@@ -1,0 +1,3 @@
+TODO: Describre the project here in details
+Amanha vc ta ferrado no ping pong.
+E tem q tomar banho...
