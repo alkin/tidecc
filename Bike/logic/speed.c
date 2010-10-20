@@ -32,66 +32,98 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
-
-#ifndef MENU_H_
-#define MENU_H_
+// Acceleration measurement functions.
+// *************************************************************************************************
 
 // *************************************************************************************************
 // Include section
 
+// system
+#include "project.h"
+#include <string.h>
 
-// *************************************************************************************************
-// Prototypes section
+// driver
+#include "display.h"
+#include "vti_as.h"
 
-
-// *************************************************************************************************
-// Defines section
-
-struct menu
-{
-	// Pointer to direct function (start, stop etc)
-	void (*sx_function)(u8 line);		 
-	// Pointer to sub menu function (change settings, reset counter etc)
-	void (*mx_function)(u8 line);		 
-	// Pointer to display function
-	void (*display_function)(u8 line, u8 mode);		 
-	// Display update trigger 
-	u8 (*display_update)(void); 	 
-	// Pointer to next menu item
-	const struct menu *next;
-};
+// logic
+#include "speed.h"
+#include "simpliciti.h"
+#include "user.h"
 
 
 // *************************************************************************************************
 // Global Variable section
-
+u8 speed_flag;
 
 // *************************************************************************************************
 // Extern section
 
-extern const struct menu menu_L1_Speed;
+// Global flag for proper acceleration sensor operation
 
-// Line2 navigation
+// *************************************************************************************************
+// @fn          sx_alarm
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
 
-extern const struct menu menu_L2_Time;
-extern const struct menu menu_L2_Distance;
+void reset_speed(u8 mode) 
+{
+	// We have to create the variable speed
+	
+	// Set main 24H time to start value
+	if(mode==SPEED_KM_H_)
+	{
+		speed_flag = SPEED_KM_H_;
+	}
+	else if(mode==SPEED_MI_H_)
+	{
+		speed_flag = SPEED_MI_H_;
+	}
+	else if(mode==SPEED_M_S_)
+	{
+		speed_flag = SPEED_M_S_;
+	}
+}
 
+void sx_speed(u8 line)
+{
 
-/*// Line1 navigation
-extern const struct menu menu_L1_Time;
-extern const struct menu menu_L1_Temperature;
-extern const struct menu menu_L1_Altitude;
-extern const struct menu menu_L1_Heartrate;
+}
 
-// Line2 navigation
-extern const struct menu menu_L2_Date;
-extern const struct menu menu_L2_DataLog;
-extern const struct menu menu_L2_Sync;
-extern const struct menu menu_L2_RFBSL;
-*/
+// *************************************************************************************************
+// @fn          display_datalog
+// @brief       Display data logger information.
+// @param       u8 line	LINE1, LINE2
+//				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
+// @return      none
+// *************************************************************************************************
+void display_speed(u8 line, u8 update)
+{
+	
+	// fAZER Partial update tambem!
+	
+	u8 string[8];
+	memcpy(string, "  VEL", 4);
+	display_chars(LCD_SEG_L1_3_0, string, SEG_ON);
+	
+	if(speed_flag == SPEED_KM_H_)
+	{
+		display_symbol(LCD_UNIT_L1_K, SEG_ON);
+		display_symbol(LCD_UNIT_L1_M, SEG_ON);
+		display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+	}
+	else if(speed_flag == SPEED_M_S_)
+	{
+		display_symbol(LCD_UNIT_L1_M, SEG_ON);
+		display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
+	}
+	else if(speed_flag == SPEED_MI_H_)
+	{
+		display_symbol(LCD_UNIT_L1_M, SEG_ON);
+		display_symbol(LCD_UNIT_L1_I, SEG_ON);
+		display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+	}
+}
 
-// Pointers to current menu item
-extern const struct menu * ptrMenu_L1;
-extern const struct menu * ptrMenu_L2;
-
-#endif /*MENU_H_*/

@@ -92,8 +92,8 @@ void reset_clock(void)
 	sTime.system_time = 0;
 	
 	// Set main 24H time to start value
-	sTime.hour   = 4; 
-	sTime.minute = 30; 
+	sTime.hour   = 0; 
+	sTime.minute = 0; 
 	sTime.second = 0; 
 	
 	// Display style of both lines is default (HH:MM)
@@ -266,6 +266,7 @@ void display_time(u8 line, u8 update)
 		}
 		else
 		{
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_3_2), itoa(sTime.minute, 2, 0), SEG_ON); 
 			// Display seconds
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
 			display_symbol(switch_seg(line, LCD_SEG_L1_DP1, LCD_SEG_L2_DP), SEG_ON);

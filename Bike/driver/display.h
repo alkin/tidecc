@@ -94,8 +94,8 @@ extern volatile s_display_flags display;
 #define DISPLAY_LINE_CLEAR				(BIT2)
 
 // Definitions for line view style
-#define DISPLAY_DEFAULT_VIEW			(0u)
-#define DISPLAY_ALTERNATIVE_VIEW		(1u)
+#define DISPLAY_DEFAULT_VIEW			(1u) // starts with only seconds and minutes
+#define DISPLAY_ALTERNATIVE_VIEW		(0u) // change to hours and minutes if passes 59 minutes
  
 // Definitions for line access
 #define LINE1							(1u)

@@ -84,10 +84,6 @@ void reset_acceleration(void)
 // @param       u8 value	2's complement number
 // @return      u8			1 = number is positive, 0 = number is negavtive
 // *************************************************************************************************
-u8 acceleration_value_is_positive(u8 value)
-{
-	return ((value & BIT7) == 0);
-}
 
 
 // *************************************************************************************************

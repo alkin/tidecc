@@ -33,65 +33,28 @@
 //
 // *************************************************************************************************
 
-#ifndef MENU_H_
-#define MENU_H_
+#ifndef TIME_H_
+#define TIME_H_
+
 
 // *************************************************************************************************
 // Include section
+#include <project.h>
 
 
 // *************************************************************************************************
 // Prototypes section
 
-
+extern void sx_time(u8 line);
+extern void display_time(u8 line, u8 update);
 // *************************************************************************************************
 // Defines section
-
-struct menu
-{
-	// Pointer to direct function (start, stop etc)
-	void (*sx_function)(u8 line);		 
-	// Pointer to sub menu function (change settings, reset counter etc)
-	void (*mx_function)(u8 line);		 
-	// Pointer to display function
-	void (*display_function)(u8 line, u8 mode);		 
-	// Display update trigger 
-	u8 (*display_update)(void); 	 
-	// Pointer to next menu item
-	const struct menu *next;
-};
 
 
 // *************************************************************************************************
 // Global Variable section
 
-
 // *************************************************************************************************
 // Extern section
 
-extern const struct menu menu_L1_Speed;
-
-// Line2 navigation
-
-extern const struct menu menu_L2_Time;
-extern const struct menu menu_L2_Distance;
-
-
-/*// Line1 navigation
-extern const struct menu menu_L1_Time;
-extern const struct menu menu_L1_Temperature;
-extern const struct menu menu_L1_Altitude;
-extern const struct menu menu_L1_Heartrate;
-
-// Line2 navigation
-extern const struct menu menu_L2_Date;
-extern const struct menu menu_L2_DataLog;
-extern const struct menu menu_L2_Sync;
-extern const struct menu menu_L2_RFBSL;
-*/
-
-// Pointers to current menu item
-extern const struct menu * ptrMenu_L1;
-extern const struct menu * ptrMenu_L2;
-
-#endif /*MENU_H_*/
+#endif /*TIME_H_*/

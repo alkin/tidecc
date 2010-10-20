@@ -199,8 +199,6 @@ void stop_datalog(void)
 	display_symbol(LCD_ICON_RECORD, SEG_OFF_BLINK_OFF);	
 }
 
-
-
 u8 is_datalog(void)
 {
 	return (sDatalog.flags.flag.on);	

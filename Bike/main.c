@@ -66,6 +66,9 @@
 #include "simpliciti.h"
 #include "datalog.h"
 
+#include "speed.h"
+#include "distance.h"
+#include "time.h"
 
 // *************************************************************************************************
 // Prototypes section
@@ -274,8 +277,8 @@ void init_global_variables(void)
 	// Apply default settings
 
 	// set menu pointers to default menu items
-	ptrMenu_L1 = &menu_L1_Time;
-	ptrMenu_L2 = &menu_L2_DataLog;
+	ptrMenu_L1 = &menu_L1_Speed;
+	ptrMenu_L2 = &menu_L2_Time;
 
 	// Assign LINE1 and LINE2 display functions
 	fptr_lcd_function_line1 = ptrMenu_L1->display_function;
@@ -287,6 +290,10 @@ void init_global_variables(void)
 	request.all_flags 	= 0;
 	display.all_flags 	= 0;
 	message.all_flags	= 0;
+	
+	
+	// talvez a gente possa tirar isso... REVER!!
+	speed_flag = SPEED_KM_H_;
 	
 	// Force full display update when starting up
 	display.flag.full_update = 1;
@@ -327,6 +334,9 @@ void init_global_variables(void)
 	
 	// Reset data logger
 	reset_datalog();
+	
+	// Reset data logger
+	//reset_speed(modo);
 }
 
 
@@ -513,7 +523,6 @@ void display_update(void)
 		// Update line1 only when new data is available
 		fptr_lcd_function_line1(LINE1, DISPLAY_LINE_UPDATE_PARTIAL);
 	}
-
 
 	// ---------------------------------------------------------------------
 	// If message text should be displayed on Line2, skip normal update

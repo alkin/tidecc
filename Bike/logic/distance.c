@@ -32,66 +32,66 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
+// Acceleration measurement functions.
+// *************************************************************************************************
 
-#ifndef MENU_H_
-#define MENU_H_
 
 // *************************************************************************************************
 // Include section
 
+// system
+#include "project.h"
+#include <string.h>
 
-// *************************************************************************************************
-// Prototypes section
-
-
-// *************************************************************************************************
-// Defines section
-
-struct menu
-{
-	// Pointer to direct function (start, stop etc)
-	void (*sx_function)(u8 line);		 
-	// Pointer to sub menu function (change settings, reset counter etc)
-	void (*mx_function)(u8 line);		 
-	// Pointer to display function
-	void (*display_function)(u8 line, u8 mode);		 
-	// Display update trigger 
-	u8 (*display_update)(void); 	 
-	// Pointer to next menu item
-	const struct menu *next;
-};
+// driver
+#include "display.h"
+#include "distance.h"
+// logic
+#include "simpliciti.h"
+#include "user.h"
 
 
 // *************************************************************************************************
-// Global Variable section
+// Global Variable sectionstruct accel sAccel;
 
+// Conversion values from data to mgrav taken from CMA3000-D0x datasheet (rev 0.4, table 4)
 
 // *************************************************************************************************
 // Extern section
 
-extern const struct menu menu_L1_Speed;
-
-// Line2 navigation
-
-extern const struct menu menu_L2_Time;
-extern const struct menu menu_L2_Distance;
+// Global flag for proper acceleration sensor operation
 
 
-/*// Line1 navigation
-extern const struct menu menu_L1_Time;
-extern const struct menu menu_L1_Temperature;
-extern const struct menu menu_L1_Altitude;
-extern const struct menu menu_L1_Heartrate;
 
-// Line2 navigation
-extern const struct menu menu_L2_Date;
-extern const struct menu menu_L2_DataLog;
-extern const struct menu menu_L2_Sync;
-extern const struct menu menu_L2_RFBSL;
-*/
+// *************************************************************************************************
+// @fn          sx_alarm
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
+void sx_distance(u8 line)
+{
+	
+}
 
-// Pointers to current menu item
-extern const struct menu * ptrMenu_L1;
-extern const struct menu * ptrMenu_L2;
-
-#endif /*MENU_H_*/
+// *************************************************************************************************
+// @fn          display_datalog
+// @brief       Display data logger information.
+// @param       u8 line	LINE1, LINE2
+//				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
+// @return      none
+// *************************************************************************************************
+void display_distance(u8 line, u8 update)
+{
+	u8 string[8];
+	memcpy(string, "  430", 6);
+	
+	display_chars(LCD_SEG_L2_5_0, string, SEG_ON);
+	display_symbol(LCD_UNIT_L2_KM, SEG_ON);
+	
+	
+	// fazer duas rotinas ou uma soh... tanto faz
+	// comeca mostrando em metros
+	// apos acabar os segmentos
+	// mostrar em km
+}
