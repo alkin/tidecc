@@ -9,6 +9,7 @@
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.managedbuilder.MANAGED_CONTAINER"/>
+<pathentry kind="con" path="com.ti.ccstudio.managedbuild.core.CCS_CONTAINER"/>
 </item>
 </data>
 </cdtproject>

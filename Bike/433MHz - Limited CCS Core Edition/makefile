@@ -2,10 +2,13 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+SHELL = cmd.exe
+
 EMPTY := 
 SPACE := $(EMPTY) $(EMPTY)
 
 ORDERED_OBJS += \
+$(GEN_CMDS_QUOTED) \
 "./driver/rf1a.obj" \
 "./driver/radio.obj" \
 "./driver/ports.obj" \
@@ -30,7 +33,8 @@ ORDERED_OBJS += \
 
 -include ../makefile.init
 
-RM := "C:/Programme/Texas Instruments/ccsv4/utils/Cygwin/rm" -rf
+RM := DEL /F
+RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
@@ -126,20 +130,22 @@ all: ez430_chronos_datalogger_433MHz.out
 # Tool invocations
 ez430_chronos_datalogger_433MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: MSP430 Linker'
-	"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -z -m"ez430_chronos_datalogger.map" --stack_size=80 --heap_size=80 --use_hw_mpy=F5 --warn_sections -i"C:/Programme/Texas Instruments/ccsv4/msp430/include" -i"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/lib" -i"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/include" --reread_libs --rom_model -o "ez430_chronos_datalogger_433MHz.out" $(GEN_CMDS_QUOTED) $(ORDERED_OBJS)
+	@echo 'Invoking: Linker'
+	"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/bin/cl430" -vmspx -g -O4 --opt_for_speed=0 --define=__CCE__ --define=ISM_LF --diag_warning=225 --printf_support=minimal -z -m"ez430_chronos_datalogger_433MHz.map" --stack_size=80 --heap_size=80 --use_hw_mpy=F5 --warn_sections -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/lib" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/msp430/include" --reread_libs --rom_model -o "ez430_chronos_datalogger_433MHz.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(S62_DEPS)$(ASM_DEPS)$(C55_DEPS)$(S_UPPER_DEPS)$(S_DEPS)$(CPP_DEPS)$(C64_DEPS)$(C43_DEPS)$(C62_DEPS)$(OBJS)$(C??_DEPS)$(S??_DEPS)$(S55_DEPS)$(C_DEPS)$(C_UPPER_DEPS)$(SA_DEPS)$(MSP430_EXECUTABLE_OUTPUTS)$(C++_DEPS)$(CC_DEPS)$(S64_DEPS)$(CXX_DEPS)$(S43_DEPS)$(S67_DEPS)$(C67_DEPS)$(ASM_UPPER_DEPS)$(OPT_DEPS) "ez430_chronos_datalogger_433MHz.out"
+	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QTD) "ez430_chronos_datalogger_433MHz.out"
+	-$(RM) ".\main.obj" ".\logic\acceleration.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\bluerobin.obj" ".\logic\clock.obj" ".\logic\datalog.obj" ".\logic\date.obj" ".\logic\menu.obj" ".\logic\rfbsl.obj" ".\logic\rfsimpliciti.obj" ".\logic\temperature.obj" ".\logic\user.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" 
+	-$(RM) ".\main.pp" ".\logic\acceleration.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\bluerobin.pp" ".\logic\clock.pp" ".\logic\datalog.pp" ".\logic\date.pp" ".\logic\menu.pp" ".\logic\rfbsl.pp" ".\logic\rfsimpliciti.pp" ".\logic\temperature.pp" ".\logic\user.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" 
 	-@echo ' '
 
 post-build:
 	-@echo 'Create flash image: TI-TXT'
-	-"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_433MHz.out" -o "ez430_chronos_datalogger_433MHz.txt" -order MS -romwidth 16
+	-"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_433MHz.out" -o "ez430_chronos_datalogger_433MHz.txt" -order MS -romwidth 16
 	-@echo ' '
 
 .PHONY: all clean dependents

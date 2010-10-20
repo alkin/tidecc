@@ -2,10 +2,13 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+SHELL = cmd.exe
+
 EMPTY := 
 SPACE := $(EMPTY) $(EMPTY)
 
 ORDERED_OBJS += \
+$(GEN_CMDS_QUOTED) \
 "./driver/vti_ps.obj" \
 "./driver/vti_as.obj" \
 "./driver/timer.obj" \
@@ -52,7 +55,8 @@ ORDERED_OBJS += \
 
 -include ../makefile.init
 
-RM := "C:/Programme/Texas Instruments/ccsv4/utils/Cygwin/rm" -rf
+RM := DEL /F
+RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
@@ -152,20 +156,41 @@ all: ez430_chronos_datalogger_868MHz.out
 # Tool invocations
 ez430_chronos_datalogger_868MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: MSP430 Linker'
-	"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -z -m"ez430_chronos_datalogger.map" --stack_size=80 --heap_size=80 --use_hw_mpy=F5 --warn_sections -i"C:/Programme/Texas Instruments/ccsv4/msp430/include" -i"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/lib" -i"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/include" --reread_libs --rom_model -o "ez430_chronos_datalogger_868MHz.out" $(GEN_CMDS_QUOTED) $(ORDERED_OBJS)
+	@echo 'Invoking: Linker'
+	$(shell echo --cmd_file="C:\Users\Patrick\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="C:\Users\Patrick\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "ccsLinker.opt")
+	$(shell echo -vmspx >> "ccsLinker.opt")
+	$(shell echo -g >> "ccsLinker.opt")
+	$(shell echo -O2 >> "ccsLinker.opt")
+	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "ccsLinker.opt")
+	$(shell echo --diag_warning=225 >> "ccsLinker.opt")
+	$(shell echo --printf_support=minimal >> "ccsLinker.opt")
+	$(shell echo -z >> "ccsLinker.opt")
+	$(shell echo -m"ez430_chronos_datalogger_868MHz.map" >> "ccsLinker.opt")
+	$(shell echo --stack_size=80 >> "ccsLinker.opt")
+	$(shell echo --heap_size=80 >> "ccsLinker.opt")
+	$(shell echo --use_hw_mpy=F5 >> "ccsLinker.opt")
+	$(shell echo --warn_sections >> "ccsLinker.opt")
+	$(shell echo -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/lib" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/msp430/include" >> "ccsLinker.opt")
+	$(shell echo --reread_libs >> "ccsLinker.opt")
+	$(shell echo --rom_model >> "ccsLinker.opt")
+	$(shell type "ccsObjs.opt" >> "ccsLinker.opt")
+	"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/bin/cl430" -@"ccsLinker.opt" -o "ez430_chronos_datalogger_868MHz.out"
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(S62_DEPS)$(ASM_DEPS)$(C55_DEPS)$(S_UPPER_DEPS)$(S_DEPS)$(CPP_DEPS)$(C64_DEPS)$(C43_DEPS)$(C62_DEPS)$(OBJS)$(C??_DEPS)$(S??_DEPS)$(S55_DEPS)$(C_DEPS)$(C_UPPER_DEPS)$(SA_DEPS)$(MSP430_EXECUTABLE_OUTPUTS)$(C++_DEPS)$(CC_DEPS)$(S64_DEPS)$(CXX_DEPS)$(S43_DEPS)$(S67_DEPS)$(C67_DEPS)$(ASM_UPPER_DEPS)$(OPT_DEPS) "ez430_chronos_datalogger_868MHz.out"
+	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QTD) "ez430_chronos_datalogger_868MHz.out"
+	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.obj" ".\simpliciti\Components\nwk_applications\nwk_ioctl.obj" ".\simpliciti\Components\nwk_applications\nwk_join.obj" ".\simpliciti\Components\nwk_applications\nwk_link.obj" ".\simpliciti\Components\nwk_applications\nwk_mgmt.obj" ".\simpliciti\Components\nwk_applications\nwk_ping.obj" ".\simpliciti\Components\nwk_applications\nwk_security.obj" ".\simpliciti\Components\nwk\nwk.obj" ".\simpliciti\Components\nwk\nwk_QMgmt.obj" ".\simpliciti\Components\nwk\nwk_api.obj" ".\simpliciti\Components\nwk\nwk_frame.obj" ".\simpliciti\Components\nwk\nwk_globals.obj" ".\simpliciti\Components\mrfi\mrfi.obj" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.obj" ".\simpliciti\Applications\application\End Device\main_ED_BM.obj" ".\main.obj" ".\logic\acceleration.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\bluerobin.obj" ".\logic\clock.obj" ".\logic\datalog.obj" ".\logic\date.obj" ".\logic\menu.obj" ".\logic\rfbsl.obj" ".\logic\rfsimpliciti.obj" 
+	-$(RM) ".\logic\temperature.obj" ".\logic\user.obj" ".\driver\adc12.obj" ".\driver\buzzer.obj" ".\driver\display.obj" ".\driver\display1.obj" ".\driver\flash.obj" ".\driver\pmm.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" ".\driver\timer.obj" ".\driver\vti_as.obj" ".\driver\vti_ps.obj" 
+	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.pp" ".\simpliciti\Components\nwk_applications\nwk_ioctl.pp" ".\simpliciti\Components\nwk_applications\nwk_join.pp" ".\simpliciti\Components\nwk_applications\nwk_link.pp" ".\simpliciti\Components\nwk_applications\nwk_mgmt.pp" ".\simpliciti\Components\nwk_applications\nwk_ping.pp" ".\simpliciti\Components\nwk_applications\nwk_security.pp" ".\simpliciti\Components\nwk\nwk.pp" ".\simpliciti\Components\nwk\nwk_QMgmt.pp" ".\simpliciti\Components\nwk\nwk_api.pp" ".\simpliciti\Components\nwk\nwk_frame.pp" ".\simpliciti\Components\nwk\nwk_globals.pp" ".\simpliciti\Components\mrfi\mrfi.pp" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.pp" ".\simpliciti\Applications\application\End Device\main_ED_BM.pp" ".\main.pp" ".\logic\acceleration.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\bluerobin.pp" ".\logic\clock.pp" ".\logic\datalog.pp" ".\logic\date.pp" ".\logic\menu.pp" ".\logic\rfbsl.pp" ".\logic\rfsimpliciti.pp" ".\logic\temperature.pp" 
+	-$(RM) ".\logic\user.pp" ".\driver\adc12.pp" ".\driver\buzzer.pp" ".\driver\display.pp" ".\driver\display1.pp" ".\driver\flash.pp" ".\driver\pmm.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" ".\driver\timer.pp" ".\driver\vti_as.pp" ".\driver\vti_ps.pp" 
 	-@echo ' '
 
 post-build:
 	-@echo 'Create flash image: TI-TXT'
-	-"C:/Programme/Texas Instruments/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_868MHz.out" -o "ez430_chronos_datalogger_868MHz.txt" -order MS -romwidth 16
+	-"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_868MHz.out" -o "ez430_chronos_datalogger_868MHz.txt" -order MS -romwidth 16
 	-@echo ' '
 
 .PHONY: all clean dependents
