@@ -320,47 +320,13 @@ void display_value1(u8 segments, u32 value, u8 digits, u8 blanks)
 // @return      none
 // *************************************************************************************************
 void display_hours1(u8 segments, u32 value, u8 digits, u8 blanks)
-{
-	u8 hours;
-	
+{	
 	if (sys.flag.use_metric_units)
 	{
 		// Display hours in 24H time format 
 		display_value1(segments, (u16) value, digits, blanks);
 	}
-	else
-	{
-		// convert internal 24H time format to 12H time format
-		hours = convert_hour_to_12H_format(value);
-
-		// display hours in 12H time format		
-		display_value1(segments, hours, digits, blanks);
-		display_am_pm_symbol(value);
-	}
 }
-
-
-// *************************************************************************************************
-// @fn          display_am_pm_symbol
-// @brief       Display AM or PM symbol.
-// @param       u8 hour		24H internal time format
-// @return      none
-// *************************************************************************************************
-void display_am_pm_symbol(u8 hour)
-{
-	// Display AM/PM symbol
-	if (is_hour_am(hour))
-	{
-		display_symbol(LCD_SYMB_AM, SEG_ON);
-	}
-	else
-	{
-		// Clear AM segments first - required when changing from AM to PM
-		display_symbol(LCD_SYMB_AM, SEG_OFF);
-		display_symbol(LCD_SYMB_PM, SEG_ON);
-	}
-}
-
 
 // *************************************************************************************************
 // @fn          display_symbol

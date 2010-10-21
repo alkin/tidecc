@@ -45,6 +45,10 @@
 // *************************************************************************************************
 // Defines section
 
+
+#define CHANGE_MENU_PERIOD			(5u) // period to change menu (seconds)
+
+
 // Comment this to not use the LCD charge pump
 //#define USE_LCD_CHARGE_PUMP
 

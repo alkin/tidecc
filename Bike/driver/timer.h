@@ -59,8 +59,6 @@ struct timer
 	u16		timer0_A3_ticks;
 };
 
-#define CHANGE_MENU_PERIOD			(2u) // period to change menu (seconds)
-
 
 extern struct timer sTimer;
 
