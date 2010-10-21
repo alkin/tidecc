@@ -83,15 +83,32 @@ void sx_distance(u8 line)
 // *************************************************************************************************
 void display_distance(u8 line, u8 update)
 {
+	
 	u8 string[8];
 	memcpy(string, "  430", 6);
-	
-	display_chars(LCD_SEG_L2_5_0, string, SEG_ON);
-	display_symbol(LCD_UNIT_L2_KM, SEG_ON);
-	
 	
 	// fazer duas rotinas ou uma soh... tanto faz
 	// comeca mostrando em metros
 	// apos acabar os segmentos
 	// mostrar em km
+	
+	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
+	{
+		display_chars(LCD_SEG_L2_5_0, string, SEG_ON);
+		//mudar apenas a velocidade
+	}
+	
+	else if (update == DISPLAY_LINE_UPDATE_FULL)	
+	{
+		//tudo
+		display_chars(LCD_SEG_L2_5_0, string, SEG_ON);
+		display_symbol(LCD_UNIT_L2_KM, SEG_ON);
+	}
+	else if (update == DISPLAY_LINE_CLEAR)
+	{
+		// Clean up Km or Mi icon
+		display_chars(LCD_SEG_L2_5_0, string, SEG_OFF);
+		display_symbol(LCD_UNIT_L2_KM, SEG_OFF);
+	}
+	
 }

@@ -92,6 +92,7 @@ typedef union
     u16 low_battery      		: 1;    // 1 = Battery is low
     u16 use_metric_units		: 1;    // 1 = Use metric units, 0 = use English units
     u16 delay_over     			: 1;    // 1 = Timer delay over
+    
   } flag;
   u16 all_flags;            // Shortcut to all display flags (for reset)
 } s_system_flags;
@@ -127,11 +128,25 @@ typedef union
     u16 type_on				: 1;	// 1 = Show "  on" text in Line1
     u16 type_off			: 1;	// 1 = Show " off" text in Line1
     u16 type_nomem			: 1;	// 1 = Show "nomem" text in Line2
+    
+    
+    u16 welcome				: 1;	// show some message at the startup
  } flag;
   u16 all_flags;            // Shortcut to all message flags (for reset)
 } s_message_flags;
 extern volatile s_message_flags message;
 
+
+typedef union
+{
+  struct
+  {
+   u16 menu_time_over : 1; 		// flag to change menu
+   
+  } flag;
+  u16 all_flags;            // Shortcut to all display flags (for reset)
+} s_bike_flags;
+extern volatile s_bike_flags bike;
 
 // *************************************************************************************************
 // Global Variable section

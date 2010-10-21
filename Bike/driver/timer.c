@@ -81,7 +81,7 @@ void (*fptr_Timer0_A3_function)(void);
 // *************************************************************************************************
 // Global Variable section
 struct timer sTimer;
-
+u8 change_menu = 0;
 // *************************************************************************************************
 // Extern section
 extern void BRRX_TimerTask_v(void);
@@ -242,7 +242,6 @@ void Timer0_A4_Delay(u16 ticks)
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR(void)
 {
-	static u8 button_lock_counter = 0;
 	
 	// Disable IE 
 	TA0CCTL0 &= ~CCIE;
@@ -320,64 +319,28 @@ __interrupt void TIMER0_A0_ISR(void)
 		if (sTime.system_time - sTime.last_activity > INACTIVITY_TIME) sys.flag.idle_timeout = 1; //setFlag(sysFlag_g, SYS_TIMEOUT_IDLE);
 	}
 	
-	// -------------------------------------------------------------------
-	// Detect continuous button high states
-
-	// Trying to lock/unlock buttons?
-	if (BUTTON_NUM_IS_PRESSED && BUTTON_DOWN_IS_PRESSED)
-	{
-		if (button_lock_counter++ > LEFT_BUTTON_LONG_TIME)
-		{
-			// Toggle lock / unlock buttons flag
-			sys.flag.lock_buttons = ~sys.flag.lock_buttons;
 	
-			// Show "buttons are locked/unlocked" message synchronously with next second tick
-			message.flag.prepare = 1;
-			if (sys.flag.lock_buttons)	message.flag.type_locked   = 1;
-			else						message.flag.type_unlocked = 1;
-			
-			// Reset button lock counter
-			button_lock_counter = 0;
-		}
-	}
-	else // Trying to create a long button press?
-	{
-		// Reset button lock counter
-		button_lock_counter = 0;
-
-		if (BUTTON_STAR_IS_PRESSED) 	
-		{
-			sButton.star_timeout++;
-			
-			// Check if button was held low for some seconds
-			if (sButton.star_timeout > LEFT_BUTTON_LONG_TIME) 
-			{
-				button.flag.star_long = 1;
-				sButton.star_timeout = 0;
-			}
-		}
-		else
-		{
-			sButton.star_timeout = 0;
-		}
 	
-		if (BUTTON_NUM_IS_PRESSED) 	
-		{
-			sButton.num_timeout++;
-		
-			// Check if button was held low for some seconds
-			if (sButton.num_timeout > LEFT_BUTTON_LONG_TIME) 
-			{
-				button.flag.num_long = 1;
-				sButton.num_timeout = 0;
-			}
-		}
-		else
-		{
-			sButton.num_timeout = 0;
-		}
+	// To change the menu automatically
+	if( change_menu >= CHANGE_MENU_PERIOD )
+	{
+		bike.flag.menu_time_over = 1;
+		change_menu=0;
 	}
-
+	else
+	{
+		change_menu++;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// Exit from LPM3 on RETI
 	_BIC_SR_IRQ(LPM3_bits);               
