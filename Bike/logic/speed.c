@@ -32,7 +32,7 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
-// Acceleration measurement functions.
+// Speed functions.
 // *************************************************************************************************
 
 // *************************************************************************************************
@@ -62,38 +62,76 @@ u8 speed_flag;
 // Global flag for proper acceleration sensor operation
 
 // *************************************************************************************************
-// @fn          sx_alarm
+// @fn          reset_speed
 // @brief       Sx button turns alarm on/off.
 // @param       u8 line		LINE1
 // @return      none
 // *************************************************************************************************
-
-void reset_speed(u8 mode) 
+void reset_speed(void)
 {
-	// We have to create the variable speed
-	
-	// Set main 24H time to start value
-	if(mode==SPEED_KM_H_)
-	{
-		speed_flag = SPEED_KM_H_;
-	}
-	else if(mode==SPEED_MI_H_)
-	{
-		speed_flag = SPEED_MI_H_;
-	}
-	else if(mode==SPEED_M_S_)
-	{
-		speed_flag = SPEED_M_S_;
-	}
-}
-
-void sx_speed(u8 line)
-{
-
+	speed = 0;
+	speed_flag = SPEED_KM_H;
 }
 
 // *************************************************************************************************
-// @fn          display_datalog
+// @fn          sx_speed
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
+void sx_speed(u8 line)
+{
+	
+}
+
+// *************************************************************************************************
+// @fn          convert_speed_to_km_h
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
+u16 convert_speed_to_km_h(u16 speed_ms)
+{
+	return (speed * 3.6);
+}
+
+// *************************************************************************************************
+// @fn          convert_speed_to_mi_h
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
+u16 convert_speed_to_mi_h(u16 speed_ms)
+{
+	return (speed * 1);
+}
+
+// *************************************************************************************************
+// @fn          do_speed_measurement
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
+void do_speed_measurement(void)
+{
+	
+	
+}
+
+// *************************************************************************************************
+// @fn          set_speed_unit
+// @brief       Sx button turns alarm on/off.
+// @param       u8 line		LINE1
+// @return      none
+// *************************************************************************************************
+void set_speed_unit(u8 unit)
+{
+	
+	
+}
+
+// *************************************************************************************************
+// @fn          display_speed
 // @brief       Display data logger information.
 // @param       u8 line	LINE1, LINE2
 //				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
@@ -101,9 +139,6 @@ void sx_speed(u8 line)
 // *************************************************************************************************
 void display_speed(u8 line, u8 update)
 {
-	
-	// fAZER Partial update tambem!
-	
 	u8 string[8];
 	memcpy(string, "  VEL", 4);
 	display_chars(LCD_SEG_L1_3_0, string, SEG_ON);
@@ -126,4 +161,3 @@ void display_speed(u8 line, u8 update)
 		display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
 	}
 }
-
