@@ -55,7 +55,7 @@
 // *************************************************************************************************
 // Global Variable section
 u8 speed_flag;
-
+u16 speed;
 
 // *************************************************************************************************
 // Extern section
@@ -114,7 +114,7 @@ u16 convert_speed_to_mi_h(u16 speed_ms)
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
-	speed = (sensor * 2 * PI * bike_radius);	
+	//	speed = (sensor * 2 * PI * bike_radius);	
 }
 
 // *************************************************************************************************
@@ -125,7 +125,7 @@ void do_speed_measurement(void)
 // *************************************************************************************************
 void set_speed_unit(u8 unit)
 {
-	speed_flag ~= SPEED_KM_H | SPEED_MI_H | SPEED_M_S;
+	//speed_flag ~= SPEED_KM_H | SPEED_MI_H | SPEED_M_S;
 	speed_flag |= unit;	
 }
 
@@ -173,6 +173,10 @@ void display_speed(u8 line, u8 update)
 	}
 	else if (update == DISPLAY_LINE_CLEAR)
 	{
-		
+			display_symbol(LCD_UNIT_L1_K, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_M, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
 	}
+	
 }
