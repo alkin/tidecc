@@ -55,6 +55,9 @@
 #include "bluerobin.h"
 
 
+#include "speed.h"
+#include "distance.h"
+
 // *************************************************************************************************
 // Prototypes section
 void start_datalog(void);
@@ -99,9 +102,6 @@ void reset_datalog(void)
 	sDatalog.idx		= 0;
 }
 
-
-
-
 // *************************************************************************************************
 // @fn          sx_alarm
 // @brief       Sx button turns alarm on/off.
@@ -131,7 +131,6 @@ void sx_datalog(u8 line)
 		stop_datalog();
 	}
 }
-
 
 
 // *************************************************************************************************

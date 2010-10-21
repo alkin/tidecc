@@ -62,10 +62,6 @@ void clock_tick(void);
 void mx_time(u8 line);
 void sx_time(u8 line);
 
-void calc_24H_to_12H(u8 * hours, u8 * timeAM);
-void conv_24H_to_12H(u8 * hours24, u8 * hours12, u8 * timeAMorPM);
-
-
 // *************************************************************************************************
 // Defines section
 
@@ -137,48 +133,9 @@ void clock_tick(void)
 			sTime.minute = 0;
 			sTime.hour++;
 			sTime.drawFlag++;
-
-			// Add 1 day
-			if (sTime.hour == 24)
-			{
-				sTime.hour = 0;
-				add_day();
-			}
 		}
 	}
 }
-
-
-// *************************************************************************************************
-// @fn          convert_hour_to_12H_format
-// @brief       Convert internal 24H time to 12H time.
-// @param       u8 hour		Hour in 24H format
-// @return      u8				Hour in 12H format
-// *************************************************************************************************
-u8 convert_hour_to_12H_format(u8 hour)
-{
-	// 00:00 .. 11:59 --> AM 12:00 .. 11:59
-	if (hour == 0)			return (hour + 12);
-	else if (hour <= 12)	return (hour);	
-	// 13:00 .. 23:59 --> PM 01:00 .. 11:59
-	else  					return (hour - 12);
-}
-
-
-// *************************************************************************************************
-// @fn          is_hour_am
-// @brief       Checks if internal 24H time is AM or PM
-// @param       u8 hour		Hour in 24H format
-// @return      u8				1 = AM, 0 = PM
-// *************************************************************************************************
-u8 is_hour_am(u8 hour)
-{
-	// 00:00 .. 11:59 --> AM 12:00 .. 11:59
-	if (hour < 12)	return (1);
-	// 12:00 .. 23:59 --> PM 12:00 .. 11:59
-	else  			return (0);
-}
-
 
 // *************************************************************************************************
 // @fn          sx_time
@@ -202,15 +159,13 @@ void sx_time(u8 line)
 // @return      none
 // *************************************************************************************************
 void display_time(u8 line, u8 update)
-{
-	u8 hour12;
-	
+{	
 	// Partial update
  	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
 		if(sTime.drawFlag != 0) 
 		{
-			if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW)
+			if (sTime.line1ViewStyle != DISPLAY_DEFAULT_VIEW)
 			{
 				switch(sTime.drawFlag) 
 				{
@@ -219,14 +174,6 @@ void display_time(u8 line, u8 update)
 								// Display 24H time "HH" 
 								display_chars(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), itoa(sTime.hour, 2, 0), SEG_ON);
 							}
-							else
-							{
-								// Display 12H time "HH" + AM/PM
-								hour12 = convert_hour_to_12H_format(sTime.hour);
-								display_chars(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), itoa(hour12, 2, 0), SEG_ON); 
-								display_am_pm_symbol(sTime.hour);
-							}
-							
 					case 2: display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON); 
 				}
 			}
@@ -240,26 +187,14 @@ void display_time(u8 line, u8 update)
 	else if (update == DISPLAY_LINE_UPDATE_FULL)			
 	{
 		// Full update
-		if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW)
+		if (sTime.line1ViewStyle != DISPLAY_DEFAULT_VIEW)
 		{	
 			// Display 24H/12H time
 			if (sys.flag.use_metric_units)
 			{
 				// Display 24H time "HH" 
 				display_chars(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), itoa(sTime.hour, 2, 0), SEG_ON);
-			}
-			else
-			{
-				// Display 12H time "HH" + AM/PM information
-				hour12 = convert_hour_to_12H_format(sTime.hour);
-				display_chars(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), itoa(hour12, 2, 0), SEG_ON); 
-				// Display AM/PM information
-				if (line == LINE1)
-				{
-					display_am_pm_symbol(sTime.hour);
-				}
-			}
-							
+			}				
 			// Display minute
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON); 
 			display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_ON_BLINK_ON);
