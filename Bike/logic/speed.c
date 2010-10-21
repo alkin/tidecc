@@ -132,7 +132,7 @@ void set_speed_unit(u8 unit)
 // *************************************************************************************************
 // @fn          display_speed
 // @brief       Display data logger information.
-// @param       u8 line	LINE1, LINE2
+// @param       u8 line		LINE1, LINE2
 //				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
 // @return      none
 // *************************************************************************************************
