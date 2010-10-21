@@ -56,15 +56,15 @@
 // Global Variable section
 u8 speed_flag;
 
+
 // *************************************************************************************************
 // Extern section
 
-// Global flag for proper acceleration sensor operation
 
 // *************************************************************************************************
 // @fn          reset_speed
-// @brief       Sx button turns alarm on/off.
-// @param       u8 line		LINE1
+// @brief       Resets speed to 0 m/s, km/h display format
+// @param       none
 // @return      none
 // *************************************************************************************************
 void reset_speed(void)
@@ -75,7 +75,7 @@ void reset_speed(void)
 
 // *************************************************************************************************
 // @fn          sx_speed
-// @brief       Sx button turns alarm on/off.
+// @brief       Sx button does nothing.
 // @param       u8 line		LINE1
 // @return      none
 // *************************************************************************************************
@@ -86,9 +86,9 @@ void sx_speed(u8 line)
 
 // *************************************************************************************************
 // @fn          convert_speed_to_km_h
-// @brief       Sx button turns alarm on/off.
-// @param       u8 line		LINE1
-// @return      none
+// @brief       Converts the speed from m/s to km/h
+// @param       u16 speed_ms	Speed in meters per second.
+// @return      u16 			Speed in kilometers per hour.
 // *************************************************************************************************
 u16 convert_speed_to_km_h(u16 speed_ms)
 {
@@ -97,9 +97,9 @@ u16 convert_speed_to_km_h(u16 speed_ms)
 
 // *************************************************************************************************
 // @fn          convert_speed_to_mi_h
-// @brief       Sx button turns alarm on/off.
-// @param       u8 line		LINE1
-// @return      none
+// @brief       Converts the speed from m/s to mi/h
+// @param       u16 speed_ms	Speed in meters per second.
+// @return      u16 			Speed in miles per hour.
 // *************************************************************************************************
 u16 convert_speed_to_mi_h(u16 speed_ms)
 {
@@ -108,14 +108,13 @@ u16 convert_speed_to_mi_h(u16 speed_ms)
 
 // *************************************************************************************************
 // @fn          do_speed_measurement
-// @brief       Sx button turns alarm on/off.
-// @param       u8 line		LINE1
+// @brief       Does a speed measurement.
+// @param       none
 // @return      none
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
-	
-	
+	speed = (sensor * 2 * PI * bike_radius);	
 }
 
 // *************************************************************************************************
@@ -126,8 +125,8 @@ void do_speed_measurement(void)
 // *************************************************************************************************
 void set_speed_unit(u8 unit)
 {
-	
-	
+	speed_flag ~= SPEED_KM_H | SPEED_MI_H | SPEED_M_S;
+	speed_flag |= unit;	
 }
 
 // *************************************************************************************************
@@ -139,25 +138,41 @@ void set_speed_unit(u8 unit)
 // *************************************************************************************************
 void display_speed(u8 line, u8 update)
 {
-	u8 string[8];
-	memcpy(string, "  VEL", 4);
-	display_chars(LCD_SEG_L1_3_0, string, SEG_ON);
-	
-	if(speed_flag == SPEED_KM_H_)
+	u16 speed_km_h;
+	u16 speed_mi_h;
+
+	// Partial update
+ 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		display_symbol(LCD_UNIT_L1_K, SEG_ON);
-		display_symbol(LCD_UNIT_L1_M, SEG_ON);
-		display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+		
 	}
-	else if(speed_flag == SPEED_M_S_)
+	else if (update == DISPLAY_LINE_UPDATE_FULL)			
 	{
-		display_symbol(LCD_UNIT_L1_M, SEG_ON);
-		display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
+		if(speed_flag == SPEED_KM_H)
+		{
+			speed_km_h = convert_speed_to_km_h(speed);
+			display_symbol(LCD_UNIT_L1_K, SEG_ON);
+			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_km_h, 2, 0), SEG_ON);	
+		}
+		else if(speed_flag == SPEED_M_S)
+		{
+			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed, 2, 0), SEG_ON);
+		}
+		else if(speed_flag == SPEED_MI_H)
+		{
+			speed_mi_h = convert_speed_to_mi_h(speed);
+			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+			display_symbol(LCD_UNIT_L1_I, SEG_ON);
+			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
+		}
 	}
-	else if(speed_flag == SPEED_MI_H_)
+	else if (update == DISPLAY_LINE_CLEAR)
 	{
-		display_symbol(LCD_UNIT_L1_M, SEG_ON);
-		display_symbol(LCD_UNIT_L1_I, SEG_ON);
-		display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+		
 	}
 }
