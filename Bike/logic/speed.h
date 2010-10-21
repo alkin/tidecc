@@ -43,26 +43,29 @@
 
 // *************************************************************************************************
 // Prototypes section
-
+extern void reset_speed(void);
+extern void sx_speed(u8 line);
+extern void display_speed(u8 line, u8 update);
+extern u16 convert_speed_to_km_h(u16 speed_ms);
+extern u16 convert_speed_to_mi_h(u16 speed_ms);
+extern void do_speed_measurement(void);
+extern void set_speed_unit(u8 unit);
 
 
 // *************************************************************************************************
 // Defines section
-#define SPEED_KM_H_	(0u)
-#define SPEED_MI_H_	(1u)
-#define SPEED_M_S_	(2u)
+#define SPEED_KM_H				(0u)
+#define SPEED_MI_H				(1u)
+#define SPEED_M_S				(2u)
 
 
 // *************************************************************************************************
 // Global Variable section
-
 extern u8 speed_flag;
-
+extern u16 speed;
 
 // *************************************************************************************************
 // Extern section
 
-extern void sx_speed(u8 line);
-extern void display_speed(u8 line, u8 update);
 
 #endif /*SPEED_H_*/
