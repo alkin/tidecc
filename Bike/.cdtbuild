@@ -245,9 +245,6 @@
 </tool>
 <macros expandEnvironmentMacros="true"/>
 </toolChain>
-<resourceConfiguration exclude="true" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.434572269./ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" name="ez430_chronos_datalogger_drivers.lib" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.linkerDebug.1082422527.1945923282">
-<tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.linkerDebug.1082422527.1945923282" name="MSP430 Linker" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.linkerDebug.137039759"/>
-</resourceConfiguration>
 <resourceConfiguration exclude="false" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.434572269./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="bsp_board.c" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.compilerDebug.1673826307./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c">
 <tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.compilerDebug.1673826307./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="MSP430 Compiler" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.compilerDebug.1673826307"/>
 </resourceConfiguration>
@@ -363,9 +360,6 @@
 </tool>
 <macros/>
 </toolChain>
-<resourceConfiguration exclude="true" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.1976430675./ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" name="ez430_chronos_datalogger_drivers.lib" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.linkerDebug.2077199431./ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib">
-<tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.linkerDebug.2077199431./ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" name="MSP430 Linker" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.linkerDebug.2077199431"/>
-</resourceConfiguration>
 <resourceConfiguration exclude="false" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.1976430675./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="bsp_board.c" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.compilerDebug.164194954./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c">
 <tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.compilerDebug.164194954./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="MSP430 Compiler" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.compilerDebug.164194954"/>
 </resourceConfiguration>
@@ -477,9 +471,6 @@
 </tool>
 <macros expandEnvironmentMacros="true"/>
 </toolChain>
-<resourceConfiguration exclude="true" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.1079752688./ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" name="ez430_chronos_datalogger_drivers.lib" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/driver/ez430_chronos_datalogger_drivers.lib" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.linkerDebug.137039759.46210276">
-<tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.linkerDebug.137039759.46210276" name="MSP430 Linker" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.linkerDebug.1791973153"/>
-</resourceConfiguration>
 <resourceConfiguration exclude="false" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.1079752688./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="bsp_board.c" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.compilerDebug.1673826307.1647081083">
 <tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.compilerDebug.1673826307.1647081083" name="MSP430 Compiler" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.2.exe.compilerDebug.1795404886"/>
 </resourceConfiguration>

@@ -105,7 +105,7 @@ void display_speed(u8 line, u8 update)
 	// fAZER Partial update tambem!
 	
 	u8 string[8];
-	memcpy(string, "  VEL", 4);
+	memcpy(string, " VEL", 4);
 	display_chars(LCD_SEG_L1_3_0, string, SEG_ON);
 	
 	if(speed_flag == SPEED_KM_H_)

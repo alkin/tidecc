@@ -21,7 +21,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.core.MRU_PROGRAM_NAME" value="C:\Users\Patrick\Chronos\tidecc\Bike\868MHz - Unrestricted CCS Platinum\ez430_chronos_datalogger_868MHz.out"/>
 <stringAttribute key="CCEDebugOptions.CPU_NAME" value="TI MSP430 USB1/MSP430"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="ez430_chronos_datalogger"/>
-<stringAttribute key="com.ti.ccstudio.debug.core.MRU_MODULES" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;modules&gt;&#13;&#10;&lt;module name=&quot;C:\Users\Patrick\Chronos\tidecc\Bike\868MHz - Unrestricted CCS Platinum\ez430_chronos_datalogger_868MHz.out&quot; time=&quot;Wed Oct 20 23:20:54 CEST 2010&quot; time_long=&quot;1287609654147&quot;/&gt;&#13;&#10;&lt;/modules&gt;&#13;&#10;"/>
+<stringAttribute key="com.ti.ccstudio.debug.core.MRU_MODULES" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;modules&gt;&#13;&#10;&lt;module name=&quot;C:\Users\Patrick\Chronos\tidecc\Bike\868MHz - Unrestricted CCS Platinum\ez430_chronos_datalogger_868MHz.out&quot; time=&quot;Thu Oct 21 21:55:19 CEST 2010&quot; time_long=&quot;1287690919958&quot;/&gt;&#13;&#10;&lt;/modules&gt;&#13;&#10;"/>
 <booleanAttribute key="CCEDebugOptions.FORBID_DEVICE_MODIFICATION" value="true"/>
 <stringAttribute key="org.eclipse.cdt.launch.GLOBAL_VARIABLES" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;globalVariableList/&gt;&#13;&#10;"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="868MHz - Unrestricted CCS Platinum/ez430_chronos_datalogger_868MHz.out"/>

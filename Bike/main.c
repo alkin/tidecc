@@ -101,6 +101,9 @@ volatile s_request_flags request;
 // Variable holding message flags
 volatile s_message_flags message;
 
+// Variable holding bike flags
+volatile s_bike_flags bike;
+
 // Global radio frequency offset taken from calibration memory
 // Compensates crystal deviation from 26MHz nominal value
 u8 rf_frequoffset;
@@ -290,7 +293,7 @@ void init_global_variables(void)
 	request.all_flags 	= 0;
 	display.all_flags 	= 0;
 	message.all_flags	= 0;
-	
+	bike.all_flags 		= 0;
 	
 	// talvez a gente possa tirar isso... REVER!!
 	speed_flag = SPEED_KM_H_;
@@ -348,24 +351,11 @@ void init_global_variables(void)
 // *************************************************************************************************
 void wakeup_event(void)
 {
-	// Enable idle timeout
+/*	// Enable idle timeout
 	sys.flag.idle_timeout_enabled = 1;
 
-	// If buttons are locked, only display "buttons are locked" message
-	if (button.all_flags && sys.flag.lock_buttons)
-	{
-		// Show "buttons are locked" message synchronously with next second tick
-		if (!(BUTTON_NUM_IS_PRESSED && BUTTON_DOWN_IS_PRESSED))
-		{
-			message.flag.prepare     = 1;
-			message.flag.type_locked = 1;
-		}
-		
-		// Clear buttons
-		button.all_flags = 0;	
-	}
 	// Process long button press event (while button is held)
-	else if (button.flag.star_long)
+	if (button.flag.star_long)
 	{
 		// Clear button event
 		button.flag.star_long = 0;
@@ -376,17 +366,7 @@ void wakeup_event(void)
 		// Set display update flag
 		display.flag.full_update = 1;
 	}
-	else if (button.flag.num_long)
-	{
-		// Clear button event
-		button.flag.num_long = 0;
-		
-		// Call sub menu function
-		ptrMenu_L2->mx_function(LINE2);
-
-		// Set display update flag
-		display.flag.full_update = 1;	
-	}
+	
 	// Process single button press event (after button was released)
 	else if (button.all_flags)
 	{
@@ -441,20 +421,6 @@ void wakeup_event(void)
 			// Clear button flag	
 			button.flag.up = 0;
 		}			
-		// DOWN button event ---------------------------------------------------------------------
-		// Activate user function for Line2 menu item
-		else if(button.flag.down) 	
-		{
-			// Call direct function
-			ptrMenu_L2->sx_function(LINE2);
-
-			// Set Line1 display update flag
-			display.flag.line2_full_update = 1;
-	
-			// Clear button flag	
-			button.flag.down = 0;
-		}			
-	}
 	
 	// Process internal events
 	if (sys.all_flags)
@@ -475,6 +441,27 @@ void wakeup_event(void)
 	
 	// Disable idle timeout
 	sys.flag.idle_timeout_enabled = 0;
+	
+	*/
+	
+	if(bike.flag.menu_time_over)
+	{
+			// Clean up display before activating next menu item 
+			fptr_lcd_function_line2(LINE2, DISPLAY_LINE_CLEAR);
+
+			// Go to next menu entry
+			ptrMenu_L2 = ptrMenu_L2->next;
+
+			// Assign new display function
+			fptr_lcd_function_line2 = ptrMenu_L2->display_function;
+
+			// Set Line2 display update flag
+			display.flag.line2_full_update = 1;
+
+			// Clear button flag
+			bike.flag.menu_time_over = 0;
+	}
+	
 }
 
 
