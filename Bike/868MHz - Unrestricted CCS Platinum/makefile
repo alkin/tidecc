@@ -159,24 +159,25 @@ all: ez430_chronos_datalogger_868MHz.out
 ez430_chronos_datalogger_868MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Linker'
-	$(shell echo --cmd_file="C:\Users\Patrick\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="C:\Users\Patrick\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "ccsLinker.opt")
+	$(shell echo --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "ccsLinker.opt")
 	$(shell echo -vmspx >> "ccsLinker.opt")
 	$(shell echo -g >> "ccsLinker.opt")
 	$(shell echo -O2 >> "ccsLinker.opt")
 	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "ccsLinker.opt")
 	$(shell echo --diag_warning=225 >> "ccsLinker.opt")
 	$(shell echo --printf_support=minimal >> "ccsLinker.opt")
+	$(shell echo --asm_listing >> "ccsLinker.opt")
 	$(shell echo -z >> "ccsLinker.opt")
 	$(shell echo -m"ez430_chronos_datalogger_868MHz.map" >> "ccsLinker.opt")
 	$(shell echo --stack_size=80 >> "ccsLinker.opt")
 	$(shell echo --heap_size=80 >> "ccsLinker.opt")
 	$(shell echo --use_hw_mpy=F5 >> "ccsLinker.opt")
 	$(shell echo --warn_sections >> "ccsLinker.opt")
-	$(shell echo -i"C:/Program Files (x86)/Texas Instruments/ccsv4/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/lib" -i"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/ccsv4/msp430/include" >> "ccsLinker.opt")
+	$(shell echo -i"C:/Texas Instruments/ccsv4/msp430/include" -i"C:/Texas Instruments/ccsv4/tools/compiler/msp430/lib" -i"C:/Texas Instruments/ccsv4/tools/compiler/msp430/include" -i"C:/Texas Instruments/ccsv4/msp430/include" >> "ccsLinker.opt")
 	$(shell echo --reread_libs >> "ccsLinker.opt")
 	$(shell echo --rom_model >> "ccsLinker.opt")
 	$(shell type "ccsObjs.opt" >> "ccsLinker.opt")
-	"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"ccsLinker.opt" -o "ez430_chronos_datalogger_868MHz.out"
+	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"ccsLinker.opt" -o "ez430_chronos_datalogger_868MHz.out"
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
@@ -192,7 +193,7 @@ clean:
 
 post-build:
 	-@echo 'Create flash image: TI-TXT'
-	-"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_868MHz.out" -o "ez430_chronos_datalogger_868MHz.txt" -order MS -romwidth 16
+	-"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_868MHz.out" -o "ez430_chronos_datalogger_868MHz.txt" -order MS -romwidth 16
 	-@echo ' '
 
 .PHONY: all clean dependents

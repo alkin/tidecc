@@ -49,7 +49,6 @@ extern void display_speed(u8 line, u8 update);
 extern u16 convert_speed_to_km_h(u16 speed_ms);
 extern u16 convert_speed_to_mi_h(u16 speed_ms);
 extern void do_speed_measurement(void);
-extern void set_speed_unit(u8 unit);
 
 
 // *************************************************************************************************
@@ -61,8 +60,22 @@ extern void set_speed_unit(u8 unit);
 
 // *************************************************************************************************
 // Global Variable section
-extern u8 speed_flag;
-extern u16 speed;
+
+typedef union
+{
+    u16 unit      				: 2;    // Unit for speed display
+   u16 size    				: 6;    // Bike Frame Size
+
+} u_speed_config;
+
+typedef struct
+{
+	u_speed_config config;    
+    u16 value;    // Lock buttons
+} s_speed;
+
+extern volatile s_speed speed;
+
 
 // *************************************************************************************************
 // Extern section

@@ -94,16 +94,17 @@ void reset_acceleration(void)
 // *************************************************************************************************
 u16 convert_acceleration_value_to_mgrav(u8 value)
 {
+	
 	u16 result;
 	u8 i;
-	
+	/*
 	if (!acceleration_value_is_positive(value))
 	{
 		// Convert 2's complement negative number to positive number
 		value = ~value;
 		value += 1;
 	}
-	
+	*/
 	result = 0;
 	for (i=0; i<7; i++)
 	{

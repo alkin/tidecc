@@ -54,8 +54,7 @@
 
 // *************************************************************************************************
 // Global Variable section
-u8 speed_flag;
-u16 speed;
+volatile s_speed speed;
 
 // *************************************************************************************************
 // Extern section
@@ -69,8 +68,8 @@ u16 speed;
 // *************************************************************************************************
 void reset_speed(void)
 {
-	speed = 0;
-	speed_flag = SPEED_KM_H;
+	speed.value = 0;
+	speed.config.unit = SPEED_KM_H;
 }
 
 // *************************************************************************************************
@@ -92,7 +91,7 @@ void sx_speed(u8 line)
 // *************************************************************************************************
 u16 convert_speed_to_km_h(u16 speed_ms)
 {
-	return (speed * 3.6);
+	return (speed_ms * 36 / 10);
 }
 
 // *************************************************************************************************
@@ -104,32 +103,20 @@ u16 convert_speed_to_km_h(u16 speed_ms)
 u16 convert_speed_to_mi_h(u16 speed_ms)
 {
 	//SE: Change conversion constant
-	return (speed * 1);
+	return (speed_ms * 22369 / 10000);
 }
 
 // *************************************************************************************************
 // @fn          do_speed_measurement
-// @brief       Does a speed measurement.
+// @brief       Calculates the speed in m/s based on the counter of the sensor.
 // @param       none
 // @return      none
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
-	// speed = (sensor_counter * 2 * PI * bike_radius);	
-	speed = sensor_counter;
-}
-
-
-// *************************************************************************************************
-// @fn          set_speed_unit
-// @brief       Changes the speed unit.
-// @param       u8 unit		SPEED_KM_H, SPEED_MI_H, SPEED_M_S
-// @return      none
-// *************************************************************************************************
-void set_speed_unit(u8 unit)
-{
-	//speed_flag ~= SPEED_KM_H | SPEED_MI_H | SPEED_M_S;
-	speed_flag |= unit;	
+	// Move all the configs to driver/sensor !?
+	
+	//speed.value = sensor.get_distance();	
 }
 
 // *************************************************************************************************
@@ -146,18 +133,18 @@ void display_speed(u8 line, u8 update)
 
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(speed_flag == SPEED_KM_H)
+		if(speed.config.unit == SPEED_KM_H)
 		{
-			speed_km_h = convert_speed_to_km_h(speed);
+			speed_km_h = convert_speed_to_km_h(speed.value);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_km_h, 2, 0), SEG_ON);	
 		}
-		else if(speed_flag == SPEED_M_S)
+		else if(speed.config.unit == SPEED_M_S)
 		{
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed, 2, 0), SEG_ON);
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed.value, 2, 0), SEG_ON);
 		}
-		else if(speed_flag == SPEED_MI_H)
+		else if(speed.config.unit == SPEED_MI_H)
 		{
-			speed_mi_h = convert_speed_to_mi_h(speed);
+			speed_mi_h = convert_speed_to_mi_h(speed.value);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
 		}
 	}
@@ -165,18 +152,18 @@ void display_speed(u8 line, u8 update)
 	{
 		display_speed(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		
-		if(speed_flag == SPEED_KM_H)
+		if(speed.config.unit == SPEED_KM_H)
 		{
 			display_symbol(LCD_UNIT_L1_K, SEG_ON);
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
 		}
-		else if(speed_flag == SPEED_M_S)
+		else if(speed.config.unit == SPEED_M_S)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
 		}
-		else if(speed_flag == SPEED_MI_H)
+		else if(speed.config.unit == SPEED_MI_H)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_I, SEG_ON);

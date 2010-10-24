@@ -338,6 +338,7 @@
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/ez430_chronos_datalogger/simpliciti/Applications/configuration/smpl_nwk_config.dat}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/ez430_chronos_datalogger/simpliciti/Applications/configuration/End Device/smpl_config.dat}&quot;"/>
 </option>
+<option id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.ASM_LISTING.1947907841" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.ASM_LISTING" value="true" valueType="boolean"/>
 </tool>
 <tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.linkerDebug.2077199431" name="MSP430 Linker" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.linkerDebug">
 <option id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.linkerID.HEAP_SIZE.2137722131" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.linkerID.HEAP_SIZE" value="80" valueType="string"/>
@@ -358,7 +359,7 @@
 <listOptionValue builtIn="false" value="&quot;rts430x.lib&quot;"/>
 </option>
 </tool>
-<macros/>
+<macros expandEnvironmentMacros="true"/>
 </toolChain>
 <resourceConfiguration exclude="false" id="com.ti.ccstudio.buildDefinitions.MSP430.Debug.1976430675./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="bsp_board.c" rcbsApplicability="disable" resourcePath="/ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" toolsToInvoke="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.compilerDebug.164194954./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c">
 <tool id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.compilerDebug.164194954./ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_board.c" name="MSP430 Compiler" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.exe.compilerDebug.164194954"/>

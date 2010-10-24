@@ -1,0 +1,8 @@
+*.obj
+*.lst
+*.opt
+*.mk
+*.pp
+*.launch
+*.cdtbuild
+*.map
