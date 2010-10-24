@@ -13,10 +13,13 @@ $(GEN_CMDS_QUOTED) \
 "./driver/radio.obj" \
 "./driver/ports.obj" \
 "./logic/user.obj" \
+"./logic/time.obj" \
 "./logic/temperature.obj" \
+"./logic/speed.obj" \
 "./logic/rfsimpliciti.obj" \
 "./logic/rfbsl.obj" \
 "./logic/menu.obj" \
+"./logic/distance.obj" \
 "./logic/date.obj" \
 "./logic/datalog.obj" \
 "./logic/clock.obj" \
@@ -28,7 +31,6 @@ $(GEN_CMDS_QUOTED) \
 -l"rts430x.lib" \
 "../simpliciti/CC430_End_Device_433MHz.lib" \
 "../lnk_cc430f6137.cmd" \
-"../driver/ez430_chronos_datalogger_drivers.lib" \
 "../bluerobin/BlueRobin_RX_433MHz.lib" \
 
 -include ../makefile.init
@@ -131,7 +133,7 @@ all: ez430_chronos_datalogger_433MHz.out
 ez430_chronos_datalogger_433MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Linker'
-	"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/bin/cl430" -vmspx -g -O4 --opt_for_speed=0 --define=__CCE__ --define=ISM_LF --diag_warning=225 --printf_support=minimal -z -m"ez430_chronos_datalogger_433MHz.map" --stack_size=80 --heap_size=80 --use_hw_mpy=F5 --warn_sections -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/lib" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/msp430/include" --reread_libs --rom_model -o "ez430_chronos_datalogger_433MHz.out" $(ORDERED_OBJS)
+	"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -vmspx -g -O4 --opt_for_speed=0 --define=__CCE__ --define=ISM_LF --diag_warning=225 --printf_support=minimal -z -m"ez430_chronos_datalogger_433MHz.map" --stack_size=80 --heap_size=80 --use_hw_mpy=F5 --warn_sections -i"C:/Program Files (x86)/Texas Instruments/ccsv4/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/lib" -i"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/include" -i"C:/Program Files (x86)/Texas Instruments/ccsv4/msp430/include" --reread_libs --rom_model -o "ez430_chronos_datalogger_433MHz.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
@@ -139,13 +141,13 @@ ez430_chronos_datalogger_433MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QTD) "ez430_chronos_datalogger_433MHz.out"
-	-$(RM) ".\main.obj" ".\logic\acceleration.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\bluerobin.obj" ".\logic\clock.obj" ".\logic\datalog.obj" ".\logic\date.obj" ".\logic\menu.obj" ".\logic\rfbsl.obj" ".\logic\rfsimpliciti.obj" ".\logic\temperature.obj" ".\logic\user.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" 
-	-$(RM) ".\main.pp" ".\logic\acceleration.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\bluerobin.pp" ".\logic\clock.pp" ".\logic\datalog.pp" ".\logic\date.pp" ".\logic\menu.pp" ".\logic\rfbsl.pp" ".\logic\rfsimpliciti.pp" ".\logic\temperature.pp" ".\logic\user.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" 
+	-$(RM) ".\main.obj" ".\logic\acceleration.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\bluerobin.obj" ".\logic\clock.obj" ".\logic\datalog.obj" ".\logic\date.obj" ".\logic\distance.obj" ".\logic\menu.obj" ".\logic\rfbsl.obj" ".\logic\rfsimpliciti.obj" ".\logic\speed.obj" ".\logic\temperature.obj" ".\logic\time.obj" ".\logic\user.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" 
+	-$(RM) ".\main.pp" ".\logic\acceleration.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\bluerobin.pp" ".\logic\clock.pp" ".\logic\datalog.pp" ".\logic\date.pp" ".\logic\distance.pp" ".\logic\menu.pp" ".\logic\rfbsl.pp" ".\logic\rfsimpliciti.pp" ".\logic\speed.pp" ".\logic\temperature.pp" ".\logic\time.pp" ".\logic\user.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" 
 	-@echo ' '
 
 post-build:
 	-@echo 'Create flash image: TI-TXT'
-	-"C:/Program Files (x86)/Texas Instruments/CCSV4.2/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_433MHz.out" -o "ez430_chronos_datalogger_433MHz.txt" -order MS -romwidth 16
+	-"C:/Program Files (x86)/Texas Instruments/ccsv4/tools/compiler/msp430/bin/hex430.exe" --ti_txt "ez430_chronos_datalogger_433MHz.out" -o "ez430_chronos_datalogger_433MHz.txt" -order MS -romwidth 16
 	-@echo ' '
 
 .PHONY: all clean dependents

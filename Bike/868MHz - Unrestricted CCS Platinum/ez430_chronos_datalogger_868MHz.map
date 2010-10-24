@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v3.3.1                      
 ******************************************************************************
->> Linked Thu Oct 21 23:15:15 2010
+>> Linked Sun Oct 24 20:34:26 2010
 
 OUTPUT FILE NAME:   <ez430_chronos_datalogger_868MHz.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 0000d4f0
