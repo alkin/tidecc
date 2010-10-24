@@ -114,7 +114,7 @@ u16 convert_speed_to_mi_h(u16 speed_ms)
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
-	//	speed = (sensor * 2 * PI * bike_radius);	
+	// speed = (sensor_counter * 2 * PI * bike_radius);	
 }
 
 // *************************************************************************************************
@@ -131,7 +131,7 @@ void set_speed_unit(u8 unit)
 
 // *************************************************************************************************
 // @fn          display_speed
-// @brief       Display data logger information.
+// @brief       Display speed information.
 // @param       u8 line		LINE1, LINE2
 //				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
 // @return      none
@@ -141,34 +141,45 @@ void display_speed(u8 line, u8 update)
 	u16 speed_km_h;
 	u16 speed_mi_h;
 
-	// Partial update
- 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
+	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
 		
-	}
-	else if (update == DISPLAY_LINE_UPDATE_FULL)			
-	{
 		if(speed_flag == SPEED_KM_H)
 		{
 			speed_km_h = convert_speed_to_km_h(speed);
-			display_symbol(LCD_UNIT_L1_K, SEG_ON);
-			display_symbol(LCD_UNIT_L1_M, SEG_ON);
-			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_km_h, 2, 0), SEG_ON);	
 		}
 		else if(speed_flag == SPEED_M_S)
 		{
-			display_symbol(LCD_UNIT_L1_M, SEG_ON);
-			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed, 2, 0), SEG_ON);
 		}
 		else if(speed_flag == SPEED_MI_H)
 		{
 			speed_mi_h = convert_speed_to_mi_h(speed);
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
+		}
+		
+	}
+	else if (update == DISPLAY_LINE_UPDATE_FULL)			
+	{
+		display_speed(line, DISPLAY_LINE_UPDATE_PARTIAL);
+		
+		if(speed_flag == SPEED_KM_H)
+		{
+			display_symbol(LCD_UNIT_L1_K, SEG_ON);
+			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+		}
+		else if(speed_flag == SPEED_M_S)
+		{
+			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
+		}
+		else if(speed_flag == SPEED_MI_H)
+		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_I, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
 		}
 	}
 	else if (update == DISPLAY_LINE_CLEAR)

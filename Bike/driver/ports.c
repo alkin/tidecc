@@ -75,6 +75,7 @@ void button_repeat_function(void);
 // Global Variable section
 volatile s_button_flags button;
 volatile struct struct_button sButton;
+volatile u8 sensor_counter;
 
 
 // *************************************************************************************************
@@ -157,8 +158,10 @@ __interrupt void PORT2_ISR(void)
 		{
 			button.flag.star = 1;
 			
+			sensor_counter++;
+			
 			// Generate button click
-			buzzer = 1;
+			// buzzer = 1;
 		}
 	}
 	// ---------------------------------------------------

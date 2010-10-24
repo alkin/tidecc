@@ -109,6 +109,8 @@ struct struct_button
 };
 extern volatile struct struct_button sButton;
 
+extern volatile u8 sensor_counter;
+
 // *************************************************************************************************
 // Extern section
 extern void button_repeat_on(u16 msec);
