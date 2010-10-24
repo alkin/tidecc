@@ -103,6 +103,7 @@ u16 convert_speed_to_km_h(u16 speed_ms)
 // *************************************************************************************************
 u16 convert_speed_to_mi_h(u16 speed_ms)
 {
+	//SE: Change conversion constant
 	return (speed * 1);
 }
 
@@ -119,8 +120,8 @@ void do_speed_measurement(void)
 
 // *************************************************************************************************
 // @fn          set_speed_unit
-// @brief       Sx button turns alarm on/off.
-// @param       u8 line		LINE1
+// @brief       Changes the speed unit.
+// @param       u8 unit		SPEED_KM_H, SPEED_MI_H, SPEED_M_S
 // @return      none
 // *************************************************************************************************
 void set_speed_unit(u8 unit)
@@ -143,7 +144,6 @@ void display_speed(u8 line, u8 update)
 
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		
 		if(speed_flag == SPEED_KM_H)
 		{
 			speed_km_h = convert_speed_to_km_h(speed);
@@ -158,7 +158,6 @@ void display_speed(u8 line, u8 update)
 			speed_mi_h = convert_speed_to_mi_h(speed);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
 		}
-		
 	}
 	else if (update == DISPLAY_LINE_UPDATE_FULL)			
 	{
@@ -189,5 +188,4 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
 	}
-	
 }
