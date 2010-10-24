@@ -280,12 +280,14 @@ __interrupt void TIMER0_A0_ISR(void)
 	// Request data logging
 	if (is_datalog()) request.flag.datalog = 1;
 
-	// Request temperature and pressure measurement
-	if (is_altitude_measurement()) request.flag.altitude_measurement = 1;
+	// XUNXO - ARRUMAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	request.flag.altitude_measurement = 1;
 	
 	// Get BlueRobin data from API
 	if (is_bluerobin()) get_bluerobin_data();
+
 	
+		
 	// If battery is low, count down display counter
 	if (sys.flag.low_battery)
 	{
@@ -331,16 +333,6 @@ __interrupt void TIMER0_A0_ISR(void)
 	{
 		change_menu++;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	// Exit from LPM3 on RETI
 	_BIC_SR_IRQ(LPM3_bits);               

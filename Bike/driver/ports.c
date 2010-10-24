@@ -133,7 +133,6 @@ __interrupt void PORT2_ISR(void)
 	// Store valid button interrupt flag
 	int_flag = BUTTONS_IFG & int_enable;
 
-
 	// Debounce buttons
 	if ((int_flag & ALL_BUTTONS) != 0)
 	{ 
@@ -156,12 +155,8 @@ __interrupt void PORT2_ISR(void)
 		// Filter bouncing noise 
 		if (BUTTON_STAR_IS_PRESSED)
 		{
-			button.flag.star = 1;
-			
-			sensor_counter++;
-			
-			// Generate button click
-			// buzzer = 1;
+			// light detector
+
 		}
 	}
 	// ---------------------------------------------------
@@ -170,11 +165,9 @@ __interrupt void PORT2_ISR(void)
 	{
 		// Filter bouncing noise 
 		if (BUTTON_NUM_IS_PRESSED)
-		{
-			button.flag.num = 1;
-
-			// Generate button click
-			buzzer = 1;
+		{		
+			// input sensor
+			sensor_counter++;
 		}
 	}
 	// ---------------------------------------------------
@@ -184,10 +177,7 @@ __interrupt void PORT2_ISR(void)
 		// Filter bouncing noise 
 		if (BUTTON_UP_IS_PRESSED)
 		{
-			button.flag.up = 1;
-	
-			// Generate button click
-			buzzer = 1;
+			// free pin for use
 		}
 	}
 	// ---------------------------------------------------
@@ -197,13 +187,7 @@ __interrupt void PORT2_ISR(void)
 		// Filter bouncing noise 
 		if (BUTTON_DOWN_IS_PRESSED)
 		{
-			button.flag.down = 1;
-
-			// Generate button click
-			buzzer = 1;
-
-			// During sync, button DOWN cancels connection
-			if (is_rf()) simpliciti_flag |= SIMPLICITI_TRIGGER_STOP;
+	
 		}
 	}
 	// ---------------------------------------------------
@@ -217,15 +201,6 @@ __interrupt void PORT2_ISR(void)
 		}
 	}
 	
-	// Trying to lock/unlock buttons?
-	if (button.flag.num && button.flag.down)
-	{
-		// No buzzer output
-		buzzer = 0;
-		button.all_flags = 0;
-	}
-		
-
 	// Generate button click when button was activated
 	if (!is_rf() && buzzer)
 	{
@@ -242,8 +217,7 @@ __interrupt void PORT2_ISR(void)
 	// Acceleration sensor IRQ
 	if (IRQ_TRIGGERED(int_flag, AS_INT_PIN))
 	{
-		// Get data from sensor
-		request.flag.acceleration_measurement = 1;
+		
   	}
   	
   	// ---------------------------------------------------
@@ -253,18 +227,6 @@ __interrupt void PORT2_ISR(void)
 		// Get data from sensor
 		request.flag.altitude_measurement = 1;
   	}
-  	
-  	// ---------------------------------------------------
-  	// Enable safe long button event detection
-  	if(button.flag.star || button.flag.num) 
-	{
-		// Additional debounce delay to enable safe high detection
-		Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_LEFT));
-	
-		// Check if this button event is short enough
-		if (BUTTON_STAR_IS_PRESSED) button.flag.star = 0;
-		if (BUTTON_NUM_IS_PRESSED) button.flag.num = 0;	
-	}
 	
 	// Reenable PORT2 IRQ
 	__disable_interrupt();

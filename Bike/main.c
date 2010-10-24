@@ -111,7 +111,9 @@ int main(void)
     	if (request.all_flags) process_requests();
     	
     	// Before going to LPM3, update display
-    	if (display.all_flags) display_update();	
+    	if (display.all_flags) display_update();
+ 
+
  	}	
 }
 
@@ -262,9 +264,6 @@ void init_global_variables(void)
 	message.all_flags	= 0;
 	bike.all_flags 		= 0;
 	
-	// talvez a gente possa tirar isso... REVER!!
-	speed_flag = SPEED_KM_H;
-	
 	// Force full display update when starting up
 	display.flag.full_update = 1;
 
@@ -305,8 +304,8 @@ void init_global_variables(void)
 	// Reset data logger
 	reset_datalog();
 	
-	// Reset data logger
-	//reset_speed(modo);
+	// Reset speed
+	reset_speed();
 }
 
 
@@ -449,6 +448,10 @@ void process_requests(void)
 	// Do voltage measurement
 	if (request.flag.voltage_measurement) battery_measurement();
 	
+	//do_speed_measurement();
+ 	do_speed_measurement();
+
+    sensor_counter=0;	
 	// Reset request flag
 	request.all_flags = 0;
 }
@@ -503,7 +506,6 @@ void display_update(void)
 		else 				display_chars(LCD_SEG_L1_3_0, string, SEG_ON);
 		
 		// Next second tick erases message and repaints original screen content
-		message.all_flags = 0;
 		message.flag.erase = 1;
 	}
 	// ---------------------------------------------------------------------

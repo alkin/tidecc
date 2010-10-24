@@ -50,7 +50,7 @@
 #include "speed.h"
 #include "simpliciti.h"
 #include "user.h"
-
+#include "ports.h"
 
 // *************************************************************************************************
 // Global Variable section
@@ -116,7 +116,9 @@ u16 convert_speed_to_mi_h(u16 speed_ms)
 void do_speed_measurement(void)
 {
 	// speed = (sensor_counter * 2 * PI * bike_radius);	
+	speed = sensor_counter;
 }
+
 
 // *************************************************************************************************
 // @fn          set_speed_unit
