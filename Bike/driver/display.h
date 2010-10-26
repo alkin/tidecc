@@ -69,6 +69,7 @@ typedef union
   	// Line only
     u16 line1_full_update     	: 1;    // 1 = Redraw Line1 content
     u16 line2_full_update     	: 1;    // 1 = Redraw Line2 content
+    u16 line2_change			: 1;	// 1 = Change Line2 Menu
 
 	// Logic module data update flags
     u16 update_time      		: 1;    // 1 = Time was updated 
@@ -78,8 +79,6 @@ typedef union
     u16 update_date      		: 1;    // 1 = Date was updated
     u16 update_alarm      		: 1;    // 1 = Alarm time was updated
     u16 update_acceleration		: 1; 	// 1 = Acceleration data was updated
-    
-    u16 update_menu				: 1;
   } flag;
   u16 all_flags;            // Shortcut to all display flags (for reset)
 } s_display_flags;

@@ -326,7 +326,7 @@ __interrupt void TIMER0_A0_ISR(void)
 	// To change the menu automatically
 	if( change_menu >= CHANGE_MENU_PERIOD )
 	{
-		bike.flag.menu_time_over = 1;
+		display.flag.line2_change = 1;
 		change_menu=0;
 	}
 	else

@@ -41,8 +41,6 @@
 // Prototypes section
 void init_application(void);
 void init_global_variables(void);
-void wakeup_event(void);
-void process_requests(void);
 void display_update(void);
 void idle_loop(void);
 void configure_ports(void);
@@ -106,7 +104,8 @@ int main(void)
     	idle_loop();
     	
     	// if RF not connected then try to connect (1s)
-    	// else RF sync
+    	
+    	// if RF sync flag then SYNC
 
 		do_measurements();
 		
@@ -303,6 +302,9 @@ void init_global_variables(void)
 	// Reset data logger
 	reset_datalog();
 	
+	// Reset sensor
+	//reset_sensor();
+	
 	// Reset speed
 	reset_speed();
 	
@@ -373,10 +375,12 @@ void display_update(void)
 	}
 	
 	// ---------------------------------------------------------------------
-	// Update Menu on Line2
-	if(bike.flag.menu_time_over)
+	// Change Line2 Menu
+	if(display.flag.line2_change)
 	{
-			// Clean up display before activating next menu item 
+			clear_line(LINE2);
+			
+			// Clean up display before activating next menu item
 			fptr_lcd_function_line2(LINE2, DISPLAY_LINE_CLEAR);
 
 			// Go to next menu entry
@@ -389,7 +393,7 @@ void display_update(void)
 			display.flag.line2_full_update = 1;
 
 			// Clear button flag
-			bike.flag.menu_time_over = 0;
+			display.flag.line2_change = 0;
 	}	
 	
 	// ---------------------------------------------------------------------
