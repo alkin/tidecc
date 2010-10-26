@@ -1,33 +1,35 @@
-Sistema embarcado
+TODO
+========================
+- read_calibration_data -> read_config
+- save_config
+- clean reset_* !?
+- session_values
 
-	* Mede e mostra a velocidade no display superior
-	* Muda a cada 3 segundos o display inferior
-	* display inferior mostra distancia e tempo
-	* controlar buzzer
-	* controlar luz
-	
+========================
+	CONFIG:
+		Bike Size
+		Unit
+		Datalogger
+		Datalogger - Time
 
-Possiveis dados
-	SIMPLES:
-		velocidade media
-		velocidade maxima
-		tempo
-		distancia percorrida
-		energia?
-		temperatura media
-		altitude inicial e final
-		
-	DATALOGGER:
-		velocidade instantanea
-		tempo
-		inclinacao
-		temperatura?
-		altitude
+	INST:
+		Speed ( Average x!? )
+		Distance
+		Time
 	
+	SESSION (FLASH!?):
+		Speed - Max
+		Speed - Average
+		Time - Total
+		Distance - Total
+		Energy - Used
+		Temperature - Average
+		Altitude - Initial
+  		Altitude - End
+  	
+  	DATALOGGER (x Time):
+  		Speed
+  		Temperature
+  		Altitude
 	
-----------------------------------------------------------
-Mudar modo de display de tempo.
-	Comeca somente com segundos. Mostrar tambem os minutos. 
-	Caso passe de 60 minutos, muda pra modo convencional de relogio .
-	Retirar modo 24 horas, continuar ate 99.
 
