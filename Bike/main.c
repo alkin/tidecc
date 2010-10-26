@@ -47,6 +47,7 @@ void display_update(void);
 void idle_loop(void);
 void configure_ports(void);
 void read_calibration_values(void);
+void do_measurements(void);
 
 
 // *************************************************************************************************
@@ -103,7 +104,17 @@ int main(void)
 	{
 		// When idle go to LPM3
     	idle_loop();
+    	
+    	// if RF not connected then try to connect (1s)
+    	// else RF sync
 
+		do_measurements();
+		
+		// if datalog then do_datalog();
+		
+		display_update();
+
+/*
     	// Process wake-up events
     	if (button.all_flags || sys.all_flags) wakeup_event();
     	
@@ -112,7 +123,7 @@ int main(void)
     	
     	// Before going to LPM3, update display
     	if (display.all_flags) display_update();
- 
+*/ 
 
  	}	
 }
@@ -306,6 +317,12 @@ void init_global_variables(void)
 	
 	// Reset speed
 	reset_speed();
+	
+	// Reset distance
+	//reset_distance();
+	
+	// Reset time
+	//reset_time();
 }
 
 
@@ -409,7 +426,94 @@ void wakeup_event(void)
 	sys.flag.idle_timeout_enabled = 0;
 	
 	*/
+}
+
+
+// *************************************************************************************************
+// @fn          process_requests
+// @brief       Process requested actions outside ISR context.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void process_requests(void)
+{
+	/*
+	// Do temperature and pressure measurement
+  	if (request.flag.altitude_measurement) do_altitude_measurement(FILTER_ON);
+  	
+  	// Add data to datalog buffer
+  	if (request.flag.datalog) do_datalog();
 	
+	// Do voltage measurement
+	if (request.flag.voltage_measurement) battery_measurement();
+    	
+	// Reset request flag
+	request.all_flags = 0;
+	*/
+}
+
+
+// *************************************************************************************************
+// @fn          do_measurements
+// @brief       Does all the measurements
+// @param       none
+// @return      none
+// *************************************************************************************************
+void do_measurements(void)
+{
+	// Do speed measurement
+	do_speed_measurement();
+	
+	// Do distance measurement
+	//do_distance_measurement(FILTER_ON);
+	
+	// Do altitude measurement
+	do_altitude_measurement(FILTER_ON);
+	
+	// Reset Sensor
+	// reset_sensor();
+	
+	// SE: Move to reset_sensor()
+	sensor_counter=0;	
+}
+
+
+// *************************************************************************************************
+// @fn          display_update
+// @brief       Process display flags and call LCD update routines.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void display_update(void)
+{
+	// ---------------------------------------------------------------------
+	// Call Line1 display function
+	if (display.flag.full_update ||	display.flag.line1_full_update)
+	{
+		clear_line(LINE1);	
+		fptr_lcd_function_line1(LINE1, DISPLAY_LINE_UPDATE_FULL);
+	}
+	else if (ptrMenu_L1->display_update())
+	{
+		// Update line1 only when new data is available
+		fptr_lcd_function_line1(LINE1, DISPLAY_LINE_UPDATE_PARTIAL);
+	}
+
+	// ---------------------------------------------------------------------
+	// Call Line2 display function
+	if (display.flag.full_update || display.flag.line2_full_update)
+	{
+		clear_line(LINE2);
+		fptr_lcd_function_line2(LINE2, DISPLAY_LINE_UPDATE_FULL);
+	}
+	else if (ptrMenu_L2->display_update() && !message.all_flags)
+	{
+		// Update line2 only when new data is available
+		fptr_lcd_function_line2(LINE2, DISPLAY_LINE_UPDATE_PARTIAL);
+	}
+	
+	// ---------------------------------------------------------------------
+	// Update Menu on Line2
 	if(bike.flag.menu_time_over)
 	{
 			// Clean up display before activating next menu item 
@@ -426,114 +530,9 @@ void wakeup_event(void)
 
 			// Clear button flag
 			bike.flag.menu_time_over = 0;
-	}
-	
-}
-
-
-// *************************************************************************************************
-// @fn          process_requests
-// @brief       Process requested actions outside ISR context.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void process_requests(void)
-{
-	// Do temperature and pressure measurement
-  	if (request.flag.altitude_measurement) do_altitude_measurement(FILTER_ON);
-  	
-  	// Add data to datalog buffer
-  	if (request.flag.datalog) do_datalog();
-	
-	// Do voltage measurement
-	if (request.flag.voltage_measurement) battery_measurement();
-	
-	//do_speed_measurement();
- 	do_speed_measurement();
-
-    sensor_counter=0;	
-	// Reset request flag
-	request.all_flags = 0;
-}
-
-
-// *************************************************************************************************
-// @fn          display_update
-// @brief       Process display flags and call LCD update routines.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void display_update(void)
-{
-	u8 line;
-	u8 string[8];
+	}	
 	
 	// ---------------------------------------------------------------------
-	// Call Line1 display function
-	if (display.flag.full_update ||	display.flag.line1_full_update)
-	{
-		clear_line(LINE1);	
-		fptr_lcd_function_line1(LINE1, DISPLAY_LINE_UPDATE_FULL);
-	}
-	else if (ptrMenu_L1->display_update())
-	{
-		// Update line1 only when new data is available
-		fptr_lcd_function_line1(LINE1, DISPLAY_LINE_UPDATE_PARTIAL);
-	}
-
-	// ---------------------------------------------------------------------
-	// If message text should be displayed on Line2, skip normal update
-	if (message.flag.show)
-	{
-		// Select message to display
-		line = LINE2;
-		if (message.flag.type_locked)			memcpy(string, "  LO?T", 6);
-		else if (message.flag.type_unlocked)	memcpy(string, "  OPEN", 6);
-		else if (message.flag.type_lobatt)		memcpy(string, "LOBATT", 6);
-		else if (message.flag.type_nomem)		memcpy(string, " NOMEM", 6);
-		else
-		{
- 			line = LINE1;
-			if (message.flag.type_on)			memcpy(string, "  ON", 4);
-			else if (message.flag.type_off)		memcpy(string, " OFF", 4);
-		}
-		
-		// Clear previous content
-		clear_line(line);
-		fptr_lcd_function_line2(line, DISPLAY_LINE_CLEAR);
-		
-		if (line == LINE2) 	display_chars(LCD_SEG_L2_5_0, string, SEG_ON);
-		else 				display_chars(LCD_SEG_L1_3_0, string, SEG_ON);
-		
-		// Next second tick erases message and repaints original screen content
-		message.flag.erase = 1;
-	}
-	// ---------------------------------------------------------------------
-	// Call Line2 display function
-	else if (display.flag.full_update || display.flag.line2_full_update)
-	{
-		clear_line(LINE2);
-		fptr_lcd_function_line2(LINE2, DISPLAY_LINE_UPDATE_FULL);
-	}
-	else if (ptrMenu_L2->display_update() && !message.all_flags)
-	{
-		// Update line2 only when new data is available
-		fptr_lcd_function_line2(LINE2, DISPLAY_LINE_UPDATE_PARTIAL);
-	}
-	
-	// ---------------------------------------------------------------------
-	// Restore blinking icons (blinking memory is cleared when calling set_value)
-	if (display.flag.full_update) 
-	{
-		if (is_bluerobin() == BLUEROBIN_CONNECTED) 
-		{
-			// Turn on beeper icon to show activity
-			display_symbol(LCD_ICON_BEEPER1, SEG_ON_BLINK_OFF);
-			display_symbol(LCD_ICON_BEEPER2, SEG_ON_BLINK_OFF);
-			display_symbol(LCD_ICON_BEEPER3, SEG_ON_BLINK_OFF);
-		}
-	}
-	
 	// Clear display flag
 	display.all_flags = 0;
 }

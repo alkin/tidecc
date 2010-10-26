@@ -106,7 +106,7 @@ const struct menu menu_L1_Speed =
 {
 	FUNCTION(sx_speed),			// direct function
 	FUNCTION(dummy),			// sub menu function
-	FUNCTION(display_speed),		// display function
+	FUNCTION(display_speed),	// display function
 	FUNCTION(update_time),		// new display data
 	&menu_L1_Speed,
 };
@@ -125,7 +125,7 @@ const struct menu menu_L2_Distance =
 	FUNCTION(sx_distance),			// direct function
 	FUNCTION(dummy),				// sub menu function
 	FUNCTION(display_distance),		// display function
-	FUNCTION(update_date),			// new display data
+	FUNCTION(update_time),			// new display data
 	&menu_L2_Time,
 };
 
