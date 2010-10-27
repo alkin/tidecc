@@ -104,7 +104,7 @@ u8 update_temperature(void)
 
 const struct menu menu_L1_Speed =
 {
-	FUNCTION(sx_speed),			// direct function
+	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),			// sub menu function
 	FUNCTION(display_speed),	// display function
 	FUNCTION(update_time),		// new display data
@@ -113,7 +113,7 @@ const struct menu menu_L1_Speed =
 
 const struct menu menu_L2_Time =
 {
-	FUNCTION(sx_time),			// direct function
+	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),			// sub menu function
 	FUNCTION(display_time),		// display function
 	FUNCTION(update_time),		// new display data
@@ -122,7 +122,7 @@ const struct menu menu_L2_Time =
 
 const struct menu menu_L2_Distance =
 {
-	FUNCTION(sx_distance),			// direct function
+	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),				// sub menu function
 	FUNCTION(display_distance),		// display function
 	FUNCTION(update_time),			// new display data

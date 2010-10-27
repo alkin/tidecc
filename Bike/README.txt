@@ -8,6 +8,7 @@ TODO
 ========================
 	CONFIG:
 		Bike Size
+		Bike Sensor Number
 		Unit
 		Datalogger
 		Datalogger - Time

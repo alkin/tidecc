@@ -44,7 +44,7 @@ void init_global_variables(void);
 void display_update(void);
 void idle_loop(void);
 void configure_ports(void);
-void read_calibration_values(void);
+void read_configuration_values(void);
 void do_measurements(void);
 
 
@@ -435,13 +435,13 @@ void idle_loop(void)
 
 
 // *************************************************************************************************
-// @fn          read_calibration_values
+// @fn          read_configuration_values
 // @brief       Read calibration values for temperature measurement, voltage measurement
 //				and radio from INFO memory.
 // @param       none
 // @return      none
 // *************************************************************************************************
-void read_calibration_values(void)
+void read_configuration_values(void)
 {
 	u8 cal_data[CALIBRATION_DATA_LENGTH];		// Temporary storage for constants
 	u8 i;
@@ -490,5 +490,64 @@ void read_calibration_values(void)
 		}
 	}
 }
+
+
+// *************************************************************************************************
+// @fn          save_configuration_values
+// @brief       Read calibration values for temperature measurement, voltage measurement
+//				and radio from INFO memory.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void save_configuration_values(void)
+{
+	u8 cal_data[CALIBRATION_DATA_LENGTH];		// Temporary storage for constants
+	u8 i;
+	u8 * flash_mem;         					// Memory pointer
+	
+	// Read calibration data from Info D memory
+	flash_mem = (u8 *)0x1800;
+	for (i=0; i<CALIBRATION_DATA_LENGTH; i++)
+	{
+		cal_data[i] = *flash_mem++;
+	}
+	
+	if (cal_data[0] == 0xFF) 
+	{
+		// If no values are available (i.e. INFO D memory has been erased by user), assign experimentally derived values	
+		rf_frequoffset	= 4;
+		sBatt.offset 	= -10;	
+		simpliciti_ed_address[0] = 0x79;
+		simpliciti_ed_address[1] = 0x56;
+		simpliciti_ed_address[2] = 0x34;
+		simpliciti_ed_address[3] = 0x12;
+		sAlt.altitude_offset	 = 0;
+	}
+	else
+	{
+		// Assign calibration data to global variables
+		rf_frequoffset	= cal_data[1];	
+		// Range check for calibrated FREQEST value (-20 .. + 20 is ok, else use default value)
+		if ((rf_frequoffset > 20) && (rf_frequoffset < (256-20)))
+		{
+			rf_frequoffset = 0;
+		} 
+		sBatt.offset 	= (s16)((cal_data[4] << 8) + cal_data[5]);
+		simpliciti_ed_address[0] = cal_data[6];
+		simpliciti_ed_address[1] = cal_data[7];
+		simpliciti_ed_address[2] = cal_data[8];
+		simpliciti_ed_address[3] = cal_data[9];
+		// S/W version byte set during calibration?
+		if (cal_data[12] != 0xFF)
+		{
+			sAlt.altitude_offset = (s16)((cal_data[10] << 8) + cal_data[11]);;
+		}
+		else
+		{
+			sAlt.altitude_offset = 0;	
+		}
+	}
+}
+
 
 
