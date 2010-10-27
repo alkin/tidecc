@@ -71,16 +71,30 @@ void reset_distance(void)
 	speed.config.unit = SPEED_KM_H;
 }
 
+
 // *************************************************************************************************
 // @fn          convert_speed_to_mi_h
 // @brief       Converts the speed from m/s to mi/h
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
 // *************************************************************************************************
-u16 convert_distance_to_mi(u16 distance_km)
+u16 convert_distance_to_km(u16 distance_m)
 {
-	//SE: Change conversion constant
-	return (speed_ms * 22369 / 10000);
+	// distance_mi = distance_km * 0.62137
+	return (distance_m * / 1000);
+}
+
+
+// *************************************************************************************************
+// @fn          convert_speed_to_mi_h
+// @brief       Converts the speed from m/s to mi/h
+// @param       u16 speed_ms	Speed in meters per second.
+// @return      u16 			Speed in miles per hour.
+// *************************************************************************************************
+u16 convert_distance_to_mi(u16 distance_m)
+{
+	// distance_mi = distance_m * 0.00062137
+	return (distance_m * 62137 / 10000 / 1000);
 }
 
 // *************************************************************************************************

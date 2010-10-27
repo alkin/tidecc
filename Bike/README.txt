@@ -4,6 +4,8 @@ TODO
 - save_config
 - clean reset_* !?
 - session_values
+- clock -> time
+- driver/sensor
 
 ========================
 	CONFIG:

@@ -64,7 +64,7 @@ extern void do_speed_measurement(void);
 typedef union
 {
     u16 unit      				: 2;    // Unit for speed display
-   u16 size    				: 6;    // Bike Frame Size
+   	u16 size    				: 6;    // Bike Frame Size
 
 } u_speed_config;
 
