@@ -59,19 +59,41 @@
 // *************************************************************************************************
 // Extern section
 
-// Global flag for proper acceleration sensor operation
-
-
-
 // *************************************************************************************************
-// @fn          sx_alarm
-// @brief       Sx button turns alarm on/off.
-// @param       u8 line		LINE1
+// @fn          reset_speed
+// @brief       Resets speed to 0 m/s, km/h display format
+// @param       none
 // @return      none
 // *************************************************************************************************
-void sx_distance(u8 line)
+void reset_distance(void)
 {
+	speed.value = 0;
+	speed.config.unit = SPEED_KM_H;
+}
+
+// *************************************************************************************************
+// @fn          convert_speed_to_mi_h
+// @brief       Converts the speed from m/s to mi/h
+// @param       u16 speed_ms	Speed in meters per second.
+// @return      u16 			Speed in miles per hour.
+// *************************************************************************************************
+u16 convert_distance_to_mi(u16 distance_km)
+{
+	//SE: Change conversion constant
+	return (speed_ms * 22369 / 10000);
+}
+
+// *************************************************************************************************
+// @fn          do_speed_measurement
+// @brief       Calculates the speed in m/s based on the counter of the sensor.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void do_distance_measurement(void)
+{
+	// Move all the configs to driver/sensor !?
 	
+	//speed.value = sensor.get_distance();	
 }
 
 // *************************************************************************************************
