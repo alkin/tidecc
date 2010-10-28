@@ -271,7 +271,7 @@ void init_global_variables(void)
 #endif
 
 	// Read calibration values from info memory
-	read_calibration_values();
+	read_configuration_values();
 	
 	// Set system time to default value
 	reset_clock();
@@ -432,7 +432,6 @@ void idle_loop(void)
 	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
 #endif
 }
-
 
 // *************************************************************************************************
 // @fn          read_configuration_values

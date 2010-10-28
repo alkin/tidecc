@@ -48,8 +48,26 @@
 
 // *************************************************************************************************
 
+#define DISTANCE_KM				(0u)
+#define DISTANCE_MI				(1u)
+
 // *************************************************************************************************
 // Global Variable section
+typedef union
+{
+    u16 unit      				: 2;    // Unit for speed display
+   	u16 size    				: 6;    // Bike Frame Size
+
+} u_distance_config;
+
+typedef struct
+{
+	u_distance_config config;    
+    u16 value;    // Lock buttons
+} s_distance;
+
+extern volatile s_distance distance;
+
 
 
 // *************************************************************************************************

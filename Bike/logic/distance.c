@@ -53,7 +53,7 @@
 
 // *************************************************************************************************
 // Global Variable sectionstruct accel sAccel;
-
+volatile s_distance distance;
 
 // *************************************************************************************************
 // Extern section
@@ -67,7 +67,7 @@
 void reset_distance(void)
 {
 	distance.value = 0;
-	distance.config.unit = SPEED_KM_H;
+	distance.config.unit = DISTANCE_KM;
 }
 
 
@@ -118,32 +118,32 @@ void do_distance_measurement(void)
 // *************************************************************************************************
 void display_distance(u8 line, u8 update)
 {
-	u16 distance_km_h;
-	u16 distance_mi_h;
+	u16 distance_km;
+	u16 distance_mi;
 	
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
 		if(distance.config.unit == DISTANCE_KM)
 		{
-			distance_km = convert_distance_to_km(distance);
+			distance_km = convert_distance_to_km(distance.value);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(distance_km, 2, 0), SEG_ON);	
 		}
 		else if(distance.config.unit == DISTANCE_MI)
 		{
-			distance_mi = convert_distance_to_mi(distance);
+			distance_mi = convert_distance_to_mi(distance.value);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(distance_mi, 2, 0), SEG_ON);
 		}
 	}
 	else if (update == DISPLAY_LINE_UPDATE_FULL)			
 	{
-		display_speed(line, DISPLAY_LINE_UPDATE_PARTIAL);
+		display_distance(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		
-		if(speed.config.unit == DISTANCE_KM)
+		if(distance.config.unit == DISTANCE_KM)
 		{
 			display_symbol(LCD_UNIT_L2_KM, SEG_ON);
 			display_symbol(LCD_UNIT_L2_MI, SEG_OFF);
 		}
-		else if(speed.config.unit == DISTANCE_MI)
+		else if(distance.config.unit == DISTANCE_MI)
 		{
 			display_symbol(LCD_UNIT_L2_KM, SEG_OFF);
 			display_symbol(LCD_UNIT_L2_MI, SEG_ON);
