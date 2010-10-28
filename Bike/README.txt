@@ -34,5 +34,3 @@ TODO
   		Speed
   		Temperature
   		Altitude
-	
-

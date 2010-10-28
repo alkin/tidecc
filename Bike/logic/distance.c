@@ -54,26 +54,25 @@
 // *************************************************************************************************
 // Global Variable sectionstruct accel sAccel;
 
-// Conversion values from data to mgrav taken from CMA3000-D0x datasheet (rev 0.4, table 4)
 
 // *************************************************************************************************
 // Extern section
 
 // *************************************************************************************************
-// @fn          reset_speed
+// @fn          reset_distance
 // @brief       Resets speed to 0 m/s, km/h display format
 // @param       none
 // @return      none
 // *************************************************************************************************
 void reset_distance(void)
 {
-	speed.value = 0;
-	speed.config.unit = SPEED_KM_H;
+	distance.value = 0;
+	distance.config.unit = SPEED_KM_H;
 }
 
 
 // *************************************************************************************************
-// @fn          convert_speed_to_mi_h
+// @fn          convert_distance_to_km
 // @brief       Converts the speed from m/s to mi/h
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
@@ -81,12 +80,12 @@ void reset_distance(void)
 u16 convert_distance_to_km(u16 distance_m)
 {
 	// distance_mi = distance_km * 0.62137
-	return (distance_m * / 1000);
+	return (distance_m / 1000);
 }
 
 
 // *************************************************************************************************
-// @fn          convert_speed_to_mi_h
+// @fn          convert_distance_to_mi
 // @brief       Converts the speed from m/s to mi/h
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
@@ -94,11 +93,11 @@ u16 convert_distance_to_km(u16 distance_m)
 u16 convert_distance_to_mi(u16 distance_m)
 {
 	// distance_mi = distance_m * 0.00062137
-	return (distance_m * 62137 / 10000 / 1000);
+	return (distance_m / 1000 * 62137 / 10000 );
 }
 
 // *************************************************************************************************
-// @fn          do_speed_measurement
+// @fn          do_distance_measurement
 // @brief       Calculates the speed in m/s based on the counter of the sensor.
 // @param       none
 // @return      none
@@ -111,7 +110,7 @@ void do_distance_measurement(void)
 }
 
 // *************************************************************************************************
-// @fn          display_datalog
+// @fn          display_distance
 // @brief       Display data logger information.
 // @param       u8 line	LINE1, LINE2
 //				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
@@ -119,14 +118,19 @@ void do_distance_measurement(void)
 // *************************************************************************************************
 void display_distance(u8 line, u8 update)
 {
+	u16 distance_km_h;
+	u16 distance_mi_h;
+	
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(speed.config.unit == DISTANCE_KM)
+		if(distance.config.unit == DISTANCE_KM)
 		{
+			distance_km = convert_distance_to_km(distance);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(distance_km, 2, 0), SEG_ON);	
 		}
-		else if(speed.config.unit == DISTANCE_MI)
+		else if(distance.config.unit == DISTANCE_MI)
 		{
+			distance_mi = convert_distance_to_mi(distance);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(distance_mi, 2, 0), SEG_ON);
 		}
 	}
@@ -137,9 +141,11 @@ void display_distance(u8 line, u8 update)
 		if(speed.config.unit == DISTANCE_KM)
 		{
 			display_symbol(LCD_UNIT_L2_KM, SEG_ON);
+			display_symbol(LCD_UNIT_L2_MI, SEG_OFF);
 		}
 		else if(speed.config.unit == DISTANCE_MI)
 		{
+			display_symbol(LCD_UNIT_L2_KM, SEG_OFF);
 			display_symbol(LCD_UNIT_L2_MI, SEG_ON);
 		}
 	}

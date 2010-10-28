@@ -73,17 +73,6 @@ void reset_speed(void)
 }
 
 // *************************************************************************************************
-// @fn          sx_speed
-// @brief       Sx button does nothing.
-// @param       u8 line		LINE1
-// @return      none
-// *************************************************************************************************
-void sx_speed(u8 line)
-{
-	
-}
-
-// *************************************************************************************************
 // @fn          convert_speed_to_km_h
 // @brief       Converts the speed from m/s to km/h
 // @param       u16 speed_ms	Speed in meters per second.
@@ -157,17 +146,28 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_K, SEG_ON);
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+			
+			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
 		}
 		else if(speed.config.unit == SPEED_M_S)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
+			
+			display_symbol(LCD_UNIT_L1_K, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
+			
 		}
 		else if(speed.config.unit == SPEED_MI_H)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_I, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+			
+			display_symbol(LCD_UNIT_L1_K, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
 		}
 	}
 	else if (update == DISPLAY_LINE_CLEAR)
@@ -176,5 +176,6 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_M, SEG_OFF);
 			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
 	}
 }
