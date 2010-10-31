@@ -151,9 +151,19 @@ typedef union
    u16 menu_time_over : 1; 		// flag to change menu
    
   } flag;
-  u16 all_flags;            // Shortcut to all display flags (for reset)
+  u16 all_flags;            	// Shortcut to all display flags (for reset)
 } s_bike_flags;
 extern volatile s_bike_flags bike;
+
+typedef struct
+{
+   u16 bike_radius : 6; 		// Frame size in cm
+   u16 sensor_count : 4;
+   u16 speed_unit : 2;
+   u16 distance_unit : 2;
+
+} s_config;
+extern volatile s_config config;
 
 // *************************************************************************************************
 // Global Variable section

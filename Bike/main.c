@@ -33,6 +33,8 @@
 #include "simpliciti.h"
 #include "datalog.h"
 
+#include "session.h"
+#include "sensor.h"
 #include "speed.h"
 #include "distance.h"
 #include "time.h"
@@ -69,6 +71,9 @@ volatile s_message_flags message;
 
 // Variable holding bike flags
 volatile s_bike_flags bike;
+
+// Variable holding bike flags
+volatile s_config config;
 
 // Global radio frequency offset taken from calibration memory
 // Compensates crystal deviation from 26MHz nominal value
@@ -333,10 +338,8 @@ void do_measurements(void)
 	do_altitude_measurement(FILTER_ON);
 	
 	// Reset Sensor
-	// reset_sensor();
-	
-	// SE: Move to reset_sensor()
-	sensor_counter=0;	
+	reset_sensor();
+
 }
 
 

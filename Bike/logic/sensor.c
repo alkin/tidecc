@@ -44,15 +44,13 @@
 #include <string.h>
 
 // driver
-#include "display.h"
-#include "distance.h"
-// logic
-#include "simpliciti.h"
-#include "user.h"
 
+// logic
+#include "sensor.h"
 
 // *************************************************************************************************
 // Global Variable sectionstruct accel sAccel;
+volatile s_sensor sensor;
 
 
 // *************************************************************************************************
@@ -66,9 +64,8 @@
 // *************************************************************************************************
 void reset_sensor(void)
 {
-	
+	sensor.value = 0;	
 }
-
 
 // *************************************************************************************************
 // @fn          convert_distance_to_km
@@ -76,7 +73,18 @@ void reset_sensor(void)
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
 // *************************************************************************************************
-void get_distance(void)
+void sensor_tick()
 {
-	
+	sensor.value++;
+}
+
+// *************************************************************************************************
+// @fn          convert_distance_to_km
+// @brief       Converts the speed from m/s to mi/h
+// @param       u16 speed_ms	Speed in meters per second.
+// @return      u16 			Speed in miles per hour.
+// *************************************************************************************************
+u32 sensor_get_distance(void)
+{
+	return (sensor.value * 2 * 31415 / 10000 * config.bike_radius / 10 / config.sensor_count);	
 }

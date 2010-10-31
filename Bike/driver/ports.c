@@ -75,7 +75,6 @@ void button_repeat_function(void);
 // Global Variable section
 volatile s_button_flags button;
 volatile struct struct_button sButton;
-volatile u8 sensor_counter;
 
 
 // *************************************************************************************************
@@ -167,7 +166,7 @@ __interrupt void PORT2_ISR(void)
 		if (BUTTON_NUM_IS_PRESSED)
 		{		
 			// input sensor
-			sensor_counter++;
+			sensor_tick();
 		}
 	}
 	// ---------------------------------------------------

@@ -44,13 +44,10 @@
 
 // driver
 #include "display.h"
-#include "vti_as.h"
 
 // logic
 #include "speed.h"
-#include "simpliciti.h"
-#include "user.h"
-#include "ports.h"
+#include "sensor.h"
 
 // *************************************************************************************************
 // Global Variable section
@@ -69,30 +66,39 @@ volatile s_speed speed;
 void reset_speed(void)
 {
 	speed.value = 0;
-	speed.config.unit = SPEED_KM_H;
 }
 
 // *************************************************************************************************
 // @fn          convert_speed_to_km_h
-// @brief       Converts the speed from m/s to km/h
+// @brief       Converts the speed from dm/s to km/h
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in kilometers per hour.
 // *************************************************************************************************
-u16 convert_speed_to_km_h(u16 speed_ms)
+u16 convert_speed_to_km_h(u16 speed)
 {
-	return (speed_ms * 36 / 10);
+	return (speed * 36 / 100);
 }
 
 // *************************************************************************************************
 // @fn          convert_speed_to_mi_h
-// @brief       Converts the speed from m/s to mi/h
+// @brief       Converts the speed from dm/s to m/s
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
 // *************************************************************************************************
-u16 convert_speed_to_mi_h(u16 speed_ms)
+u16 convert_speed_to_m_s(u16 speed)
 {
-	//SE: Change conversion constant
-	return (speed_ms * 22369 / 10000);
+	return (speed / 10);
+}
+
+// *************************************************************************************************
+// @fn          convert_speed_to_mi_h
+// @brief       Converts the speed from dm/s to mi/h
+// @param       u16 speed_ms	Speed in meters per second.
+// @return      u16 			Speed in miles per hour.
+// *************************************************************************************************
+u16 convert_speed_to_mi_h(u16 speed)
+{
+	return (speed * 2236 / 10000);
 }
 
 // *************************************************************************************************
@@ -103,9 +109,7 @@ u16 convert_speed_to_mi_h(u16 speed_ms)
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
-	// Move all the configs to driver/sensor !?
-	
-	//speed.value = sensor.get_distance();	
+	speed.value = sensor_get_distance();	
 }
 
 // *************************************************************************************************
@@ -118,20 +122,22 @@ void do_speed_measurement(void)
 void display_speed(u8 line, u8 update)
 {
 	u16 speed_km_h;
+	u16 speed_m_s;
 	u16 speed_mi_h;
 
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(speed.config.unit == SPEED_KM_H)
+		if(config.speed_unit == SPEED_KM_H)
 		{
 			speed_km_h = convert_speed_to_km_h(speed.value);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_km_h, 2, 0), SEG_ON);	
 		}
-		else if(speed.config.unit == SPEED_M_S)
+		else if(config.speed_unit == SPEED_M_S)
 		{
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed.value, 2, 0), SEG_ON);
+			speed_m_s = convert_speed_to_km_h(speed.value);
+			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_m_s, 2, 0), SEG_ON);
 		}
-		else if(speed.config.unit == SPEED_MI_H)
+		else if(config.speed_unit == SPEED_MI_H)
 		{
 			speed_mi_h = convert_speed_to_mi_h(speed.value);
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
@@ -141,7 +147,7 @@ void display_speed(u8 line, u8 update)
 	{
 		display_speed(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		
-		if(speed.config.unit == SPEED_KM_H)
+		if(config.speed_unit == SPEED_KM_H)
 		{
 			display_symbol(LCD_UNIT_L1_K, SEG_ON);
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
@@ -150,7 +156,7 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
 		}
-		else if(speed.config.unit == SPEED_M_S)
+		else if(config.speed_unit == SPEED_M_S)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
@@ -160,7 +166,7 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
 			
 		}
-		else if(speed.config.unit == SPEED_MI_H)
+		else if(config.speed_unit == SPEED_MI_H)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_I, SEG_ON);

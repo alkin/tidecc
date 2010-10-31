@@ -43,14 +43,20 @@
 // *************************************************************************************************
 // Prototypes section
 extern void reset_sensor(void);
-extern void get_distance(void);
+extern u32 sensor_get_distance(void);
 
 // *************************************************************************************************
 // Defines section
+typedef struct
+{
+	u16 value;
+} s_sensor;
+extern volatile s_sensor sensor;
 
 
 // *************************************************************************************************
 // Global Variable section
+
 
 // *************************************************************************************************
 // Extern section

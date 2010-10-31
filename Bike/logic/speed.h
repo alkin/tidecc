@@ -61,16 +61,8 @@ extern void do_speed_measurement(void);
 // *************************************************************************************************
 // Global Variable section
 
-typedef union
-{
-    u16 unit      				: 2;    // Unit for speed display
-   	u16 size    				: 6;    // Bike Frame Size
-
-} u_speed_config;
-
 typedef struct
 {
-	u_speed_config config;    
     u16 value;    // Lock buttons
 } s_speed;
 
