@@ -76,7 +76,7 @@ void reset_speed(void)
 // *************************************************************************************************
 u16 convert_speed_to_km_h(u16 speed)
 {
-	return (speed * 36 / 100);
+	return (u16)(speed * 3.6 / 10);
 }
 
 // *************************************************************************************************
@@ -87,7 +87,7 @@ u16 convert_speed_to_km_h(u16 speed)
 // *************************************************************************************************
 u16 convert_speed_to_m_s(u16 speed)
 {
-	return (speed / 10);
+	return (u16)(speed / 10);
 }
 
 // *************************************************************************************************
@@ -98,7 +98,7 @@ u16 convert_speed_to_m_s(u16 speed)
 // *************************************************************************************************
 u16 convert_speed_to_mi_h(u16 speed)
 {
-	return (speed * 2236 / 10000);
+	return (u16)(speed * 2.2369 / 10);
 }
 
 // *************************************************************************************************
@@ -130,17 +130,17 @@ void display_speed(u8 line, u8 update)
 		if(config.speed_unit == SPEED_KM_H)
 		{
 			speed_km_h = convert_speed_to_km_h(speed.value);
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_km_h, 2, 0), SEG_ON);	
+			display_chars(LCD_SEG_L1_2_0, itoa(speed_km_h, 3, 2), SEG_ON);	
 		}
 		else if(config.speed_unit == SPEED_M_S)
 		{
-			speed_m_s = convert_speed_to_km_h(speed.value);
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_m_s, 2, 0), SEG_ON);
+			speed_m_s = convert_speed_to_m_s(speed.value);
+			display_chars(LCD_SEG_L1_2_0, itoa(speed_m_s, 3, 2), SEG_ON);
 		}
 		else if(config.speed_unit == SPEED_MI_H)
 		{
 			speed_mi_h = convert_speed_to_mi_h(speed.value);
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(speed_mi_h, 2, 0), SEG_ON);
+			display_chars(LCD_SEG_L1_2_0, itoa(speed_mi_h, 3, 2), SEG_ON);
 		}
 	}
 	else if (update == DISPLAY_LINE_UPDATE_FULL)			

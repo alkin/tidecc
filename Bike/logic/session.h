@@ -67,7 +67,7 @@ typedef struct
 	u16 altitude_end;
 } s_session;
 
-extern struct s_session session;
+extern volatile s_session session;
 
 
 // *************************************************************************************************

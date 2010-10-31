@@ -198,13 +198,18 @@ void display_time(u8 line, u8 update)
 			// Display minute
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON); 
 			display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_ON_BLINK_ON);
+			
+			display_symbol(LCD_ICON_STOPWATCH, SEG_ON);
 		}
 		else
 		{
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_3_2), itoa(sTime.minute, 2, 0), SEG_ON); 
 			// Display seconds
 			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
-			display_symbol(switch_seg(line, LCD_SEG_L1_DP1, LCD_SEG_L2_DP), SEG_ON);
+			
+			
+			display_symbol(LCD_SEG_L2_COL0, SEG_ON);
+			display_symbol(LCD_ICON_STOPWATCH, SEG_ON);
 		}
 	}
 	else if (update == DISPLAY_LINE_CLEAR)
@@ -214,5 +219,8 @@ void display_time(u8 line, u8 update)
 		sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
 		// Clean up AM/PM icon
 		display_symbol(LCD_SYMB_AM, SEG_OFF);
+		
+		display_symbol(LCD_ICON_STOPWATCH, SEG_OFF);
+		display_symbol(LCD_SEG_L2_COL0, SEG_OFF);
 	}
 }

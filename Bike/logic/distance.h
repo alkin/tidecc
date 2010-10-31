@@ -63,7 +63,7 @@ typedef union
 typedef struct
 {
 	u_distance_config config;    
-    u16 value;    // Lock buttons
+    u32 value;    						// Lock buttons
 } s_distance;
 
 extern volatile s_distance distance;

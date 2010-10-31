@@ -116,6 +116,8 @@ int main(void)
 		
 		// if datalog then do_datalog();
 		
+		update_session();
+		
 		display_update();
  	}	
 }
@@ -332,13 +334,13 @@ void do_measurements(void)
 	do_speed_measurement();
 	
 	// Do distance measurement
-	//do_distance_measurement(FILTER_ON);
+	do_distance_measurement();
 	
 	// Do altitude measurement
 	do_altitude_measurement(FILTER_ON);
 	
 	// Reset Sensor
-	reset_sensor();
+	//reset_sensor();
 
 }
 
@@ -351,6 +353,28 @@ void do_measurements(void)
 // *************************************************************************************************
 void display_update(void)
 {
+	// ---------------------------------------------------------------------
+	// Change Line2 Menu
+	if(display.flag.line2_change)
+	{
+			clear_line(LINE2);
+			
+			// Clean up display before activating next menu item
+			fptr_lcd_function_line2(LINE2, DISPLAY_LINE_CLEAR);
+
+			// Go to next menu entry
+			ptrMenu_L2 = ptrMenu_L2->next;
+
+			// Assign new display function
+			fptr_lcd_function_line2 = ptrMenu_L2->display_function;
+
+			// Set Line2 display update flag
+			display.flag.line2_full_update = 1;
+
+			// Clear button flag
+			display.flag.line2_change = 0;
+	}
+	
 	// ---------------------------------------------------------------------
 	// Call Line1 display function
 	if (display.flag.full_update ||	display.flag.line1_full_update)
@@ -376,28 +400,6 @@ void display_update(void)
 		// Update line2 only when new data is available
 		fptr_lcd_function_line2(LINE2, DISPLAY_LINE_UPDATE_PARTIAL);
 	}
-	
-	// ---------------------------------------------------------------------
-	// Change Line2 Menu
-	if(display.flag.line2_change)
-	{
-			clear_line(LINE2);
-			
-			// Clean up display before activating next menu item
-			fptr_lcd_function_line2(LINE2, DISPLAY_LINE_CLEAR);
-
-			// Go to next menu entry
-			ptrMenu_L2 = ptrMenu_L2->next;
-
-			// Assign new display function
-			fptr_lcd_function_line2 = ptrMenu_L2->display_function;
-
-			// Set Line2 display update flag
-			display.flag.line2_full_update = 1;
-
-			// Clear button flag
-			display.flag.line2_change = 0;
-	}	
 	
 	// ---------------------------------------------------------------------
 	// Clear display flag
@@ -445,6 +447,14 @@ void idle_loop(void)
 // *************************************************************************************************
 void read_configuration_values(void)
 {
+	config.bike_size = 60;
+	config.sensor_count = 9;
+	config.speed_unit = SPEED_KM_H;
+	config.distance_unit = DISTANCE_KM;
+	
+	
+	
+	
 	u8 cal_data[CALIBRATION_DATA_LENGTH];		// Temporary storage for constants
 	u8 i;
 	u8 * flash_mem;         					// Memory pointer

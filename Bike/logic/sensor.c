@@ -84,7 +84,7 @@ void sensor_tick()
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
 // *************************************************************************************************
-u32 sensor_get_distance(void)
+u16 sensor_get_distance(void)
 {
-	return (sensor.value * 2 * 31415 / 10000 * config.bike_radius / 10 / config.sensor_count);	
+	return (u16)(sensor.value * 3.1415 * (6) / config.sensor_count);	
 }

@@ -157,7 +157,7 @@ extern volatile s_bike_flags bike;
 
 typedef struct
 {
-   u16 bike_radius : 6; 		// Frame size in cm
+   u16 bike_size : 6; 		// Frame size in cm
    u16 sensor_count : 4;
    u16 speed_unit : 2;
    u16 distance_unit : 2;
