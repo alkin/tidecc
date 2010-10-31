@@ -48,6 +48,8 @@
 
 // logic
 #include "session.h"
+#include "speed.h"
+#include "distance.h"
 
 
 // *************************************************************************************************
@@ -65,7 +67,17 @@ volatile s_session session;
 // *************************************************************************************************
 void reset_session(void)
 {
-	
+//	session.id = config.session_id + 1;
+	session.time_start = 0;
+	session.time_end = 0;
+	session.speed_max = 0;
+	session.speed_avg = 0;
+	session.distance = 0;
+	session.energy = 0;
+	session.temperature_avg = 0;
+	session.altitude_start = 0;
+	session.altitude_end = 0;
+	session.energy = 0;
 }
 
 
@@ -77,5 +89,18 @@ void reset_session(void)
 // *************************************************************************************************
 void update_session(void)
 {
+	//if(session.altitude_start == 0) session.altitude_start = ;
+	//session.altitude_end = ;
 	
+	//if(session.time_start == 0) session.time_start = ;
+	//session.time_end = ;
+	
+	//session.energy = ;
+	
+	//session.speed_avg = distance.value / session.time;
+	if(speed.value > session.speed_max) session.speed_max = speed.value;
+	
+	//session.temperature_avg = ;
+	
+	session.distance = distance.value;
 }
