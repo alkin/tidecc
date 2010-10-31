@@ -24,6 +24,8 @@ $(GEN_CMDS_QUOTED) \
 "./logic/user.obj" \
 "./logic/temperature.obj" \
 "./logic/speed.obj" \
+"./logic/session.obj" \
+"./logic/sensor.obj" \
 "./logic/rfsimpliciti.obj" \
 "./logic/rfbsl.obj" \
 "./logic/menu.obj" \
@@ -186,9 +188,9 @@ ez430_chronos_datalogger_868MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QTD) "ez430_chronos_datalogger_868MHz.out"
 	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.obj" ".\simpliciti\Components\nwk_applications\nwk_ioctl.obj" ".\simpliciti\Components\nwk_applications\nwk_join.obj" ".\simpliciti\Components\nwk_applications\nwk_link.obj" ".\simpliciti\Components\nwk_applications\nwk_mgmt.obj" ".\simpliciti\Components\nwk_applications\nwk_ping.obj" ".\simpliciti\Components\nwk_applications\nwk_security.obj" ".\simpliciti\Components\nwk\nwk.obj" ".\simpliciti\Components\nwk\nwk_QMgmt.obj" ".\simpliciti\Components\nwk\nwk_api.obj" ".\simpliciti\Components\nwk\nwk_frame.obj" ".\simpliciti\Components\nwk\nwk_globals.obj" ".\simpliciti\Components\mrfi\mrfi.obj" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.obj" ".\simpliciti\Applications\application\End Device\main_ED_BM.obj" ".\main.obj" ".\logic\acceleration.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\bluerobin.obj" ".\logic\clock.obj" ".\logic\datalog.obj" ".\logic\date.obj" ".\logic\distance.obj" ".\logic\menu.obj" ".\logic\rfbsl.obj" 
-	-$(RM) ".\logic\rfsimpliciti.obj" ".\logic\speed.obj" ".\logic\temperature.obj" ".\logic\user.obj" ".\driver\adc12.obj" ".\driver\buzzer.obj" ".\driver\display.obj" ".\driver\display1.obj" ".\driver\flash.obj" ".\driver\pmm.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" ".\driver\timer.obj" ".\driver\vti_as.obj" ".\driver\vti_ps.obj" 
+	-$(RM) ".\logic\rfsimpliciti.obj" ".\logic\sensor.obj" ".\logic\session.obj" ".\logic\speed.obj" ".\logic\temperature.obj" ".\logic\user.obj" ".\driver\adc12.obj" ".\driver\buzzer.obj" ".\driver\display.obj" ".\driver\display1.obj" ".\driver\flash.obj" ".\driver\pmm.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" ".\driver\timer.obj" ".\driver\vti_as.obj" ".\driver\vti_ps.obj" 
 	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.pp" ".\simpliciti\Components\nwk_applications\nwk_ioctl.pp" ".\simpliciti\Components\nwk_applications\nwk_join.pp" ".\simpliciti\Components\nwk_applications\nwk_link.pp" ".\simpliciti\Components\nwk_applications\nwk_mgmt.pp" ".\simpliciti\Components\nwk_applications\nwk_ping.pp" ".\simpliciti\Components\nwk_applications\nwk_security.pp" ".\simpliciti\Components\nwk\nwk.pp" ".\simpliciti\Components\nwk\nwk_QMgmt.pp" ".\simpliciti\Components\nwk\nwk_api.pp" ".\simpliciti\Components\nwk\nwk_frame.pp" ".\simpliciti\Components\nwk\nwk_globals.pp" ".\simpliciti\Components\mrfi\mrfi.pp" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.pp" ".\simpliciti\Applications\application\End Device\main_ED_BM.pp" ".\main.pp" ".\logic\acceleration.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\bluerobin.pp" ".\logic\clock.pp" ".\logic\datalog.pp" ".\logic\date.pp" ".\logic\distance.pp" ".\logic\menu.pp" ".\logic\rfbsl.pp" ".\logic\rfsimpliciti.pp" 
-	-$(RM) ".\logic\speed.pp" ".\logic\temperature.pp" ".\logic\user.pp" ".\driver\adc12.pp" ".\driver\buzzer.pp" ".\driver\display.pp" ".\driver\display1.pp" ".\driver\flash.pp" ".\driver\pmm.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" ".\driver\timer.pp" ".\driver\vti_as.pp" ".\driver\vti_ps.pp" 
+	-$(RM) ".\logic\sensor.pp" ".\logic\session.pp" ".\logic\speed.pp" ".\logic\temperature.pp" ".\logic\user.pp" ".\driver\adc12.pp" ".\driver\buzzer.pp" ".\driver\display.pp" ".\driver\display1.pp" ".\driver\flash.pp" ".\driver\pmm.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" ".\driver\timer.pp" ".\driver\vti_as.pp" ".\driver\vti_ps.pp" 
 	-@echo ' '
 
 post-build:
