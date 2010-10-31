@@ -45,10 +45,9 @@
 
 // driver
 #include "display.h"
-#include "distance.h"
+
 // logic
-#include "simpliciti.h"
-#include "user.h"
+#include "session.h"
 
 
 // *************************************************************************************************
@@ -78,6 +77,5 @@ void reset_session(void)
 // *************************************************************************************************
 void update_session(void)
 {
-	session.
 	
 }
