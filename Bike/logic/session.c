@@ -47,6 +47,7 @@
 #include "display.h"
 
 // logic
+#include "altitude.h"
 #include "session.h"
 #include "speed.h"
 #include "distance.h"
@@ -89,13 +90,16 @@ void reset_session(void)
 // *************************************************************************************************
 void update_session(void)
 {
-	//if(session.altitude_start == 0) session.altitude_start = ;
-	//session.altitude_end = ;
+	if(session.altitude_start == 0) session.altitude_start = sAlt.altitude;
+	session.altitude_end = sAlt.altitude;
 	
-	//if(session.time_start == 0) session.time_start = ;
-	//session.time_end = ;
+	//if(session.time_start == 0) session.time_start = config.time_start;
+	//session.time_end = sTime.time;
 	
-	//session.energy = ;
+	//if(LIGHTON) session.energy += LIGHTMODE;
+	//session.energy += SLEEPMODE;
+	
+	//session.time = sTime.time;
 	
 	//session.speed_avg = distance.value / session.time;
 	if(speed.value > session.speed_max) session.speed_max = speed.value;

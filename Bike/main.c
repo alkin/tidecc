@@ -315,6 +315,9 @@ void init_global_variables(void)
 	// Reset speed
 	reset_speed();
 	
+	// Reset session
+	reset_session();
+	
 	// Reset distance
 	reset_distance();
 	
