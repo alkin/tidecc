@@ -309,7 +309,7 @@ void init_global_variables(void)
 	reset_speed();
 	
 	// Reset distance
-	//reset_distance();
+	reset_distance();
 	
 	// Reset time
 	//reset_time();
