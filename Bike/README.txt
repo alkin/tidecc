@@ -2,8 +2,9 @@ TODO
 ========================
 - read_calibration_data -> read_config
 - save_config
-- more than 1 hour time ?!
 - meter per s !!!
+- BUY resistor
+- BUY buzzer
 
 ========================
 	CONFIG:

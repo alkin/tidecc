@@ -73,7 +73,6 @@ struct time sTime;
 // Extern section
 
 
-
 // *************************************************************************************************
 // @fn          reset_clock
 // @brief       Resets clock time to 00:00:00, 24H time format.
