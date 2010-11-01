@@ -78,12 +78,11 @@
 // @param       none
 // @return      none
 // *************************************************************************************************
-void rfbike_init2(void)
+void do_rfbike(void)
 {
 	// LISTEN
 	
 	u8 sLinkID1 = 0;
-	
 	u8 len;
 	char recvBuffer[256];
 	

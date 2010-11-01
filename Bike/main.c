@@ -98,7 +98,7 @@ int main(void)
 
 	// Assign initial value to global variables
 	init_global_variables();
-	
+		
 	// Main control loop: wait in low power mode until some event needs to be processed
 	while(1)
 	{
@@ -343,6 +343,9 @@ void do_measurements(void)
 	// Do altitude measurement
 	do_altitude_measurement(FILTER_ON);
 	
+	// Do distance measurement
+	do_light_measurement();
+	
 	// Reset Sensor
 	//reset_sensor();
 }
@@ -576,7 +579,7 @@ void read_configuration_values(void)
 		
 		config.bike_size = 60;
 		config.sensor_count = 9;
-		config.speed_unit = SPEED_KM_H;
+		config.speed_unit = SPEED_M_S;
 		config.distance_unit = DISTANCE_KM;
 	}
 	else

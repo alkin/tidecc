@@ -44,6 +44,7 @@
 
 // driver
 #include "adc12.h"
+#include "ports.h"
 
 // logic
 #include "light.h"
@@ -73,9 +74,14 @@
 // *************************************************************************************************
 void reset_light(void)
 {
-
+	//light.enable = false;
+	
+	BUTTONS_DIR |= BUTTON_DOWN_PIN;
+	BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
 }
 
+
+volatile u16 light_voltage;
 // *************************************************************************************************
 // @fn          convert_C_to_F
 // @brief       Convert °C to °F 
@@ -84,10 +90,18 @@ void reset_light(void)
 // *************************************************************************************************
 void do_light_measurement(void)
 {
-	u16 voltage;
+	light_voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_2);
+	light_voltage = (light_voltage * 2 * 2) / 41; 
+
+	if(light_voltage > 200)
+	{
+		BUTTONS_OUT |= BUTTON_BACKLIGHT_PIN;	
+	} else
+	{
+		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
+	}
 	
-	voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_11);
-	voltage = (voltage * 2 * 2) / 41;  
+	//light.value = light.value*0.8 + voltage*0.2;
 }
 
 // *************************************************************************************************
@@ -99,6 +113,15 @@ void do_light_measurement(void)
 void update_light(void)
 {
 /*
-	light.enable = (ligth.value < xxx);
+	if(ligth.value < xxx)
+	{
+		ligth.enable = true;
+		BUTTONS_OUT |= BUTTON_DOWN_PIN;
+	}
+	else
+	{
+		ligth.enable = false;
+		BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
+	}
 */
 }
