@@ -7,6 +7,8 @@ TODO
 - session values
 - datalogger
 - speed resolution !?
+- Light Sensor AD
+- Light ON/OFF
 
 ========================
 	CONFIG:
