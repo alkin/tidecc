@@ -41,6 +41,7 @@
 
 // system
 #include "project.h"
+#include <string.h>
 
 #include "mrfi.h"
 #include "nwk_types.h"
@@ -71,7 +72,6 @@
 // Extern section
 
 
-
 // *************************************************************************************************
 // @fn          idle_loop
 // @brief       Go to LPM. Service watchdog timer when waking up.
@@ -81,34 +81,36 @@
 void rfbike_init2(void)
 {
 	// LISTEN
+	
+	u8 sLinkID1 = 0;
+	
 	u8 len;
-	u8 sLinkID1;
+	char recvBuffer[256];
 	
-	
-	while (SMPL_Receive(sLinkID1, simpliciti_data, &len) == SMPL_SUCCESS)
+	while (SMPL_Receive(sLinkID1, (uint8_t*)recvBuffer, &len) == SMPL_SUCCESS)
 	{
  		if (len <= 0) break;
  		
- 		if(strncmp(simpliciti_data, "HELLO", 5))
+ 		if(strncmp(recvBuffer, "HELLO", 5) == 0)
  		{
- 			SMPL_SendOpt(sLinkID1, "HALLO", 5, SMPL_TXOPTION_NONE);
+ 			SMPL_SendOpt(sLinkID1, (uint8_t*)"HALLO", 5, SMPL_TXOPTION_NONE);
  			continue;
  		}
  		
- 		if(strncmp(simpliciti_data, "BYE", 3))
+ 		if(strncmp(recvBuffer, "BYE", 3) == 0)
  		{
- 			SMPL_SendOpt(sLinkID1, "CIAO", 3, SMPL_TXOPTION_NONE);
+ 			SMPL_SendOpt(sLinkID1, (uint8_t*)"CIAO", 3, SMPL_TXOPTION_NONE);
  			break;
  		}
  		
- 		if(strncmp(simpliciti_data, "SETCONFIG", 9))
+ 		if(strncmp(recvBuffer, "SETCONFIG", 9) == 0)
  		{
  			// Set Config
- 			SMPL_SendOpt(sLinkID1, "ACK", 3, SMPL_TXOPTION_NONE);
+ 			SMPL_SendOpt(sLinkID1, (uint8_t*)"ACK", 3, SMPL_TXOPTION_NONE);
  			continue;
  		}
  		
- 		if(strncmp(simpliciti_data, "GETDATA", 9))
+ 		if(strncmp(recvBuffer, "GETDATA", 9) == 0)
  		{
  			// Send Data
  			// SMPL_SendOpt(sLinkID1, "CIAO", 3, SMPL_TXOPTION_NONE);
@@ -116,7 +118,8 @@ void rfbike_init2(void)
  			continue;
  		}
  		
-	}	
+	}
+	
 	// <- Hello
 	// -> Hallo
 	
