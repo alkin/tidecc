@@ -107,8 +107,8 @@ int main(void)
 	{
 		// When idle go to LPM3
     	idle_loop();
-    	
-    	//do_rfbike();
+
+		rfbike_sync();
 
 		do_measurements();
 		
@@ -340,6 +340,9 @@ void do_measurements(void)
 	
 	// Reset Sensor
 	//reset_sensor();
+	
+	// Update Light
+	update_light();
 }
 
 

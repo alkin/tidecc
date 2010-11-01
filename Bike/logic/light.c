@@ -56,7 +56,7 @@
 
 // *************************************************************************************************
 // Defines section
-
+volatile s_light light;
 
 // *************************************************************************************************
 // Global Variable section
@@ -74,7 +74,8 @@
 // *************************************************************************************************
 void reset_light(void)
 {
-	//light.enable = false;
+	light.enable = FALSE;
+	light.value = 0;
 	
 	BUTTONS_DIR |= BUTTON_DOWN_PIN;
 	BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
@@ -90,8 +91,9 @@ volatile u16 light_voltage;
 // *************************************************************************************************
 void do_light_measurement(void)
 {
-	light_voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_2);
-	light_voltage = (light_voltage * 2 * 2) / 41; 
+	u16 voltage;
+	voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_2);
+	voltage = (voltage * 2 * 2) / 41; 
 
 	if(light_voltage > 200)
 	{
@@ -101,7 +103,7 @@ void do_light_measurement(void)
 		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
 	}
 	
-	//light.value = light.value*0.8 + voltage*0.2;
+	light.value = light.value*0.8 + voltage*0.2;
 }
 
 // *************************************************************************************************
@@ -112,16 +114,14 @@ void do_light_measurement(void)
 // *************************************************************************************************
 void update_light(void)
 {
-/*
-	if(ligth.value < xxx)
+	if(light.value >= 200)
 	{
-		ligth.enable = true;
-		BUTTONS_OUT |= BUTTON_DOWN_PIN;
+		light.enable = TRUE;
+		BUTTONS_OUT |= BUTTON_BACKLIGHT_PIN;
 	}
 	else
 	{
-		ligth.enable = false;
-		BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
+		light.enable = FALSE;
+		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
 	}
-*/
 }
