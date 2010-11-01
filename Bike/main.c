@@ -313,9 +313,6 @@ void init_global_variables(void)
 	
 	// Reset distance
 	reset_distance();
-	
-	// Reset time
-	//reset_time();
 }
 
 // *************************************************************************************************

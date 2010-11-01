@@ -82,10 +82,8 @@ struct time sTime;
 // *************************************************************************************************
 void reset_clock(void) 
 {
-	// Set global system time to 0
 	sTime.system_time = 0;
-	
-	// Set main 24H time to start value
+
 	sTime.hour   = 0; 
 	sTime.minute = 0; 
 	sTime.second = 0; 
@@ -133,6 +131,12 @@ void display_time(u8 line, u8 update)
 	// Partial update
  	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
+		if(sTime.hour > 0)
+		{
+			display_chars(LCD_SEG_L2_5_4, itoa(sTime.hour, 2, 1), SEG_ON);
+			display_symbol(LCD_SEG_L2_COL1, SEG_ON);
+		} 
+		
 		display_chars(LCD_SEG_L2_3_2, itoa(sTime.minute, 2, 0), SEG_ON); 
 		display_chars(LCD_SEG_L2_1_0, itoa(sTime.second, 2, 0), SEG_ON);
 	}
@@ -147,5 +151,6 @@ void display_time(u8 line, u8 update)
 	{
 		display_symbol(LCD_ICON_STOPWATCH, SEG_OFF);
 		display_symbol(LCD_SEG_L2_COL0, SEG_OFF);
+		display_symbol(LCD_SEG_L2_COL1, SEG_OFF);
 	}
 }

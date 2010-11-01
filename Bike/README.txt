@@ -4,11 +4,6 @@ TODO
 - save_config
 - more than 1 hour time ?!
 - meter per s !!!
-- session values
-- datalogger
-- speed resolution !?
-- Light Sensor AD
-- Light ON/OFF
 
 ========================
 	CONFIG:
