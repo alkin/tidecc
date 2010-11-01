@@ -70,9 +70,6 @@ volatile s_request_flags request;
 volatile s_message_flags message;
 
 // Variable holding bike flags
-volatile s_bike_flags bike;
-
-// Variable holding bike flags
 volatile s_config config;
 
 // Global radio frequency offset taken from calibration memory
@@ -267,7 +264,6 @@ void init_global_variables(void)
 	request.all_flags 	= 0;
 	display.all_flags 	= 0;
 	message.all_flags	= 0;
-	bike.all_flags 		= 0;
 	
 	// Force full display update when starting up
 	display.flag.full_update = 1;

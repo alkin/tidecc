@@ -73,6 +73,7 @@ extern volatile s_distance distance;
 // *************************************************************************************************
 // Extern section
 extern void reset_distance(void);
+extern void do_distance_measurement(void);
 extern void display_distance(u8 line, u8 update);
 
 

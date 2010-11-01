@@ -45,10 +45,10 @@
 
 // driver
 #include "display.h"
-#include "distance.h"
+
 // logic
-#include "simpliciti.h"
-#include "user.h"
+#include "distance.h"
+#include "sensor.h"
 
 
 // *************************************************************************************************

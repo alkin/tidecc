@@ -2,10 +2,11 @@ TODO
 ========================
 - read_calibration_data -> read_config
 - save_config
-- clean reset_* !?
-- session_values
-- clock -> time
-- driver/sensor
+- more than 1 hour time ?!
+- meter per s !!!
+- session values
+- datalogger
+- speed resolution !?
 
 ========================
 	CONFIG:

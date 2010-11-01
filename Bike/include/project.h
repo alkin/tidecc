@@ -143,25 +143,13 @@ typedef union
 } s_message_flags;
 extern volatile s_message_flags message;
 
-
-typedef union
-{
-  struct
-  {
-   u16 menu_time_over : 1; 		// flag to change menu
-   
-  } flag;
-  u16 all_flags;            	// Shortcut to all display flags (for reset)
-} s_bike_flags;
-extern volatile s_bike_flags bike;
-
 typedef struct
 {
    u16 bike_size : 6; 		// Frame size in cm
    u16 sensor_count : 4;
    u16 speed_unit : 2;
-   u16 distance_unit : 2;
-
+   u16 distance_unit : 1;
+   u16 datalogger_en : 1;
 } s_config;
 extern volatile s_config config;
 
