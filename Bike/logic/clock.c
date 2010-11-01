@@ -59,8 +59,6 @@
 // Prototypes section
 void reset_clock(void);
 void clock_tick(void);
-void mx_time(u8 line);
-void sx_time(u8 line);
 
 // *************************************************************************************************
 // Defines section

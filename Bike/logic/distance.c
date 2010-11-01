@@ -135,8 +135,6 @@ void display_distance(u8 line, u8 update)
 	{
 		display_distance(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		display_symbol(LCD_SEG_L2_DP, SEG_ON);
-		//display_symbol(LCD_ICON_ALARM, SEG_ON);
-		
 		
 		if(config.distance_unit == DISTANCE_KM)
 		{
@@ -155,6 +153,5 @@ void display_distance(u8 line, u8 update)
 		display_symbol(LCD_UNIT_L2_MI, SEG_OFF);
 		
 		display_symbol(LCD_SEG_L2_DP, SEG_OFF);
-		display_symbol(LCD_ICON_ALARM, SEG_OFF);
 	}
 }
