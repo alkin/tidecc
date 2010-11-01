@@ -108,13 +108,17 @@ int main(void)
     	// if RF not connected then try to connect (1s)
     	
     	// if RF sync flag then SYNC
+    	
+    	//do_rfbike();
 
 		do_measurements();
 		
+		/*
 		if(config.datalogger_en)
 			do_datalog();
+		*/
 		
-		update_session();
+		// update_session();
 		
 		display_update();
  	}	
@@ -436,6 +440,9 @@ void idle_loop(void)
 	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
 #endif
 }
+
+
+
 
 // *************************************************************************************************
 // @fn          idle_loop

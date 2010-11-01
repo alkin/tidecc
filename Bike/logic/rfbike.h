@@ -33,8 +33,8 @@
 //
 // *************************************************************************************************
 
-#ifndef SESSION_H_
-#define SESSION_H_
+#ifndef RFBIKE_H_
+#define RFBIKE_H_
 
 // *************************************************************************************************
 // Include section
@@ -42,8 +42,7 @@
 
 // *************************************************************************************************
 // Prototypes section
-extern void reset_session(void);
-extern void update_session(void);
+
 
 // *************************************************************************************************
 // Defines section
@@ -51,35 +50,9 @@ extern void update_session(void);
 
 // *************************************************************************************************
 // Global Variable section
-typedef struct
-{
-	u16 id;
-	
-	// Instant
-	u16 altitude;
-	u32 distance;
-	u16 speed;
-	u32 time;
-	u32 temperature;
-	
-	// Session
-	u16 altitude_start;
-	u16 altitude_end;
-	u16 energy;
-	u16 speed_max;
-	u16 speed_avg;
-	u16 temperature_max;
-	u16 temperature_min;
-	u16 temperature_avg;
-	u16 time_start;
-	u16 time_end;
-} s_session;
-
-extern volatile s_session session;
 
 
 // *************************************************************************************************
 // Extern section
 
-
-#endif /*SESSION_H_*/
+#endif /*RFBIKE_H_*/

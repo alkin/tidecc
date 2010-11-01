@@ -32,18 +32,32 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
+// Temperature measurement functions.
+// *************************************************************************************************
 
-#ifndef SESSION_H_
-#define SESSION_H_
 
 // *************************************************************************************************
 // Include section
 
+// system
+#include "project.h"
+
+#include "mrfi.h"
+#include "nwk_types.h"
+#include "nwk_api.h"
+#include "simpliciti.h"
+
+// driver
+#include "temperature.h"
+#include "display.h"
+
+// logic
+#include "rfbike.h"
+
 
 // *************************************************************************************************
 // Prototypes section
-extern void reset_session(void);
-extern void update_session(void);
+
 
 // *************************************************************************************************
 // Defines section
@@ -51,35 +65,69 @@ extern void update_session(void);
 
 // *************************************************************************************************
 // Global Variable section
-typedef struct
-{
-	u16 id;
-	
-	// Instant
-	u16 altitude;
-	u32 distance;
-	u16 speed;
-	u32 time;
-	u32 temperature;
-	
-	// Session
-	u16 altitude_start;
-	u16 altitude_end;
-	u16 energy;
-	u16 speed_max;
-	u16 speed_avg;
-	u16 temperature_max;
-	u16 temperature_min;
-	u16 temperature_avg;
-	u16 time_start;
-	u16 time_end;
-} s_session;
-
-extern volatile s_session session;
 
 
 // *************************************************************************************************
 // Extern section
 
 
-#endif /*SESSION_H_*/
+
+// *************************************************************************************************
+// @fn          idle_loop
+// @brief       Go to LPM. Service watchdog timer when waking up.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void rfbike_init2(void)
+{
+	// LISTEN
+	u8 len;
+	u8 sLinkID1;
+	
+	
+	while (SMPL_Receive(sLinkID1, simpliciti_data, &len) == SMPL_SUCCESS)
+	{
+ 		if (len <= 0) break;
+ 		
+ 		if(strncmp(simpliciti_data, "HELLO", 5))
+ 		{
+ 			SMPL_SendOpt(sLinkID1, "HALLO", 5, SMPL_TXOPTION_NONE);
+ 			continue;
+ 		}
+ 		
+ 		if(strncmp(simpliciti_data, "BYE", 3))
+ 		{
+ 			SMPL_SendOpt(sLinkID1, "CIAO", 3, SMPL_TXOPTION_NONE);
+ 			break;
+ 		}
+ 		
+ 		if(strncmp(simpliciti_data, "SETCONFIG", 9))
+ 		{
+ 			// Set Config
+ 			SMPL_SendOpt(sLinkID1, "ACK", 3, SMPL_TXOPTION_NONE);
+ 			continue;
+ 		}
+ 		
+ 		if(strncmp(simpliciti_data, "GETDATA", 9))
+ 		{
+ 			// Send Data
+ 			// SMPL_SendOpt(sLinkID1, "CIAO", 3, SMPL_TXOPTION_NONE);
+ 			
+ 			continue;
+ 		}
+ 		
+	}	
+	// <- Hello
+	// -> Hallo
+	
+	// <- Set Config
+	// <- Config
+	// -> ACK
+	
+	// <- Get Measurements
+	// -> Measure
+	// <- ACK
+	
+	// <- Bye
+	// -> Ciao	
+}
