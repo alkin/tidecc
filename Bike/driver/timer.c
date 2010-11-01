@@ -267,61 +267,10 @@ __interrupt void TIMER0_A0_ISR(void)
 	}
 	
 	// -------------------------------------------------------------------
-	// Service modules that require 1/min processing
-	if (sTime.drawFlag >= 2) 
-	{
-		// Measure battery voltage
-		request.flag.voltage_measurement = 1;
-	}
-
-	// -------------------------------------------------------------------
 	// Service active modules that require 1/s processing
 	
-	// Request data logging
-	if (is_datalog()) request.flag.datalog = 1;
-
-	// XUNXO - ARRUMAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	request.flag.altitude_measurement = 1;
-	
-	// Get BlueRobin data from API
+    // Get BlueRobin data from API
 	if (is_bluerobin()) get_bluerobin_data();
-
-	
-		
-	// If battery is low, count down display counter
-	if (sys.flag.low_battery)
-	{
-		if (sBatt.lobatt_display-- == 0) 
-		{
-			message.flag.prepare = 1;
-			message.flag.type_lobatt = 1;
-			sBatt.lobatt_display = BATTERY_LOW_MESSAGE_CYCLE;
-		}
-	}
-	
-	// If a message has to be displayed, set display flag
-	if (message.all_flags)
-	{
-		if (message.flag.prepare)
-		{
-			message.flag.prepare = 0;
-			message.flag.show    = 1;
-		}
-		else if (message.flag.erase) // message cycle is over, so erase it
-		{
-			message.flag.erase       = 0;
-			display.flag.full_update = 1;
-		}	
-	}
-	
-	// -------------------------------------------------------------------
-	// Check idle timeout, set timeout flag
-	if (sys.flag.idle_timeout_enabled)
-	{
-		if (sTime.system_time - sTime.last_activity > INACTIVITY_TIME) sys.flag.idle_timeout = 1; //setFlag(sysFlag_g, SYS_TIMEOUT_IDLE);
-	}
-	
-	
 	
 	// To change the menu automatically
 	if( change_menu >= CHANGE_MENU_PERIOD )

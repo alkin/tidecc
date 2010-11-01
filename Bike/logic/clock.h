@@ -39,18 +39,11 @@
 // *************************************************************************************************
 // Defines section
 
-// Definitions for time format
-#define TIMEFORMAT_24H					(0u)
-#define TIMEFORMAT_12H					(1u)
-
 
 // *************************************************************************************************
 // Prototypes section
 extern void reset_clock(void);
-extern void sx_time(u8 line);
-extern void mx_time(u8 line);
 extern void clock_tick(void);
-extern void display_selection_Timeformat1(u8 segments, u32 index, u8 digits, u8 blanks);
 extern void display_time(u8 line, u8 update);
 
 // *************************************************************************************************
@@ -59,19 +52,9 @@ struct time
 {
 	u32 	system_time;
 
-	// Flag to minimize display updates
-	u8 		drawFlag;
-
-	// Viewing style
-	u8		line1ViewStyle;
-	
-	// Time data
 	u8		hour;
 	u8		minute;
 	u8 		second;
-	
-	// Inactivity detection (exits set_value() function)
-	u32 	last_activity;
 };
 extern struct time sTime;
 

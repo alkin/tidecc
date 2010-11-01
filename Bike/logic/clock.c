@@ -91,12 +91,6 @@ void reset_clock(void)
 	sTime.hour   = 0; 
 	sTime.minute = 0; 
 	sTime.second = 0; 
-	
-	// Display style of both lines is default (HH:MM)
-	sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
-	
-	// Reset timeout detection
-	sTime.last_activity 		  = 0;
 }
 
 
@@ -108,12 +102,6 @@ void reset_clock(void)
 // *************************************************************************************************
 void clock_tick(void) 
 {
-	// Use sTime.drawFlag to minimize display updates
-	// sTime.drawFlag = 1: second
-	// sTime.drawFlag = 2: minute, second
-	// sTime.drawFlag = 3: hour, minute
-	sTime.drawFlag = 1;
-
 	// Increase global system time
 	sTime.system_time++;
 
@@ -125,31 +113,15 @@ void clock_tick(void)
 	{
 		sTime.second = 0;
 		sTime.minute++;
-		sTime.drawFlag++;
 	
 		// Add 1 hour	
 		if (sTime.minute == 60)
 		{
 			sTime.minute = 0;
 			sTime.hour++;
-			sTime.drawFlag++;
 		}
 	}
 }
-
-// *************************************************************************************************
-// @fn          sx_time
-// @brief       Time user routine. Toggles view style between HH:MM and SS.
-// @param       line		LINE1
-// @return      none
-// *************************************************************************************************
-void sx_time(u8 line)
-{
-	// Toggle display view style
-	if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW) 	sTime.line1ViewStyle = DISPLAY_ALTERNATIVE_VIEW;
-	else 									 			sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
-}
-
 
 // *************************************************************************************************
 // @fn          display_time
@@ -163,63 +135,18 @@ void display_time(u8 line, u8 update)
 	// Partial update
  	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(sTime.drawFlag != 0) 
-		{
-			if (sTime.line1ViewStyle != DISPLAY_DEFAULT_VIEW)
-			{
-				switch(sTime.drawFlag) 
-				{
-					case 3: if (sys.flag.use_metric_units)
-							{
-								// Display 24H time "HH" 
-								display_chars(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), itoa(sTime.hour, 2, 0), SEG_ON);
-							}
-					case 2: display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON); 
-				}
-			}
-			else
-			{
-				// Seconds are always updated
-				display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
-			}
-		}	
+		display_chars(LCD_SEG_L2_3_2, itoa(sTime.minute, 2, 0), SEG_ON); 
+		display_chars(LCD_SEG_L2_1_0, itoa(sTime.second, 2, 0), SEG_ON);
 	}
 	else if (update == DISPLAY_LINE_UPDATE_FULL)			
 	{
-		// Full update
-		if (sTime.line1ViewStyle != DISPLAY_DEFAULT_VIEW)
-		{	
-			// Display 24H/12H time
-			if (sys.flag.use_metric_units)
-			{
-				// Display 24H time "HH" 
-				display_chars(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), itoa(sTime.hour, 2, 0), SEG_ON);
-			}				
-			// Display minute
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON); 
-			display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_ON_BLINK_ON);
-			
-			display_symbol(LCD_ICON_STOPWATCH, SEG_ON);
-		}
-		else
-		{
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_3_2), itoa(sTime.minute, 2, 0), SEG_ON); 
-			// Display seconds
-			display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
-			
-			
-			display_symbol(LCD_SEG_L2_COL0, SEG_ON);
-			display_symbol(LCD_ICON_STOPWATCH, SEG_ON);
-		}
+		display_time(line, DISPLAY_LINE_UPDATE_PARTIAL);
+
+		display_symbol(LCD_SEG_L2_COL0, SEG_ON);
+		display_symbol(LCD_ICON_STOPWATCH, SEG_ON);
 	}
 	else if (update == DISPLAY_LINE_CLEAR)
 	{
-		display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_OFF_BLINK_OFF);
-		// Change display style to default (HH:MM)
-		sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
-		// Clean up AM/PM icon
-		display_symbol(LCD_SYMB_AM, SEG_OFF);
-		
 		display_symbol(LCD_ICON_STOPWATCH, SEG_OFF);
 		display_symbol(LCD_SEG_L2_COL0, SEG_OFF);
 	}
