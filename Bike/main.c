@@ -33,6 +33,9 @@
 #include "simpliciti.h"
 #include "datalog.h"
 
+
+#include "rfbike.h"
+#include "light.h"
 #include "session.h"
 #include "sensor.h"
 #include "speed.h"
@@ -105,20 +108,9 @@ int main(void)
 		// When idle go to LPM3
     	idle_loop();
     	
-    	// if RF not connected then try to connect (1s)
-    	
-    	// if RF sync flag then SYNC
-    	
     	//do_rfbike();
 
 		do_measurements();
-		
-		/*
-		if(config.datalogger_en)
-			do_datalog();
-		*/
-		
-		// update_session();
 		
 		display_update();
  	}	
@@ -442,109 +434,6 @@ void idle_loop(void)
 	// Service watchdog
 	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
 #endif
-}
-
-
-
-
-// *************************************************************************************************
-// @fn          idle_loop
-// @brief       Go to LPM. Service watchdog timer when waking up.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void rfbike_init(void)
-{
-	// LISTEN
-	
-	// <- Hello
-	// -> Hallo
-	
-	// <- Set Config
-	// <- Config
-	// -> ACK
-	
-	// <- Get Measurements
-	// -> Measure
-	// <- ACK
-	
-	// <- Bye
-	// -> Ciao	
-	
-	
-	// Sync Timer
-	// reset_sensor();	
-	
-	// -> Hello
-	// <- Hallo
-	
-	// -> Start
-	// <- Session
-	// <- Config
-	// -> ACK
-	
-	// Init Session
-	/* 
-	if(session.id == 0)
-	{
-		session.id 				 = new_session.id;
-		session.time_start 		+= new_session.time_start;
-		session.time_end 		+= new_session.time_end;
-		session.speed_max		+= new_session.speed_max;
-		session.speed_avg		+= new_session.speed_avg;
-		session.distance 		+= new_session.distance;
-		session.energy 			+= new_session.energy;
-		session.temperature_avg += new_session.temperature_avg;
-		session.altitude_start 	+= new_session.altitude_start;
-		session.altitude_end	+= new_session.altitude_end;
-	} else if( session.id < new_session.id )
-	{
-		session.id 				= new_session.id;
-		session.time_start 		= new_session.time_start;
-		session.time_end 		= new_session.time_end;
-		session.speed_max		= new_session.speed_max;
-		session.speed_avg		= new_session.speed_avg;
-		session.distance 		= new_session.distance;
-		session.energy 			= new_session.energy;
-		session.temperature_avg = new_session.temperature_avg;
-		session.altitude_start 	= new_session.altitude_start;
-		session.altitude_end	= new_session.altitude_end;
-		
-		// Clear Datalogger
-	}
-	*/
-	
-	// Init Config
-	/*
-	config.bike_size = new_config.bike_size;
-	config.datalogger_en = new_config.datalogger_en;
-	config.distance_unit = new_config.distance_unit;
-	config.sensor_count = new_config.sensor_count;
-	config.speed_unit = new_config.speed_unit;
-	*/
-		
-	// Set Flag Connected
-}
-
-// *************************************************************************************************
-// @fn          idle_loop
-// @brief       Go to LPM. Service watchdog timer when waking up.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void rfbike_sync(void)
-{
-	// LISTEN
-	
-	// -> Hello
-	// <- Hallo
-	
-	// -> Sync
-	// -> Session
-	// -> Datalog
-	// <- ACK
-	
-	// Clear DataLog buffer
 }
 
 // *************************************************************************************************

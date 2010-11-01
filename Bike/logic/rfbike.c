@@ -78,7 +78,7 @@
 // @param       none
 // @return      none
 // *************************************************************************************************
-void do_rfbike(void)
+void rfbike_sync(void)
 {
 	// LISTEN
 	
