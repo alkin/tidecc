@@ -438,6 +438,51 @@ void idle_loop(void)
 }
 
 // *************************************************************************************************
+// @fn          idle_loop
+// @brief       Go to LPM. Service watchdog timer when waking up.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void rfbike_init(void)
+{
+	// LISTEN
+	
+	// -> Hello
+	// <- Hallo
+	
+	// -> Start
+	// <- Session
+	// <- Config
+	// -> ACK
+	
+	// Init Session
+	// Init Config
+	
+	// Set Flag Connected
+}
+
+// *************************************************************************************************
+// @fn          idle_loop
+// @brief       Go to LPM. Service watchdog timer when waking up.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void rfbike_sync(void)
+{
+	// LISTEN
+	
+	// -> Hello
+	// <- Hallo
+	
+	// -> Sync
+	// -> Session
+	// -> Datalog
+	// <- ACK
+	
+	// Clear DataLog buffer
+}
+
+// *************************************************************************************************
 // @fn          read_configuration_values
 // @brief       Read calibration values for temperature measurement, voltage measurement
 //				and radio from INFO memory.
