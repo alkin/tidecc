@@ -2,9 +2,9 @@ TODO
 ========================
 - read_calibration_data -> read_config
 - save_config
-- meter per s !!!
 - BUY resistor
 - BUY buzzer
+- Remove session
 
 ========================
 	CONFIG:
