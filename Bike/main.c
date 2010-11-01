@@ -447,6 +447,9 @@ void rfbike_init(void)
 {
 	// LISTEN
 	
+	// Sync Timer
+	// reset_sensor();	
+	
 	// -> Hello
 	// <- Hallo
 	
@@ -456,8 +459,45 @@ void rfbike_init(void)
 	// -> ACK
 	
 	// Init Session
-	// Init Config
+	/* 
+	if(session.id == 0)
+	{
+		session.id 				 = new_session.id;
+		session.time_start 		+= new_session.time_start;
+		session.time_end 		+= new_session.time_end;
+		session.speed_max		+= new_session.speed_max;
+		session.speed_avg		+= new_session.speed_avg;
+		session.distance 		+= new_session.distance;
+		session.energy 			+= new_session.energy;
+		session.temperature_avg += new_session.temperature_avg;
+		session.altitude_start 	+= new_session.altitude_start;
+		session.altitude_end	+= new_session.altitude_end;
+	} else if( session.id < new_session.id )
+	{
+		session.id 				= new_session.id;
+		session.time_start 		= new_session.time_start;
+		session.time_end 		= new_session.time_end;
+		session.speed_max		= new_session.speed_max;
+		session.speed_avg		= new_session.speed_avg;
+		session.distance 		= new_session.distance;
+		session.energy 			= new_session.energy;
+		session.temperature_avg = new_session.temperature_avg;
+		session.altitude_start 	= new_session.altitude_start;
+		session.altitude_end	= new_session.altitude_end;
+		
+		// Clear Datalogger
+	}
+	*/
 	
+	// Init Config
+	/*
+	config.bike_size = new_config.bike_size;
+	config.datalogger_en = new_config.datalogger_en;
+	config.distance_unit = new_config.distance_unit;
+	config.sensor_count = new_config.sensor_count;
+	config.speed_unit = new_config.speed_unit;
+	*/
+		
 	// Set Flag Connected
 }
 

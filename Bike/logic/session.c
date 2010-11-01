@@ -69,7 +69,7 @@ volatile s_session session;
 // *************************************************************************************************
 void reset_session(void)
 {
-//	session.id = config.session_id + 1;
+	session.id = 0;
 	session.time_start = 0;
 	session.time_end = 0;
 	session.speed_max = 0;
@@ -79,9 +79,7 @@ void reset_session(void)
 	session.temperature_avg = 0;
 	session.altitude_start = 0;
 	session.altitude_end = 0;
-	session.energy = 0;
 }
-
 
 // *************************************************************************************************
 // @fn          convert_distance_to_km
