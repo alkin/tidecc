@@ -111,7 +111,8 @@ int main(void)
 
 		do_measurements();
 		
-		// if datalog then do_datalog();
+		if(config.datalogger_en)
+			do_datalog();
 		
 		update_session();
 		
@@ -340,7 +341,6 @@ void do_measurements(void)
 	
 	// Reset Sensor
 	//reset_sensor();
-
 }
 
 

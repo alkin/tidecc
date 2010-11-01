@@ -59,7 +59,7 @@ typedef struct
 	
 	u16 speed_max;
 	u16 speed_avg;
-	u16 distance;
+	u32 distance;
 	u16 energy;
 	u16 time;
 	u16 temperature_avg;
