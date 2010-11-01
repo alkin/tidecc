@@ -447,6 +447,21 @@ void rfbike_init(void)
 {
 	// LISTEN
 	
+	// <- Hello
+	// -> Hallo
+	
+	// <- Set Config
+	// <- Config
+	// -> ACK
+	
+	// <- Get Measurements
+	// -> Measure
+	// <- ACK
+	
+	// <- Bye
+	// -> Ciao	
+	
+	
 	// Sync Timer
 	// reset_sensor();	
 	
