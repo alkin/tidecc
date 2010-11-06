@@ -51,7 +51,10 @@ extern void update_light();
 typedef struct
 {
     u16 value		: 9;    // Lock buttons
-    u16 enable		: 1 ;
+    u16 enable		: 1;
+    u16 state		: 1;
+    u16 blink		: 4;
+    u16 duty		: 7;
 } s_light;
 
 extern volatile s_light light;

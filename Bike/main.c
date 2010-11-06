@@ -87,6 +87,8 @@ void (*fptr_lcd_function_line2)(u8 line, u8 update);
 // *************************************************************************************************
 // Extern section
 
+#define NUM 40
+#define DUTY 0.2
 
 // *************************************************************************************************
 // @fn          main
@@ -101,11 +103,29 @@ int main(void)
 
 	// Assign initial value to global variables
 	init_global_variables();
+	
+	/*
+	P2IE &= ~(BUTTON_UP_PIN | BUTTON_DOWN_PIN);
+	P2DIR |= BUTTON_UP_PIN | BUTTON_DOWN_PIN;
+	P2OUT &= ~BUTTON_DOWN_PIN;
+	
+	P2OUT |= BUTTON_UP_PIN;
+	P2OUT &= ~BUTTON_UP_PIN;
+	*/
 		
 	// Main control loop: wait in low power mode until some event needs to be processed
 	while(1)
 	{
 		// When idle go to LPM3
+		
+		/*
+		P2OUT &= ~BUTTON_UP_PIN;
+		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000/NUM * DUTY));
+		P2OUT |= BUTTON_UP_PIN;	
+		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000/NUM * (1-DUTY)));
+		*/
+		
+			
     	idle_loop();
 
 		rfbike_sync();
@@ -113,6 +133,9 @@ int main(void)
 		do_measurements();
 		
 		display_update();
+		
+		
+		
  	}	
 }
 
@@ -303,7 +326,7 @@ void init_global_variables(void)
 	reset_datalog();
 	
 	// Reset sensor
-	//reset_sensor();
+	reset_sensor();
 	
 	// Reset speed
 	reset_speed();
@@ -313,6 +336,9 @@ void init_global_variables(void)
 	
 	// Reset distance
 	reset_distance();
+	
+	// Reset light
+	reset_light();
 }
 
 // *************************************************************************************************

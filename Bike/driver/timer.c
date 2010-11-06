@@ -60,6 +60,7 @@
 #include "bluerobin.h"
 #include "temperature.h"
 #include "datalog.h"
+#include "light.h"
 
 
 // *************************************************************************************************
@@ -133,6 +134,42 @@ void Timer0_Stop(void)
 
 	// Set Timer0 count register to 0x0000
 	TA0R = 0;                             
+}
+
+
+// *************************************************************************************************
+// @fn          Timer0_A3_Start
+// @brief       Trigger IRQ every "ticks" microseconds
+// @param       ticks (1 tick = 1/32768 sec)
+// @return      none
+// *************************************************************************************************
+void Timer0_A2_Start(void)
+{
+	u16 value;
+	
+	// Delay based on current counter value
+	value = TA0R + CONV_MS_TO_TICKS(5);
+	
+	// Update CCR
+	TA0CCR2 = value;   
+
+	// Reset IRQ flag    
+	TA0CCTL2 &= ~CCIFG; 
+	          
+	// Enable timer interrupt    
+	TA0CCTL2 |= CCIE; 
+}
+
+// *************************************************************************************************
+// @fn          Timer0_A3_Stop
+// @brief       Stop Timer0_A3.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void Timer0_A2_Stop(void)
+{
+	// Clear timer interrupt    
+	TA0CCTL2 &= ~CCIE; 
 }
 
 
@@ -310,6 +347,25 @@ __interrupt void TIMER0_A1_5_ISR(void)
 		case 0x02:	// Timer0_A1 handler
 					BRRX_TimerTask_v();
 					break;
+		// Timer0_A2	BlueRobin timer
+		case 0x04:	// Timer0_A1 handler
+					if(light.state == 0)
+					{
+						BUTTONS_OUT &= ~BUTTON_UP_PIN;
+						TA0CCR2 = TA0R + CONV_MS_TO_TICKS(10 * light.duty / light.blink);
+						TA0CCTL2 &= ~CCIFG; 
+						TA0CCTL2 |= CCIE; 
+	
+						light.state = 1;
+					} else {
+						BUTTONS_OUT |= BUTTON_UP_PIN;
+						TA0CCR2 = TA0R + CONV_MS_TO_TICKS(10 * (100-light.duty) / light.blink);
+						TA0CCTL2 &= ~CCIFG; 
+						TA0CCTL2 |= CCIE; 
+	
+						light.state = 0;						
+					}					
+					return;					
 
 		// Timer0_A3	Configurable periodic IRQ (used by button_repeat and buzzer)			
 		case 0x06:	// Disable IE 

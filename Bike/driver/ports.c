@@ -54,6 +54,7 @@
 #include "clock.h"
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
+#include "sensor.h"
 #include "altitude.h"
 
 

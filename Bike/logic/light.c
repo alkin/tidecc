@@ -76,9 +76,11 @@ void reset_light(void)
 {
 	light.enable = FALSE;
 	light.value = 0;
+	light.state = 0;
 	
-	BUTTONS_DIR |= BUTTON_DOWN_PIN;
-	BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
+	BUTTONS_IE  &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN);
+	BUTTONS_DIR |= (BUTTON_UP_PIN|BUTTON_DOWN_PIN);
+	BUTTONS_OUT &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN);
 }
 
 
@@ -94,14 +96,6 @@ void do_light_measurement(void)
 	u16 voltage;
 	voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_2);
 	voltage = (voltage * 2 * 2) / 41; 
-
-	if(light_voltage > 200)
-	{
-		BUTTONS_OUT |= BUTTON_BACKLIGHT_PIN;	
-	} else
-	{
-		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
-	}
 	
 	light.value = light.value*0.8 + voltage*0.2;
 }
@@ -114,14 +108,25 @@ void do_light_measurement(void)
 // *************************************************************************************************
 void update_light(void)
 {
-	if(light.value >= 200)
+	if(light.value >= 10)
 	{
 		light.enable = TRUE;
+		light.blink = 2;
+		light.duty = 5;
+		light.state = 1;
+		
+		Timer0_A2_Start();
+	
+		BUTTONS_OUT &= ~BUTTON_UP_PIN;
 		BUTTONS_OUT |= BUTTON_BACKLIGHT_PIN;
 	}
 	else
 	{
 		light.enable = FALSE;
+		
+		Timer0_A2_Stop();
+		
+		BUTTONS_OUT |= BUTTON_UP_PIN;
 		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
 	}
 }
