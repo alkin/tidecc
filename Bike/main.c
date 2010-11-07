@@ -36,7 +36,6 @@
 
 #include "rfbike.h"
 #include "light.h"
-#include "session.h"
 #include "sensor.h"
 #include "speed.h"
 #include "distance.h"
@@ -314,9 +313,6 @@ void init_global_variables(void)
 	
 	// Reset speed
 	reset_speed();
-	
-	// Reset session
-	reset_session();
 	
 	// Reset distance
 	reset_distance();

@@ -2,9 +2,21 @@ TODO
 ========================
 - read_calibration_data -> read_config
 - save_config
-- Review Light system. Add Documentation.
-- BUY buzzer
-- Remove session
+
+Light/
+	Check Resistance of the 2 devices
+	Calculate the right Blink and Duty Cicle
+	Documentation
+
+Speed/
+	Solder the coil
+	Check coil response to magnet
+	Solder Logic for coil ( Zener )
+	Test
+
+RF/
+	High level functions
+
 
 ========================
 	CONFIG:
