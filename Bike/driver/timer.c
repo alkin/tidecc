@@ -143,6 +143,74 @@ void Timer0_Stop(void)
 // @param       ticks (1 tick = 1/32768 sec)
 // @return      none
 // *************************************************************************************************
+void Timer0_A1_Start(u16 ticks)
+{
+// Update CCR
+	TA0CCR2 = TA0R + 2;   
+
+	// Reset IRQ flag    
+	TA0CCTL2 &= ~CCIFG; 
+	          
+	// Enable timer interrupt    
+	TA0CCTL2 |= CCIE; 
+}
+
+
+
+// *************************************************************************************************
+// @fn          Timer0_A3_Stop
+// @brief       Stop Timer0_A3.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void Timer0_A1_Stop(void)
+{
+	// Clear timer interrupt    
+	TA0CCTL1 &= ~CCIE; 
+}
+
+
+// *************************************************************************************************
+// @fn          Timer0_A3_Start
+// @brief       Trigger IRQ every "ticks" microseconds
+// @param       ticks (1 tick = 1/32768 sec)
+// @return      none
+// *************************************************************************************************
+void Timer0_A2_Start(void)
+{
+	// Update CCR
+	TA0CCR2 = TA0R + 2;   
+
+	// Reset IRQ flag    
+	TA0CCTL2 &= ~CCIFG; 
+	          
+	// Enable timer interrupt    
+	TA0CCTL2 |= CCIE; 
+}
+
+
+
+// *************************************************************************************************
+// @fn          Timer0_A3_Stop
+// @brief       Stop Timer0_A3.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void Timer0_A2_Stop(void)
+{
+	// Clear timer interrupt    
+	TA0CCTL2 &= ~CCIE; 
+}
+
+
+
+
+// *************************************************************************************************
+// @fn          Timer0_A3_Start
+// @brief       Trigger IRQ every "ticks" microseconds
+// @param       ticks (1 tick = 1/32768 sec)
+// @return      none
+// *************************************************************************************************
 void Timer0_A3_Start(u16 ticks)
 {
 	u16 value;
