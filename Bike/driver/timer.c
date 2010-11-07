@@ -71,6 +71,7 @@ void Timer0_A1_Stop(void);
 void Timer0_A3_Start(u16 ticks);
 void Timer0_A3_Stop(void);
 void Timer0_A4_Delay(u16 ticks);
+void (*fptr_Timer0_A1_function)(void);
 void (*fptr_Timer0_A2_function)(void);
 void (*fptr_Timer0_A3_function)(void);
  
@@ -135,35 +136,6 @@ void Timer0_Stop(void)
 	// Set Timer0 count register to 0x0000
 	TA0R = 0;                             
 }
-
-
-// *************************************************************************************************
-// @fn          Timer0_A3_Start
-// @brief       Trigger IRQ every "ticks" microseconds
-// @param       ticks (1 tick = 1/32768 sec)
-// @return      none
-// *************************************************************************************************
-void Timer0_A2_Start(void)
-{
-	// Reset IRQ flag    
-	TA0CCTL2 &= ~CCIFG; 
-	          
-	// Enable timer interrupt    
-	TA0CCTL2 |= CCIE; 
-}
-
-// *************************************************************************************************
-// @fn          Timer0_A3_Stop
-// @brief       Stop Timer0_A3.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void Timer0_A2_Stop(void)
-{
-	// Clear timer interrupt    
-	TA0CCTL2 &= ~CCIE; 
-}
-
 
 // *************************************************************************************************
 // @fn          Timer0_A3_Start
@@ -335,10 +307,17 @@ __interrupt void TIMER0_A1_5_ISR(void)
 		
 	switch (TA0IV)
 	{
-		// Timer0_A1	BlueRobin timer
+		// Timer0_A1	Light Timer
 		case 0x02:	// Timer0_A1 handler
-					BRRX_TimerTask_v();
-					break;
+					TA0CCTL1 &= ~CCIE;
+					// Reset IRQ flag  
+					TA0CCTL1 &= ~CCIFG;  
+					// Call function handler
+					fptr_Timer0_A1_function();
+					// Enable timer interrupt
+					TA0CCTL1 |= CCIE;
+					// Return without changing the Power Mode		
+					return;	
 		// Timer0_A2	Light timer
 		case 0x04:	// Disable IE
 					TA0CCTL2 &= ~CCIE;

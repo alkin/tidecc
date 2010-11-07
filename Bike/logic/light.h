@@ -45,17 +45,19 @@
 extern void reset_light(void);
 extern void do_light_measurement(void);
 extern void update_light(void);
-extern void toggle_light(void);
+extern void toggle_light_front(void);
+extern void toggle_light_back(void);
 
 // *************************************************************************************************
 // Defines section
 typedef struct
 {
-    u16 value		: 9;    // Lock buttons
-    u16 enable		: 1;
-    u16 state		: 1;
-    u16 blink		: 6;
-    u16 duty		: 7;
+    u16 value			: 9;    // Lock buttons
+    u16 enable			: 1;
+    u16 back_enable		: 1;
+    u16 front_enable	: 1;
+    u16 front_blink		: 6;
+    u16 front_duty		: 7;
 } s_light;
 
 extern volatile s_light light;

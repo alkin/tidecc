@@ -45,11 +45,10 @@
 extern void Timer0_Init(void);
 extern void Timer0_Start(void);
 extern void Timer0_Stop(void);
-extern void Timer0_A2_Start(void);
-extern void Timer0_A2_Stop(void);
 extern void Timer0_A3_Start(u16 ticks);
 extern void Timer0_A3_Stop(void);
 extern void Timer0_A4_Delay(u16 ticks);
+extern void (*fptr_Timer0_A1_function)(void);
 extern void (*fptr_Timer0_A2_function)(void);
 extern void (*fptr_Timer0_A3_function)(void);
 

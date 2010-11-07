@@ -104,6 +104,13 @@ int main(void)
 	// Assign initial value to global variables
 	init_global_variables();
 	
+	// Cheat: Ground
+	P2IE  &= ~BUTTON_NUM_PIN;
+	P2DIR |=  BUTTON_NUM_PIN;
+	P2OUT &= ~BUTTON_NUM_PIN;
+	
+	
+	
 	/*
 	P2IE &= ~(BUTTON_UP_PIN | BUTTON_DOWN_PIN);
 	P2DIR |= BUTTON_UP_PIN | BUTTON_DOWN_PIN;
@@ -117,15 +124,6 @@ int main(void)
 	while(1)
 	{
 		// When idle go to LPM3
-		
-		/*
-		P2OUT &= ~BUTTON_UP_PIN;
-		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000/NUM * DUTY));
-		P2OUT |= BUTTON_UP_PIN;	
-		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000/NUM * (1-DUTY)));
-		*/
-		
-			
     	idle_loop();
 
 		rfbike_sync();
@@ -133,9 +131,6 @@ int main(void)
 		do_measurements();
 		
 		display_update();
-		
-		
-		
  	}	
 }
 

@@ -76,16 +76,23 @@ volatile s_light light;
 // *************************************************************************************************
 void reset_light(void)
 {
-	light.enable = FALSE;
+	light.enable = TRUE;
 	light.value = 0;
-	light.state = 0;
 	
-	BUTTONS_IE  &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN);
-	BUTTONS_DIR |=  (BUTTON_UP_PIN|BUTTON_DOWN_PIN);
-	BUTTONS_OUT &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN);
+	light.back_enable = 0;
 	
-	fptr_Timer0_A2_function = toggle_light;
+	light.front_enable = 0;
+	light.front_blink = 1;
+	light.front_duty = 50;
 	
+	BUTTONS_IE  &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN);
+	BUTTONS_REN &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN);
+	BUTTONS_DIR |=  (BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN);
+	BUTTONS_OUT |=  (BUTTON_UP_PIN|BUTTON_DOWN_PIN);
+	BUTTONS_OUT &= ~(BUTTON_BACKLIGHT_PIN);
+	
+	fptr_Timer0_A1_function = toggle_light_front;
+	fptr_Timer0_A2_function = toggle_light_back;	
 }
 
 // *************************************************************************************************
@@ -100,7 +107,7 @@ void do_light_measurement(void)
 	voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_2);
  	voltage = (voltage * 2 * 2) / 41; 
 	
-	light.value = light.value*0.8 + voltage*0.2;
+	light.value = light.value*0.7 + voltage*0.3;
 }
 
 // *************************************************************************************************
@@ -113,26 +120,34 @@ void update_light(void)
 {
 	if(light.value >= 10)
 	{
-		// Calcula Blink and Duty
-		light.blink = light.value-9;
-		light.duty = 10;
-		
 		// Enable light
-		light.enable = TRUE;
-		light.state = 1;
+		light.front_enable = TRUE;
+		light.front_blink = light.value-9;
+		light.front_duty = 10;
+		
+		TA0CCR1 = TA0R + 10;
+		TA0CCTL1 &= ~CCIFG; 
+		TA0CCTL1 |= CCIE; 
+		
+		light.back_enable = TRUE;
 		
 		TA0CCR2 = TA0R + 10;
-		Timer0_A2_Start();
+		TA0CCTL2 &= ~CCIFG; 
+		TA0CCTL2 |= CCIE; 
 	
 		BUTTONS_OUT &= ~BUTTON_UP_PIN;
 		BUTTONS_OUT |= BUTTON_BACKLIGHT_PIN;
 	}
 	else
 	{
-		light.enable = FALSE;
-		light.state = 0;
+		light.front_enable = FALSE;
+		light.back_enable = FALSE;
 		
-		Timer0_A2_Stop();
+		// Clear timer interrupt    
+		TA0CCTL1 &= ~CCIE; 
+		
+		// Clear timer interrupt    
+		TA0CCTL2 &= ~CCIE; 
 		
 		BUTTONS_OUT |= BUTTON_UP_PIN;
 		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
@@ -145,28 +160,49 @@ void update_light(void)
 // @param       s16 value		Temperature in °C
 // @return      s16 			Temperature in °F
 // *************************************************************************************************
-void toggle_light(void)
+void toggle_light_front(void)
 {
-	u16 value;
-	
-	if(light.state == 0)
+	if(light.enable && light.front_enable == FALSE)
 	{
 		BUTTONS_OUT &= ~BUTTON_UP_PIN;
 
-		value = CONV_MS_TO_TICKS(10 * light.duty / light.blink);
-		
-		TA0CCR2 = TA0R + value;
+		TA0CCR1 = TA0R + CONV_MS_TO_TICKS(10 * light.front_duty / light.front_blink);
 
-		light.state = 1;
+		light.front_enable = TRUE;
 	} 
 	else
 	{
 		BUTTONS_OUT |= BUTTON_UP_PIN;
 		
-		value = CONV_MS_TO_TICKS(10 * (100-light.duty) / light.blink);
-		
-		TA0CCR2 = TA0R + value;
+		TA0CCR1 = TA0R + CONV_MS_TO_TICKS(10 * (100-light.front_duty) / light.front_blink);
 
-		light.state = 0;						
+		light.front_enable = FALSE;						
+	}
+}
+
+
+// *************************************************************************************************
+// @fn          convert_C_to_F
+// @brief       Convert °C to °F 
+// @param       s16 value		Temperature in °C
+// @return      s16 			Temperature in °F
+// *************************************************************************************************
+void toggle_light_back(void)
+{
+	if(light.enable && light.back_enable == FALSE)
+	{
+		BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
+		
+		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(10);
+
+		light.back_enable = TRUE;
+	} 
+	else
+	{
+		BUTTONS_OUT |= BUTTON_DOWN_PIN;
+		
+		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(320);
+
+		light.back_enable = FALSE;						
 	}
 }
