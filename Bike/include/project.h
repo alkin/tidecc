@@ -150,6 +150,9 @@ typedef struct
 } s_config;
 extern volatile s_config config;
 
+
+
+
 // *************************************************************************************************
 // Global Variable section
 

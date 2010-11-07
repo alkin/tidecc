@@ -32,7 +32,7 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
-// Acceleration measurement functions.
+// Distance functions.
 // *************************************************************************************************
 
 
@@ -60,44 +60,40 @@ volatile s_distance distance;
 
 // *************************************************************************************************
 // @fn          reset_distance
-// @brief       Resets speed to 0 m/s, km/h display format
+// @brief       Resets distance value
 // @param       none
 // @return      none
 // *************************************************************************************************
 void reset_distance(void)
 {
 	distance.value = 0;
-	distance.config.unit = DISTANCE_KM;
 }
-
 
 // *************************************************************************************************
 // @fn          convert_distance_to_km
-// @brief       Converts the speed from m/s to mi/h
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in miles per hour.
+// @brief       Converts distance into kilometers with 2 decimals
+// @param       u16 distance	Distance in meters with 1 decimal
+// @return      u16 			Distance in kilometers with 2 decimals
 // *************************************************************************************************
-u16 convert_distance_to_km(u32 distance)
+u32 convert_distance_to_km(u32 distance)
 {
 	return (distance / 100);
 }
 
-
 // *************************************************************************************************
 // @fn          convert_distance_to_mi
-// @brief       Converts the speed from m/s to mi/h
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in miles per hour.
+// @brief       Converts distance into miles with 2 decimals
+// @param       u16 speed_ms	Distance in meters with 1 decimal
+// @return      u16 			Distance in miles with 2 decimals
 // *************************************************************************************************
-u16 convert_distance_to_mi(u32 distance_m)
+u32 convert_distance_to_mi(u32 distance)
 {
-	// distance_mi = distance_m * 0.00062137
-	return (distance_m * 0.62137 / 100 );
+	return (distance * 0.62137 / 100 );
 }
 
 // *************************************************************************************************
 // @fn          do_distance_measurement
-// @brief       Calculates the speed in m/s based on the counter of the sensor.
+// @brief       
 // @param       none
 // @return      none
 // *************************************************************************************************
@@ -108,8 +104,8 @@ void do_distance_measurement(void)
 
 // *************************************************************************************************
 // @fn          display_distance
-// @brief       Display data logger information.
-// @param       u8 line	LINE1, LINE2
+// @brief       Display distance value
+// @param       u8 line		LINE1, LINE2
 //				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
 // @return      none
 // *************************************************************************************************

@@ -32,7 +32,7 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
-// Acceleration measurement functions.
+// Sensor functions.
 // *************************************************************************************************
 
 
@@ -49,29 +49,30 @@
 #include "sensor.h"
 
 // *************************************************************************************************
-// Global Variable sectionstruct accel sAccel;
+// Global Variable section
 volatile s_sensor sensor;
 
 
 // *************************************************************************************************
 // Extern section
 
+
 // *************************************************************************************************
-// @fn          reset_distance
-// @brief       Resets speed to 0 m/s, km/h display format
+// @fn          reset_sensor
+// @brief       
 // @param       none
 // @return      none
 // *************************************************************************************************
 void reset_sensor(void)
 {
-	sensor.value = 0;	
+	sensor.value = 9;	
 }
 
 // *************************************************************************************************
-// @fn          convert_distance_to_km
-// @brief       Converts the speed from m/s to mi/h
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in miles per hour.
+// @fn          sensor_tick
+// @brief       
+// @param       none
+// @return      none
 // *************************************************************************************************
 void sensor_tick(void)
 {
@@ -79,12 +80,12 @@ void sensor_tick(void)
 }
 
 // *************************************************************************************************
-// @fn          convert_distance_to_km
-// @brief       Converts the speed from m/s to mi/h
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in miles per hour.
+// @fn          sensor_get_distance
+// @brief       
+// @param       none
+// @return      u16 			Speed in decimeter per second
 // *************************************************************************************************
 u16 sensor_get_distance(void)
 {
-	return (u16)(sensor.value * 3.1415 * (6) / config.sensor_count);	
+	return (u16)(sensor.value * 3.1415 * config.bike_size / 10 / config.sensor_count);	
 }

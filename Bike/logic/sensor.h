@@ -43,8 +43,9 @@
 // *************************************************************************************************
 // Prototypes section
 extern void reset_sensor(void);
-extern u16 sensor_get_distance(void);
 extern void sensor_tick(void);
+extern u16  sensor_get_distance(void);
+
 
 // *************************************************************************************************
 // Defines section
@@ -52,12 +53,11 @@ typedef struct
 {
 	u16 value;
 } s_sensor;
-extern volatile s_sensor sensor;
 
 
 // *************************************************************************************************
 // Global Variable section
-
+extern volatile s_sensor sensor;
 
 // *************************************************************************************************
 // Extern section

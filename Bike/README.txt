@@ -11,7 +11,7 @@ Light/
 Speed/
 	Solder the coil
 	Check coil response to magnet
-	Solder Logic for coil ( Zener )
+	Solder Logic for coil ( Zener || Diode )
 	Test
 
 RF/

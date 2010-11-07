@@ -59,7 +59,7 @@ volatile s_speed speed;
 
 // *************************************************************************************************
 // @fn          reset_speed
-// @brief       Resets speed to 0 m/s, km/h display format
+// @brief       Resets speed value.
 // @param       none
 // @return      none
 // *************************************************************************************************
@@ -69,21 +69,10 @@ void reset_speed(void)
 }
 
 // *************************************************************************************************
-// @fn          convert_speed_to_km_h
-// @brief       Converts the speed from dm/s to km/h
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in kilometers per hour.
-// *************************************************************************************************
-u16 convert_speed_to_km_h(u16 speed)
-{
-	return (u16)(speed * 3.6 / 10);
-}
-
-// *************************************************************************************************
-// @fn          convert_speed_to_mi_h
-// @brief       Converts the speed from dm/s to m/s
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in miles per hour.
+// @fn          convert_speed_to_m_s
+// @brief       Converts speed into meters per second.
+// @param       u16 value		Speed in meters per second with 1 decimal
+// @return      u16 			Speed in meters per second
 // *************************************************************************************************
 u16 convert_speed_to_m_s(u16 speed)
 {
@@ -91,10 +80,22 @@ u16 convert_speed_to_m_s(u16 speed)
 }
 
 // *************************************************************************************************
+// @fn          convert_speed_to_km_h
+// @brief       Converts speed into kilometers per hour.
+// @param       u16 speed_ms	Speed in meters per second with 1 decimal
+// @return      u16 			Speed in kilometers per hour
+// *************************************************************************************************
+u16 convert_speed_to_km_h(u16 speed)
+{
+	return (u16)(speed * 3.6 / 10);
+}
+
+
+// *************************************************************************************************
 // @fn          convert_speed_to_mi_h
-// @brief       Converts the speed from dm/s to mi/h
-// @param       u16 speed_ms	Speed in meters per second.
-// @return      u16 			Speed in miles per hour.
+// @brief       Converts speed into miles per hour.
+// @param       u16 speed   	Speed in meters per second with 1 decimal
+// @return      u16 			Speed in miles per hour
 // *************************************************************************************************
 u16 convert_speed_to_mi_h(u16 speed)
 {
@@ -103,7 +104,7 @@ u16 convert_speed_to_mi_h(u16 speed)
 
 // *************************************************************************************************
 // @fn          do_speed_measurement
-// @brief       Calculates the speed in m/s based on the counter of the sensor.
+// @brief       Updates speed in meters per second with 1 decimal.
 // @param       none
 // @return      none
 // *************************************************************************************************
@@ -114,7 +115,7 @@ void do_speed_measurement(void)
 
 // *************************************************************************************************
 // @fn          display_speed
-// @brief       Display speed information.
+// @brief       Display speed value.
 // @param       u8 line		LINE1, LINE2
 //				u8 update	DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_CLEAR
 // @return      none
@@ -127,15 +128,15 @@ void display_speed(u8 line, u8 update)
 
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(config.speed_unit == SPEED_KM_H)
-		{
-			speed_km_h = convert_speed_to_km_h(speed.value);
-			display_chars(LCD_SEG_L1_2_0, itoa(speed_km_h, 3, 2), SEG_ON);	
-		}
-		else if(config.speed_unit == SPEED_M_S)
+		if(config.speed_unit == SPEED_M_S)
 		{
 			speed_m_s = convert_speed_to_m_s(speed.value);
 			display_chars(LCD_SEG_L1_2_0, itoa(speed_m_s, 3, 2), SEG_ON);
+		}		
+		else if(config.speed_unit == SPEED_KM_H)
+		{
+			speed_km_h = convert_speed_to_km_h(speed.value);
+			display_chars(LCD_SEG_L1_2_0, itoa(speed_km_h, 3, 2), SEG_ON);	
 		}
 		else if(config.speed_unit == SPEED_MI_H)
 		{
@@ -147,16 +148,7 @@ void display_speed(u8 line, u8 update)
 	{
 		display_speed(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		
-		if(config.speed_unit == SPEED_KM_H)
-		{
-			display_symbol(LCD_UNIT_L1_K, SEG_ON);
-			display_symbol(LCD_UNIT_L1_M, SEG_ON);
-			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
-			
-			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
-			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
-		}
-		else if(config.speed_unit == SPEED_M_S)
+		if(config.speed_unit == SPEED_M_S)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
@@ -165,6 +157,15 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
 			
+		}
+		else if(config.speed_unit == SPEED_KM_H)
+		{
+			display_symbol(LCD_UNIT_L1_K, SEG_ON);
+			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+			display_symbol(LCD_UNIT_L1_PER_H, SEG_ON);
+			
+			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
+			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
 		}
 		else if(config.speed_unit == SPEED_MI_H)
 		{

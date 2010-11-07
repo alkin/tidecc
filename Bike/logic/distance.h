@@ -43,16 +43,19 @@
 
 // *************************************************************************************************
 // Prototypes section
-
+extern void reset_distance(void);
+extern void do_distance_measurement(void);
+extern void display_distance(u8 line, u8 update);
+extern u32 convert_distance_to_km(u32 distance);
+extern u32 convert_distance_to_mi(u32 distance);
 
 
 // *************************************************************************************************
+// Defines section
 
 #define DISTANCE_KM				(0u)
 #define DISTANCE_MI				(1u)
 
-// *************************************************************************************************
-// Global Variable section
 typedef union
 {
     u16 unit      				: 2;    // Unit for speed display
@@ -66,15 +69,13 @@ typedef struct
     u32 value;    						// Lock buttons
 } s_distance;
 
+// *************************************************************************************************
+// Global Variable section
 extern volatile s_distance distance;
-
 
 
 // *************************************************************************************************
 // Extern section
-extern void reset_distance(void);
-extern void do_distance_measurement(void);
-extern void display_distance(u8 line, u8 update);
 
 
 #endif /*DISTANCE_H_*/

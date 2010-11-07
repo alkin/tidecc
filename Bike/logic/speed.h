@@ -44,28 +44,25 @@
 // *************************************************************************************************
 // Prototypes section
 extern void reset_speed(void);
-extern void sx_speed(u8 line);
-extern void display_speed(u8 line, u8 update);
-extern u16 convert_speed_to_km_h(u16 speed_ms);
-extern u16 convert_speed_to_mi_h(u16 speed_ms);
 extern void do_speed_measurement(void);
-
+extern u16  convert_speed_to_km_h(u16 speed_ms);
+extern u16  convert_speed_to_m_s(u16 speed_ms);
+extern u16  convert_speed_to_mi_h(u16 speed_ms);
+extern void display_speed(u8 line, u8 update);
 
 // *************************************************************************************************
 // Defines section
-#define SPEED_KM_H				(0u)
-#define SPEED_MI_H				(1u)
-#define SPEED_M_S				(2u)
-
-
-// *************************************************************************************************
-// Global Variable section
+#define SPEED_M_S				(0u)
+#define SPEED_KM_H				(1u)
+#define SPEED_MI_H				(2u)
 
 typedef struct
 {
-    u16 value;    // Lock buttons
+    u16 value;
 } s_speed;
 
+// *************************************************************************************************
+// Global Variable section
 extern volatile s_speed speed;
 
 
