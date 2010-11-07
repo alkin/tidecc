@@ -109,15 +109,6 @@ int main(void)
 	P2DIR |=  BUTTON_NUM_PIN;
 	P2OUT &= ~BUTTON_NUM_PIN;
 	
-	/*
-	P2IE &= ~(BUTTON_UP_PIN | BUTTON_DOWN_PIN);
-	P2DIR |= BUTTON_UP_PIN | BUTTON_DOWN_PIN;
-	P2OUT &= ~BUTTON_DOWN_PIN;
-	
-	P2OUT |= BUTTON_UP_PIN;
-	P2OUT &= ~BUTTON_UP_PIN;
-	*/
-		
 	// Main control loop: wait in low power mode until some event needs to be processed
 	while(1)
 	{
