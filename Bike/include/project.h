@@ -59,9 +59,6 @@
 #define FILTER_OFF						(0u)
 #define FILTER_ON						(1u)
 
-// Uncomment this define to build the application with BlueRobin heartrate support
-#define INCLUDE_BLUEROBIN_SUPPORT
-
 // Value of PI
 #define PI_INT						(31415u)
 

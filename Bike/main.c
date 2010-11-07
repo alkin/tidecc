@@ -28,7 +28,6 @@
 #include "altitude.h"
 #include "battery.h"
 #include "acceleration.h"
-#include "bluerobin.h"
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
 #include "datalog.h"
@@ -293,11 +292,6 @@ void init_global_variables(void)
 	
 	// Reset acceleration measurement
 	reset_acceleration();
-
-#ifdef INCLUDE_BLUEROBIN_SUPPORT	
-	// Reset BlueRobin stack
-	reset_bluerobin();
-#endif
 
 	// Reset SimpliciTI stack
 	reset_rf();

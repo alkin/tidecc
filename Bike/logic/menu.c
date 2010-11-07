@@ -50,7 +50,6 @@
 #include "clock.h"
 #include "date.h"
 #include "battery.h"
-#include "bluerobin.h"
 
 #include "menu.h"
 #include "temperature.h"
@@ -159,16 +158,6 @@ const struct menu menu_L1_Altitude =
 	FUNCTION(update_time),				// new display data
 #ifdef INCLUDE_BLUEROBIN_SUPPORT
 	&menu_L1_Heartrate,
-};
-// Line1 - Heart Rate
-const struct menu menu_L1_Heartrate =
-{
-	FUNCTION(sx_bluerobin),				// direct function
-	FUNCTION(mx_bluerobin),				// sub menu function
-	FUNCTION(display_heartrate),		// display function
-	FUNCTION(update_time),				// new display data
-#endif
-	&menu_L1_Time,
 };
 
 // Line2 - Date

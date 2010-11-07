@@ -57,7 +57,6 @@
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
 #include "acceleration.h"
-#include "bluerobin.h"
 #include "temperature.h"
 #include "datalog.h"
 
@@ -86,7 +85,6 @@ struct timer sTimer;
 u8 change_menu = 0;
 // *************************************************************************************************
 // Extern section
-extern void BRRX_TimerTask_v(void);
 
 
 // *************************************************************************************************
@@ -327,19 +325,8 @@ __interrupt void TIMER0_A0_ISR(void)
 	// Set clock update flag
 	display.flag.update_time = 1;
 	
-	// While BlueRobin searches freeze system state
-	if (is_bluerobin_searching()) 
-	{
-		// Exit from LPM3 on RETI
-		_BIC_SR_IRQ(LPM3_bits);     
-		return;
-	}
-	
 	// -------------------------------------------------------------------
 	// Service active modules that require 1/s processing
-	
-    // Get BlueRobin data from API
-	if (is_bluerobin()) get_bluerobin_data();
 	
 	// To change the menu automatically
 	if( change_menu >= CHANGE_MENU_PERIOD )
@@ -361,8 +348,8 @@ __interrupt void TIMER0_A0_ISR(void)
 // @fn          Timer0_A1_5_ISR
 // @brief       IRQ handler for timer IRQ.
 //				Timer0_A0	1/1sec clock tick (serviced by function TIMER0_A0_ISR)
-//				Timer0_A1	BlueRobin timer 
-//				Timer0_A2	
+//				Timer0_A1	Front light Timer 
+//				Timer0_A2	Back light Timer
 //				Timer0_A3	Configurable periodic IRQ (used by button_repeat and buzzer)
 //				Timer0_A4	One-time delay
 // @param       none

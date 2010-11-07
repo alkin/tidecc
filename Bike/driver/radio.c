@@ -44,7 +44,6 @@
 
 // logic
 #include "rfsimpliciti.h"
-#include "bluerobin.h"
 
 
 // *************************************************************************************************
@@ -52,10 +51,6 @@
 
 // SimpliciTI CC430 radio ISR - located in SimpliciTi library
 extern void MRFI_RadioIsr(void);
-
-// BlueRobin CC430 radio ISR - located in BlueRobin library
-extern void BlueRobin_RadioISR_v(void);
-
 
 // *************************************************************************************************
 // @fn          radio_reset
@@ -160,7 +155,6 @@ void close_radio(void)
 // *************************************************************************************************
 // @fn          GDOx_ISR
 // @brief       GDO0/2 ISR to detect received packet. 
-//				In BlueRobin mode:  capture packet end time and decode received packet
 //				In SimpliciTI mode: go to SimpliciTI handler
 // @param       none
 // @return      none
@@ -174,19 +168,5 @@ __interrupt void radio_ISR(void)
 	if (is_rf())
 	{
 		MRFI_RadioIsr();
-	}
-	else // BlueRobin packet end interrupt service routine
-	{		
-		if (rf1aivec == RF1AIV_RFIFG9)
-		{    
-			if ((sBlueRobin.state == BLUEROBIN_SEARCHING) || (sBlueRobin.state == BLUEROBIN_CONNECTED))
-			{
-				BlueRobin_RadioISR_v();
-			}
-		}
-		else if (rf1aivec == RF1AIV_NONE) // RF1A interface interrupt (error etc.)
-		{
-			asm("	nop"); // break here
-		}
 	}
 }

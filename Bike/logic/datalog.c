@@ -52,7 +52,6 @@
 #include "clock.h"
 #include "altitude.h"
 #include "temperature.h"
-#include "bluerobin.h"
 
 
 #include "speed.h"
@@ -141,21 +140,6 @@ void sx_datalog(u8 line)
 // *************************************************************************************************
 void start_datalog(void)
 {
-	// Start BlueRobin RX
-	if ((sDatalog.mode & DATALOG_MODE_HEARTRATE) != 0)
-	{
-		// Keep existing connection
-		if (!is_bluerobin())
-		{
-			// Start BlueRobin
-			if (!start_bluerobin()) 
-			{
-				// No connection established? -> Close stack
-				stop_bluerobin();
-			}
-		}
-	}
-	
 	// Start pressure measurement
 	if ((sDatalog.mode & (DATALOG_MODE_TEMPERATURE | DATALOG_MODE_ALTITUDE)) != 0)
 	{
@@ -179,15 +163,9 @@ void start_datalog(void)
 // *************************************************************************************************
 void stop_datalog(void)
 {
-	if ((sDatalog.mode & DATALOG_MODE_HEARTRATE) != 0)
-	{
-		// Stop BlueRobin connection
-		if (is_bluerobin()) stop_bluerobin();
-	}
-
 	// Stop data logging and write out buffer
 	datalog_sm(NULL, 0, DATALOG_CMD_CLOSE);
-	
+
 	if ((sDatalog.mode & (DATALOG_MODE_TEMPERATURE | DATALOG_MODE_ALTITUDE)) != 0)
 	{
 		// Stop altitude measurement
@@ -238,7 +216,7 @@ void do_datalog(void)
 		// Store data when possible compressed (heartrate = 8 bits, temperature/altitude = min. 12 bits)
 		if (sDatalog.mode == DATALOG_MODE_HEARTRATE)
 		{
-			temp[0] = sBlueRobin.heartrate;
+			// temp[0] = sBlueRobin.heartrate;
 			count = 1;
 		}
 		else if (sDatalog.mode == DATALOG_MODE_TEMPERATURE)
@@ -255,7 +233,7 @@ void do_datalog(void)
 		}
 		else if (sDatalog.mode == (DATALOG_MODE_HEARTRATE | DATALOG_MODE_TEMPERATURE | DATALOG_MODE_ALTITUDE))
 		{
-			temp[0] = sBlueRobin.heartrate;
+			// temp[0] = sBlueRobin.heartrate;
 			temp[1] = (sAlt.temperature_C >> 4) & 0xFF;
 			temp[2] = ((sAlt.temperature_C << 4) & 0xF0) | ((sAlt.altitude >> 8) & 0x0F);
 			temp[3] = sAlt.altitude & 0xFF;
@@ -263,14 +241,14 @@ void do_datalog(void)
 		}
 		else if (sDatalog.mode == (DATALOG_MODE_HEARTRATE | DATALOG_MODE_TEMPERATURE))
 		{
-			temp[0] = sBlueRobin.heartrate;
+			// temp[0] = sBlueRobin.heartrate;
 			temp[1] = (sAlt.temperature_C >> 8) & 0xFF;
 			temp[2] = sAlt.temperature_C & 0xFF;
 			count = 3;
 		}
 		else if (sDatalog.mode == (DATALOG_MODE_HEARTRATE | DATALOG_MODE_ALTITUDE))
 		{
-			temp[0] = sBlueRobin.heartrate;
+			// temp[0] = sBlueRobin.heartrate;
 			temp[1] = (sAlt.altitude >> 8) & 0xFF;
 			temp[2] = sAlt.altitude & 0xFF;
 			count = 3;
@@ -452,8 +430,6 @@ void datalog_sm(u8 * data, u8 len, u8 cmd)
                               		// Over write threshold?
                                 	if (sDatalog.idx > DATALOG_BUFFER_WRITE_THRESHOLD) 
                                 	{
-                                		// BlueRobin ISR call more than ~13ms away?
-                                		if (is_bluerobin_flash_write_window()) datalog_write_buffer();
                                 	} 
                               	}
                               	break;
