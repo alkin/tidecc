@@ -2,7 +2,7 @@ TODO
 ========================
 - read_calibration_data -> read_config
 - save_config
-- BUY resistor
+- Review Light system. Add Documentation.
 - BUY buzzer
 - Remove session
 
