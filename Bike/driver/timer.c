@@ -143,7 +143,7 @@ void Timer0_Stop(void)
 // @param       ticks (1 tick = 1/32768 sec)
 // @return      none
 // *************************************************************************************************
-void Timer0_A1_Start(u16 ticks)
+void Timer0_A1_Start(void)
 {
 // Update CCR
 	TA0CCR2 = TA0R + 2;   

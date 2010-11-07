@@ -32,7 +32,7 @@
 //	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
-// Temperature measurement functions.
+// Light functions.
 // *************************************************************************************************
 
 
@@ -49,7 +49,6 @@
 
 // logic
 #include "light.h"
-
 
 
 // *************************************************************************************************
@@ -69,37 +68,41 @@ volatile s_light light;
 
 
 // *************************************************************************************************
-// @fn          convert_C_to_F
-// @brief       Convert °C to °F 
-// @param       s16 value		Temperature in °C
-// @return      s16 			Temperature in °F
+// @fn          reset_light
+// @brief       Resets light values, Configures Port and Timer. 
+// @param       none
+// @return      none
 // *************************************************************************************************
 void reset_light(void)
 {
+	// Enable light system
 	light.enable = TRUE;
+	
+	// Initialize light values
 	light.value = 0;
-	
 	light.back_enable = 0;
-	
 	light.front_enable = 0;
 	light.front_blink = 1;
 	light.front_duty = 50;
 	
-	BUTTONS_IE  &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN);
-	BUTTONS_REN &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN);
-	BUTTONS_DIR |=  (BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN);
-	BUTTONS_OUT |=  (BUTTON_UP_PIN|BUTTON_DOWN_PIN);
-	BUTTONS_OUT &= ~(BUTTON_BACKLIGHT_PIN);
+	// Configure light pins
+	BUTTONS_IE  &= ~(LIGHT_ALL);
+	BUTTONS_REN &= ~(LIGHT_ALL);
+	BUTTONS_DIR |=  (LIGHT_ALL);
 	
+	// Turn off all lights
+	set_light(LIGHT_ALL, LIGHT_OFF);
+	
+	// Configure light timer callbacks
 	fptr_Timer0_A1_function = toggle_light_front;
 	fptr_Timer0_A2_function = toggle_light_back;	
 }
 
 // *************************************************************************************************
-// @fn          convert_C_to_F
-// @brief       Convert °C to °F 
-// @param       s16 value		Temperature in °C
-// @return      s16 			Temperature in °F
+// @fn          do_light_measurement
+// @brief       Measures light level 
+// @param       none
+// @return      none
 // *************************************************************************************************
 void do_light_measurement(void)
 {
@@ -111,68 +114,86 @@ void do_light_measurement(void)
 }
 
 // *************************************************************************************************
-// @fn          convert_C_to_F
-// @brief       Convert °C to °F 
-// @param       s16 value		Temperature in °C
-// @return      s16 			Temperature in °F
+// @fn          update_light
+// @brief       Update light status 
+// @param       none
+// @return      none
 // *************************************************************************************************
 void update_light(void)
 {
-	if(light.value >= 10)
+	if(light.value >= LIGHT_LEVEL)
 	{
-		// Enable light
-		light.front_enable = TRUE;
+		// Config front light duty cicle and blink rate
 		light.front_blink = light.value-9;
 		light.front_duty = 10;
 		
-		TA0CCR1 = TA0R + 10;
-		TA0CCTL1 &= ~CCIFG; 
-		TA0CCTL1 |= CCIE; 
+		// Enable front light Timer
+		light.front_enable = TRUE;
+		Timer0_A1_Start();
 		
+		// Enable back light Timer
 		light.back_enable = TRUE;
-		
-		TA0CCR2 = TA0R + 10;
-		TA0CCTL2 &= ~CCIFG; 
-		TA0CCTL2 |= CCIE; 
+		Timer0_A2_Start(); 
 	
-		BUTTONS_OUT &= ~BUTTON_UP_PIN;
-		BUTTONS_OUT |= BUTTON_BACKLIGHT_PIN;
+		// Turn on lights
+		set_light(LIGHT_ALL, LIGHT_ON);
 	}
 	else
 	{
+		// Disable front light Timer
 		light.front_enable = FALSE;
+		Timer0_A1_Stop();
+		
+		// Disable back light Timer
 		light.back_enable = FALSE;
+		Timer0_A2_Stop(); 
 		
-		// Clear timer interrupt    
-		TA0CCTL1 &= ~CCIE; 
-		
-		// Clear timer interrupt    
-		TA0CCTL2 &= ~CCIE; 
-		
-		BUTTONS_OUT |= BUTTON_UP_PIN;
-		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
+		// Turn off lights
+		set_light(LIGHT_ALL, LIGHT_OFF);
+	}
+}
+
+
+// *************************************************************************************************
+// @fn          set_light
+// @brief       Turns light ON or OFF 
+// @param       u8 light_unit		Light to be changed
+//				u8 status			LIGHT_ON, LIGHT_OFF
+// @return      none
+// *************************************************************************************************
+void set_light(u8 light_unit, u8 status)
+{
+	if(status == LIGHT_ON)
+	{
+		BUTTONS_OUT &= ~(light_unit & (LIGHT_FRONT | LIGHT_BACK));
+		BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
+	}
+	else
+	{
+		BUTTONS_OUT |=  (light_unit & (LIGHT_FRONT | LIGHT_BACK));
+		BUTTONS_OUT &= ~(light_unit & (LIGHT_BACKLIGHT));		
 	}
 }
 
 // *************************************************************************************************
-// @fn          convert_C_to_F
-// @brief       Convert °C to °F 
-// @param       s16 value		Temperature in °C
-// @return      s16 			Temperature in °F
+// @fn          toggle_light_front
+// @brief       Toggles front light status, Sets time for duty cycle. 
+// @param       none
+// @return      none
 // *************************************************************************************************
 void toggle_light_front(void)
 {
 	if(light.enable && light.front_enable == FALSE)
 	{
-		BUTTONS_OUT &= ~BUTTON_UP_PIN;
-
+		set_light(LIGHT_FRONT, LIGHT_ON);
+		
 		TA0CCR1 = TA0R + CONV_MS_TO_TICKS(10 * light.front_duty / light.front_blink);
 
 		light.front_enable = TRUE;
 	} 
 	else
 	{
-		BUTTONS_OUT |= BUTTON_UP_PIN;
+		set_light(LIGHT_FRONT, LIGHT_OFF);
 		
 		TA0CCR1 = TA0R + CONV_MS_TO_TICKS(10 * (100-light.front_duty) / light.front_blink);
 
@@ -182,16 +203,16 @@ void toggle_light_front(void)
 
 
 // *************************************************************************************************
-// @fn          convert_C_to_F
-// @brief       Convert °C to °F 
-// @param       s16 value		Temperature in °C
-// @return      s16 			Temperature in °F
+// @fn          toggle_light_back
+// @brief       Toggles back light status, Sets time for duty cycle.
+// @param       none
+// @return      none
 // *************************************************************************************************
 void toggle_light_back(void)
 {
 	if(light.enable && light.back_enable == FALSE)
 	{
-		BUTTONS_OUT &= ~BUTTON_DOWN_PIN;
+		set_light(LIGHT_BACK, LIGHT_ON);
 		
 		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(10);
 
@@ -199,7 +220,7 @@ void toggle_light_back(void)
 	} 
 	else
 	{
-		BUTTONS_OUT |= BUTTON_DOWN_PIN;
+		set_light(LIGHT_BACK, LIGHT_ON);
 		
 		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(320);
 

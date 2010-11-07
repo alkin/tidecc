@@ -47,9 +47,21 @@ extern void do_light_measurement(void);
 extern void update_light(void);
 extern void toggle_light_front(void);
 extern void toggle_light_back(void);
+extern void set_light(u8 light_unit, u8 status);
 
 // *************************************************************************************************
 // Defines section
+
+#define	LIGHT_OFF			(0u)
+#define	LIGHT_ON			(1u)
+
+#define LIGHT_FRONT			(BUTTON_UP_PIN)
+#define LIGHT_BACK			(BUTTON_DOWN_PIN)
+#define LIGHT_BACKLIGHT 	(BUTTON_BACKLIGHT_PIN)
+#define LIGHT_ALL			(BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN)
+
+#define	LIGHT_LEVEL			(10u)
+
 typedef struct
 {
     u16 value			: 9;    // Lock buttons
