@@ -49,12 +49,15 @@
 #include "simpliciti.h"
 
 // driver
-#include "temperature.h"
-#include "display.h"
 
 // logic
 #include "rfbike.h"
-
+#include "altitude.h"
+#include "clock.h"
+#include "distance.h"
+#include "light.h"
+#include "speed.h"
+#include "temperature.h"
 
 // *************************************************************************************************
 // Prototypes section
@@ -80,6 +83,37 @@
 // *************************************************************************************************
 void rfbike_sync(void)
 {
+	/* ---- High Level Algorithm ----
+	 * 
+	 * Init Radio
+	 * 
+	 * Listen Connection
+	 * 
+	 * While( Receive == SUCCESS)
+	 * 		Handle Packet
+	 * 		if( PACKET == CIAO ) break;
+	 * 
+	 * Finish Radio
+	 *  
+	 */
+	
+	/* ---- Protocol ----
+	 * 
+	 *	<- Hello		(HANDSHAKE) 
+	 *  -> Hallo
+	 * 
+	 *  <- Set Config   (Changes the config variable. Units, etc)
+	 *  <- Config
+	 *  -> ACK
+	 * 
+	 *  <- Get Data		(Asks for measurements data)
+	 *  -> Data
+	 *  <- ACK
+	 * 
+	 *  <- Bye			(End of Connection)
+	 *  -> Ciao
+	 */
+	  
 	// LISTEN
 	
 	u8 sLinkID1 = 0;
@@ -104,7 +138,10 @@ void rfbike_sync(void)
  		
  		if(strncmp(recvBuffer, "SETCONFIG", 9) == 0)
  		{
+ 			// Receive config
+ 			
  			// Set Config
+ 			
  			SMPL_SendOpt(sLinkID1, (uint8_t*)"ACK", 3, SMPL_TXOPTION_NONE);
  			continue;
  		}
@@ -112,24 +149,11 @@ void rfbike_sync(void)
  		if(strncmp(recvBuffer, "GETDATA", 9) == 0)
  		{
  			// Send Data
- 			// SMPL_SendOpt(sLinkID1, "CIAO", 3, SMPL_TXOPTION_NONE);
+ 			
+ 			// Reads ACK
  			
  			continue;
  		}
  		
 	}
-	
-	// <- Hello
-	// -> Hallo
-	
-	// <- Set Config
-	// <- Config
-	// -> ACK
-	
-	// <- Get Measurements
-	// -> Measure
-	// <- ACK
-	
-	// <- Bye
-	// -> Ciao	
 }
