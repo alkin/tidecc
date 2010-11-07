@@ -60,7 +60,6 @@
 #include "bluerobin.h"
 #include "temperature.h"
 #include "datalog.h"
-#include "light.h"
 
 
 // *************************************************************************************************
@@ -72,6 +71,7 @@ void Timer0_A1_Stop(void);
 void Timer0_A3_Start(u16 ticks);
 void Timer0_A3_Stop(void);
 void Timer0_A4_Delay(u16 ticks);
+void (*fptr_Timer0_A2_function)(void);
 void (*fptr_Timer0_A3_function)(void);
  
 
@@ -145,14 +145,6 @@ void Timer0_Stop(void)
 // *************************************************************************************************
 void Timer0_A2_Start(void)
 {
-	u16 value;
-	
-	// Delay based on current counter value
-	value = TA0R + CONV_MS_TO_TICKS(5);
-	
-	// Update CCR
-	TA0CCR2 = value;   
-
 	// Reset IRQ flag    
 	TA0CCTL2 &= ~CCIFG; 
 	          
@@ -347,26 +339,17 @@ __interrupt void TIMER0_A1_5_ISR(void)
 		case 0x02:	// Timer0_A1 handler
 					BRRX_TimerTask_v();
 					break;
-		// Timer0_A2	BlueRobin timer
-		case 0x04:	// Timer0_A1 handler
-					if(light.state == 0)
-					{
-						BUTTONS_OUT &= ~BUTTON_UP_PIN;
-						TA0CCR2 = TA0R + CONV_MS_TO_TICKS(10 * light.duty / light.blink);
-						TA0CCTL2 &= ~CCIFG; 
-						TA0CCTL2 |= CCIE; 
-	
-						light.state = 1;
-					} else {
-						BUTTONS_OUT |= BUTTON_UP_PIN;
-						TA0CCR2 = TA0R + CONV_MS_TO_TICKS(10 * (100-light.duty) / light.blink);
-						TA0CCTL2 &= ~CCIFG; 
-						TA0CCTL2 |= CCIE; 
-	
-						light.state = 0;						
-					}					
+		// Timer0_A2	Light timer
+		case 0x04:	// Disable IE
+					TA0CCTL2 &= ~CCIE;
+					// Reset IRQ flag  
+					TA0CCTL2 &= ~CCIFG;  
+					// Call function handler
+					fptr_Timer0_A2_function();
+					// Enable timer interrupt
+					TA0CCTL2 |= CCIE;
+					// Return without changing the Power Mode		
 					return;					
-
 		// Timer0_A3	Configurable periodic IRQ (used by button_repeat and buzzer)			
 		case 0x06:	// Disable IE 
 					TA0CCTL3 &= ~CCIE;

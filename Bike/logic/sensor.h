@@ -44,6 +44,7 @@
 // Prototypes section
 extern void reset_sensor(void);
 extern u16 sensor_get_distance(void);
+extern void sensor_tick(void);
 
 // *************************************************************************************************
 // Defines section

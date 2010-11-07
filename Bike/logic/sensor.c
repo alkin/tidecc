@@ -73,7 +73,7 @@ void reset_sensor(void)
 // @param       u16 speed_ms	Speed in meters per second.
 // @return      u16 			Speed in miles per hour.
 // *************************************************************************************************
-void sensor_tick()
+void sensor_tick(void)
 {
 	sensor.value++;
 }

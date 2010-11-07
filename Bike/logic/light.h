@@ -42,9 +42,10 @@
 
 // *************************************************************************************************
 // Prototypes section
-extern void reset_light();
-extern void do_light_measurement();
-extern void update_light();
+extern void reset_light(void);
+extern void do_light_measurement(void);
+extern void update_light(void);
+extern void toggle_light(void);
 
 // *************************************************************************************************
 // Defines section
@@ -53,7 +54,7 @@ typedef struct
     u16 value		: 9;    // Lock buttons
     u16 enable		: 1;
     u16 state		: 1;
-    u16 blink		: 4;
+    u16 blink		: 6;
     u16 duty		: 7;
 } s_light;
 

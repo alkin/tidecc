@@ -45,9 +45,11 @@
 // driver
 #include "adc12.h"
 #include "ports.h"
+#include "timer.h"
 
 // logic
 #include "light.h"
+
 
 
 // *************************************************************************************************
@@ -79,12 +81,13 @@ void reset_light(void)
 	light.state = 0;
 	
 	BUTTONS_IE  &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN);
-	BUTTONS_DIR |= (BUTTON_UP_PIN|BUTTON_DOWN_PIN);
+	BUTTONS_DIR |=  (BUTTON_UP_PIN|BUTTON_DOWN_PIN);
 	BUTTONS_OUT &= ~(BUTTON_UP_PIN|BUTTON_DOWN_PIN);
+	
+	fptr_Timer0_A2_function = toggle_light;
+	
 }
 
-
-volatile u16 light_voltage;
 // *************************************************************************************************
 // @fn          convert_C_to_F
 // @brief       Convert °C to °F 
@@ -95,7 +98,7 @@ void do_light_measurement(void)
 {
 	u16 voltage;
 	voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_2);
-	voltage = (voltage * 2 * 2) / 41; 
+ 	voltage = (voltage * 2 * 2) / 41; 
 	
 	light.value = light.value*0.8 + voltage*0.2;
 }
@@ -110,11 +113,15 @@ void update_light(void)
 {
 	if(light.value >= 10)
 	{
+		// Calcula Blink and Duty
+		light.blink = light.value-9;
+		light.duty = 10;
+		
+		// Enable light
 		light.enable = TRUE;
-		light.blink = 2;
-		light.duty = 5;
 		light.state = 1;
 		
+		TA0CCR2 = TA0R + 10;
 		Timer0_A2_Start();
 	
 		BUTTONS_OUT &= ~BUTTON_UP_PIN;
@@ -123,10 +130,43 @@ void update_light(void)
 	else
 	{
 		light.enable = FALSE;
+		light.state = 0;
 		
 		Timer0_A2_Stop();
 		
 		BUTTONS_OUT |= BUTTON_UP_PIN;
 		BUTTONS_OUT &= ~BUTTON_BACKLIGHT_PIN;
+	}
+}
+
+// *************************************************************************************************
+// @fn          convert_C_to_F
+// @brief       Convert °C to °F 
+// @param       s16 value		Temperature in °C
+// @return      s16 			Temperature in °F
+// *************************************************************************************************
+void toggle_light(void)
+{
+	u16 value;
+	
+	if(light.state == 0)
+	{
+		BUTTONS_OUT &= ~BUTTON_UP_PIN;
+
+		value = CONV_MS_TO_TICKS(10 * light.duty / light.blink);
+		
+		TA0CCR2 = TA0R + value;
+
+		light.state = 1;
+	} 
+	else
+	{
+		BUTTONS_OUT |= BUTTON_UP_PIN;
+		
+		value = CONV_MS_TO_TICKS(10 * (100-light.duty) / light.blink);
+		
+		TA0CCR2 = TA0R + value;
+
+		light.state = 0;						
 	}
 }
