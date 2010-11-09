@@ -144,13 +144,13 @@ void Timer0_Stop(void)
 void Timer0_A1_Start(void)
 {
 // Update CCR
-	TA0CCR2 = TA0R + 2;   
+	TA0CCR1 = TA0R + 2;   
 
 	// Reset IRQ flag    
-	TA0CCTL2 &= ~CCIFG; 
+	TA0CCTL1 &= ~CCIFG; 
 	          
 	// Enable timer interrupt    
-	TA0CCTL2 |= CCIE; 
+	TA0CCTL1 |= CCIE; 
 }
 
 

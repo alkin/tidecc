@@ -108,7 +108,7 @@ int main(void)
 	P2OUT &= ~BUTTON_NUM_PIN;
 	
 	// Cheat: Backlight ON
-	set_light(LIGHT_BACKLIGHT, LIGHT_ON);
+	//set_light(LIGHT_BACKLIGHT, LIGHT_ON);
 	
 	// Main control loop: wait in low power mode until some event needs to be processed
 	while(1)

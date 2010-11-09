@@ -60,7 +60,7 @@ extern void set_light(u8 light_unit, u8 status);
 #define LIGHT_BACKLIGHT 	(BUTTON_BACKLIGHT_PIN)
 #define LIGHT_ALL			(BUTTON_UP_PIN|BUTTON_DOWN_PIN|BUTTON_BACKLIGHT_PIN)
 
-#define	LIGHT_LEVEL			(10u)
+#define	LIGHT_LEVEL			(120u)
 
 typedef struct
 {

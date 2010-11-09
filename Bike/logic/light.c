@@ -124,7 +124,7 @@ void update_light(void)
 	if(light.value >= LIGHT_LEVEL)
 	{
 		// Config front light duty cicle and blink rate
-		light.front_blink = light.value-9;
+		light.front_blink = 6;
 		light.front_duty = 10;
 		
 		// Enable front light Timer
@@ -220,7 +220,7 @@ void toggle_light_back(void)
 	} 
 	else
 	{
-		set_light(LIGHT_BACK, LIGHT_ON);
+		set_light(LIGHT_BACK, LIGHT_OFF);
 		
 		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(320);
 
