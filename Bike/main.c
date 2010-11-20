@@ -85,9 +85,6 @@ void (*fptr_lcd_function_line2)(u8 line, u8 update);
 // *************************************************************************************************
 // Extern section
 
-#define NUM 40
-#define DUTY 0.2
-
 // *************************************************************************************************
 // @fn          main
 // @brief       Main routine
@@ -103,9 +100,9 @@ int main(void)
 	init_global_variables();
 	
 	// Cheat: Ground
-	P2IE  &= ~BUTTON_NUM_PIN;
-	P2DIR |=  BUTTON_NUM_PIN;
-	P2OUT &= ~BUTTON_NUM_PIN;
+	//P2IE  &= ~BUTTON_NUM_PIN;
+	//P2DIR |=  BUTTON_NUM_PIN;
+	//P2OUT &= ~BUTTON_NUM_PIN;
 	
 	// Cheat: Backlight ON
 	//set_light(LIGHT_BACKLIGHT, LIGHT_ON);
@@ -184,7 +181,6 @@ void init_application(void)
 		SFRIFG1 &= ~OFIFG;                      // Clear fault flags
 	} while ((SFRIFG1 & OFIFG));	
 
-
 	// ---------------------------------------------------------------------
 	// Configure port mapping
 	
@@ -214,6 +210,16 @@ void init_application(void)
 	// Re-enable all interrupts
 	__enable_interrupt();
 	
+	// ---------------------------------------------------------------------
+	// Wait until 3V in DVcc is settled
+ 	Timer0_Init();
+ 	TA0CCTL0 &= ~CCIE;
+ 	do
+ 	{
+ 		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000));
+	 	battery_measurement();
+ 	} while (sys.flag.low_battery);
+		
 	// ---------------------------------------------------------------------
 	// Configure ports
 

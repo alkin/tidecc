@@ -166,7 +166,7 @@ void set_light(u8 light_unit, u8 status)
 	if(status == LIGHT_ON)
 	{
 		BUTTONS_OUT &= ~(light_unit & (LIGHT_FRONT | LIGHT_BACK));
-		BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
+		//BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
 	}
 	else
 	{
@@ -222,7 +222,7 @@ void toggle_light_back(void)
 	{
 		set_light(LIGHT_BACK, LIGHT_OFF);
 		
-		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(320);
+		TA0CCR2 = TA0R + CONV_MS_TO_TICKS(323);
 
 		light.back_enable = FALSE;						
 	}

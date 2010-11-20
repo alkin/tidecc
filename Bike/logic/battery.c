@@ -105,36 +105,16 @@ void battery_measurement(void)
 	// --> (A11/4095)*4V=AVCC --> AVCC=(A11*4)/4095
 	voltage = (voltage * 2 * 2) / 41;  
 
-	// Correct measured voltage with calibration value
-	voltage += sBatt.offset;
-	
-	// Discard values that are clearly outside the measurement range 
-	if (voltage > BATTERY_HIGH_THRESHOLD) 
-	{
-		voltage = sBatt.voltage;
-	}
-	
 	// Filter battery voltage
-	sBatt.voltage = ((voltage*2) + (sBatt.voltage*8))/10;
+	sBatt.voltage = voltage;
 
 	// If battery voltage falls below low battery threshold, set system flag and modify LINE2 display function pointer
 	if (sBatt.voltage < BATTERY_LOW_THRESHOLD) 
 	{
 		sys.flag.low_battery = 1;
-		
-		// Set sticky battery icon
-		display_symbol(LCD_SYMB_BATTERY, SEG_ON);
 	}
 	else
 	{
 		sys.flag.low_battery = 0;
-
-		// Clear sticky battery icon
-		display_symbol(LCD_SYMB_BATTERY, SEG_OFF);
 	}
-	// Update LINE2
-	display.flag.line2_full_update = 1;
-	
-	// Indicate to display function that new value is available
-	display.flag.update_battery_voltage = 1;
 }

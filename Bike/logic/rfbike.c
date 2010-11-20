@@ -106,6 +106,10 @@ void rfbike_sync(void)
 	 *  <- Config
 	 *  -> ACK
 	 * 
+	 *  <- Set Initial Values   
+	 *  <- Config
+	 *  -> ACK
+	 * 
 	 *  <- Get Data		(Asks for measurements data)
 	 *  -> Data
 	 *  <- ACK

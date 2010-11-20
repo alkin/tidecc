@@ -110,7 +110,11 @@ u16 convert_speed_to_mi_h(u16 speed)
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
-	speed.value = sensor_get_distance();	
+	//speed.value = sensor_get_distance();
+	
+		 	u16 voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_11);
+		voltage = (voltage * 2 * 2) / 41 * 10;	
+		speed.value = voltage;
 }
 
 // *************************************************************************************************
