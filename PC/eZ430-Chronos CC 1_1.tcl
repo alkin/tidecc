@@ -56,9 +56,9 @@ package require Tk
 package require Ttk
 
 set exit_prog 0
-catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
+catch { load [file [join [pwd]/eZ430_Chronos_CC.dll]] } result
 if { [string first "couldn't" $result] != -1 } {
-  tk_dialog .dialog1 "DLL not found" {Press OK to close application.} info 0 OK
+  tk_dialog .dialog1 "DLL not found. $arq" {Press OK to close application.} info 0 OK
   set exit_prog 1
 }
 
