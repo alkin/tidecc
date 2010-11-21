@@ -248,13 +248,90 @@ proc get_wbsl_status {} {}
 proc wbsl_set_timer { timeout } {}
 proc wbsl_reset_timer {} {}
 
+# ----
+
+proc load_report { } {
+  global w
+  global waveSpeed
+  global waveDistance
+  global waveAltitude
+  global waveTemperature
+  
+  # Try to open file with key definitions
+  catch { set fhandle [open "teste.txt" r] } res
+
+  # Exit if file is missing
+  if { [string first "couldn't open" $res] == 0 } { return }
+ 
+  fconfigure $fhandle -buffering line
+
+  # Read file line by line and set global variables
+  while { ![eof $fhandle] } {
+    # Get next line
+    gets $fhandle line
+
+	set data [ split $line "," ]
+    # Verify that extracted strings consist of ASCII characters
+    if { [string is ascii [ lindex $data 0 ]] && [string is ascii [ lindex $data 1 ]] } {
+      # Set variable
+	  #tk_dialog .dialog1 "Error in communication" {The the same way as before.} info 0 OK
+      lappend waveSpeed [ lindex $data 0 ] [ lindex $data 1 ]
+	  lappend waveDistance [ lindex $data 0 ] [ lindex $data 2 ]
+	  lappend waveAltitude [ lindex $data 0 ] [ lindex $data 3 ]
+	  lappend waveTemperature [ lindex $data 0 ] [ lindex $data 4 ]
+    }
+  }
+  
+  close $fhandle  
+}
+
+
+
+
 # ----------------------------------------------------------------------------------------
 # Graphical user interface setup ---------------------------------------------------------
 
 # Some custom styles for graphical elements
 ttk::setTheme clam
-ttk::style configure custom.TCheckbutton -font "Helvetica 10"
+ttk::style configure custom.TCheckbutton -font "Helvetica 9" -foreground "Red"
 ttk::style configure custom.TLabelframe -font "Helvetica 12 bold"
+
+ttk::style layout custom.cbRed { 
+        custom.cbRed.border -children { 
+                custom.cbRed.padding -sticky n -children { 
+                        custom.cbRed.label -sticky n
+                } 
+        } 
+} 
+
+ttk::style layout custom.cbGreen { 
+        custom.cbRed.border -children { 
+                custom.cbRed.padding -sticky nswe -children { 
+                        custom.cbRed.label -sticky nswe 
+                } 
+        } 
+} 
+
+ttk::style layout custom.cbBlue { 
+        custom.cbRed.border -children { 
+                custom.cbRed.padding -sticky nswe -children { 
+                        custom.cbRed.label -sticky nswe 
+                } 
+        } 
+} 
+
+ttk::style layout custom.cbBlack { 
+        custom.cbRed.border -children { 
+                custom.cbRed.padding -sticky nswe -children { 
+                        custom.cbRed.label -sticky nswe 
+                } 
+        } 
+} 
+
+ttk::style configure custom.cbRed -font "Helvetica 9" -foreground "Red"
+ttk::style configure custom.cbGreen -font "Helvetica 9" -foreground "Green"
+ttk::style configure custom.cbBlue -font "Helvetica 9" -foreground "Blue"
+ttk::style configure custom.cbBlack -font "Helvetica 9" -foreground "Black"
 
 # Set default font size for the app
 switch $tcl_platform(platform) "unix" {
@@ -269,7 +346,7 @@ switch $tcl_platform(platform) "unix" {
 
 # Define basic window geometry
 wm title . "Chronos Challenge - cBike Control Center v$revision"
-wm geometry . 600x470
+wm geometry . 800x470
 wm resizable . 0 0
 wm iconname . "ttknote"
 ttk::frame .f
@@ -285,6 +362,79 @@ bind . <Key-m> { allow_mouse_control }
 ttk::notebook $w.note
 pack $w.note -fill both -expand 1 -padx 2 -pady 3
 ttk::notebook::enableTraversal $w.note
+
+# ----------------------------------------------------------------------------------------
+# Report Charts pane -------------------------------------------------------------------
+ttk::frame $w.note.report -style custom.TFrame
+$w.note add $w.note.report -text "Report Charts" -underline 0 -padding 2 
+grid columnconfigure $w.note.report {0 1} -weight 1 -uniform 1
+
+
+ttk::frame $w.note.report.frame2 -style custom.TFrame
+canvas $w.note.report.frame2.canvas -width 600 -height 420 -background "gray95" -borderwidth 0
+ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
+ttk::combobox $w.note.report.frame2.combo1 -textvariable ini_file -state readonly -values $all_ini_files -width 90
+ttk::label $w.note.report.frame2.lblDisplay -text "Display:" -justify left -font "Helvetica 10 bold"
+ttk::checkbutton $w.note.report.frame2.cb1 -text "Speed" -variable cb_speed -style custom.cbRed
+ttk::checkbutton $w.note.report.frame2.cb2 -text "Distance" -variable cb_distance
+ttk::checkbutton $w.note.report.frame2.cb3 -text "Altitude" -variable cb_altitude 
+ttk::checkbutton $w.note.report.frame2.cb4 -text "Temperature" -variable cb_temperature
+ttk::label $w.note.report.frame2.lblDate -text "Date:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblDate2 -text "12/10/2010 15:30" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblDistance -text "Distance:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblDistance2 -text "3.5 km" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblTime -text "Time:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblTime2 -text "35:32" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblAvgSpeed -text "Average Speed:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblAvgSpeed2 -text "24 km/h" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblMaxSpeed -text "Max Speed:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblMaxSpeed2 -text "35 km/h" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblAvgTemperature -text "Average Temperature:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblAvgTemperature2 -text "27 C" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblDiferenceAltitude -text "Diference Altitude:" -justify left -font "Helvetica 10 bold"
+ttk::label $w.note.report.frame2.lblDiferenceAltitude2 -text "75 m" -justify left -font "Helvetica 9"
+
+grid $w.note.report.frame2 -row 1 -column 0 -pady 5 -padx 10 -sticky ew -columnspan 2 -rowspan 1
+pack $w.note.report.frame2.canvas -side left -fill x
+pack $w.note.report.frame2.lblReport -side top -fill x -padx 10
+pack $w.note.report.frame2.combo1 -side top -fill x -padx 10 -pady 5
+pack $w.note.report.frame2.lblDisplay -side top -fill x -padx 10
+pack $w.note.report.frame2.cb1 -side top -fill x -padx 20 
+pack $w.note.report.frame2.cb2 -side top -fill x -padx 20 
+pack $w.note.report.frame2.cb3 -side top -fill x -padx 20 
+pack $w.note.report.frame2.cb4 -side top -fill x -padx 20
+
+pack $w.note.report.frame2.lblDate -side top -fill x -padx 10
+pack $w.note.report.frame2.lblDate2 -side top -fill x -padx 20
+pack $w.note.report.frame2.lblDistance -side top -fill x -padx 10 
+pack $w.note.report.frame2.lblDistance2 -side top -fill x -padx 20
+pack $w.note.report.frame2.lblTime -side top -fill x -padx 10
+pack $w.note.report.frame2.lblTime2 -side top -fill x -padx 20
+pack $w.note.report.frame2.lblAvgSpeed -side top -fill x -padx 10
+pack $w.note.report.frame2.lblAvgSpeed2 -side top -fill x -padx 20
+pack $w.note.report.frame2.lblMaxSpeed -side top -fill x -padx 10
+pack $w.note.report.frame2.lblMaxSpeed2 -side top -fill x -padx 20
+pack $w.note.report.frame2.lblAvgTemperature -side top -fill x -padx 10
+pack $w.note.report.frame2.lblAvgTemperature2 -side top -fill x -padx 20
+pack $w.note.report.frame2.lblDiferenceAltitude -side top -fill x -padx 10
+pack $w.note.report.frame2.lblDiferenceAltitude2 -side top -fill x -padx 20
+
+set waveSpeed { }
+set waveDistance { }
+set waveAltitude { }
+set waveTemperature { }
+set waveZero { }
+lappend waveZero 0 360
+lappend waveZero 600 360
+load_report
+
+$w.note.report.frame2.canvas create line $waveZero -tags wave -width 1 -fill black -smooth 1 
+$w.note.report.frame2.canvas create line $waveSpeed -tags wave -width 1 -fill red -smooth 1  
+$w.note.report.frame2.canvas create line $waveDistance -tags wave -width 1 -fill green -smooth 1
+$w.note.report.frame2.canvas create line $waveAltitude -tags wave -width 1 -fill blue -smooth 1
+$w.note.report.frame2.canvas create line $waveTemperature -tags wave -width 1 -fill black -smooth 1
+
+
 
 # ----------------------------------------------------------------------------------------
 # Bike pane -------------------------------------------------------------------------
@@ -339,50 +489,6 @@ ttk::label $w.note.br.frame0b.lblStatusText -text "BlueRobin transmitter off." -
 grid $w.note.br.frame0b -row 4 -column 0 -pady 20 -padx 10 -sticky ew -columnspan 2
 pack $w.note.br.frame0b.lblStatus -side left -fill x 
 pack $w.note.br.frame0b.lblStatusText -side left -fill x 
-
-# ----------------------------------------------------------------------------------------
-# Wireless Update pane -------------------------------------------------------------------
-ttk::frame $w.note.wbsl -style custom.TFrame
-$w.note add $w.note.wbsl -text "Reports" -underline 0 -padding 2 
-grid columnconfigure $w.note.wbsl {0 1} -weight 1 -uniform 1
-
-ttk::label $w.note.wbsl.label0 -font "Helvetica 10 bold" -width 80 -wraplength 550 -justify center -text "Only use this update function with watch firmware that allows to invoke the Wireless Update on the watch again.\n\nOlder eZ430-Chronos kits require a manual software update of the watch and access point. See Chronoswiki."
-grid $w.note.wbsl.label0 -row 0 -column 0 -sticky ew -columnspan 3 -pady 10 -padx 10
-
-ttk::label $w.note.wbsl.label1 -font "Helvetica 10" -text "Select the firmware file that you want to download to the watch:" 
-ttk::entry $w.note.wbsl.entry0 -state readonly -textvariable select_input_file
-
-grid $w.note.wbsl.label1 -row 1 -column 0 -sticky ew -columnspan 3 -pady 15 -padx 10
-grid $w.note.wbsl.entry0 -row 2 -column 0 -sticky ew -columnspan 2 -padx 10
-
-ttk::button $w.note.wbsl.btnBrowse -text "Browse..." -command { open_file } -width 16
-grid $w.note.wbsl.btnBrowse -row 2 -column 2 -sticky ew -padx 10
-
-ttk::button $w.note.wbsl.btnDwnld -text "Update Chronos Watch" -command { start_wbsl_ap } -width 16 -default "active"
-grid $w.note.wbsl.btnDwnld -row 3 -column 0 -sticky ew -pady 15 -padx 8 -columnspan 3
-
-# Progress bar
-labelframe $w.note.wbsl.frame1p -borderwidth 0
-ttk::label $w.note.wbsl.frame1p.lblProgress -text "Progress " -font "Helvetica 10 bold"
-ttk::progressbar $w.note.wbsl.frame1p.progBar -orient horizontal -value 0 -variable wbsl_progress -mode determinate 
-grid $w.note.wbsl.frame1p -row 4 -column 0 -sticky ew -pady 16 -padx 10 -columnspan 3
-pack $w.note.wbsl.frame1p.lblProgress -side left 
-pack $w.note.wbsl.frame1p.progBar -side left -fill x -expand 1 
-
-#Dummy Labels to fill Space
-ttk::label $w.note.wbsl.importantNote -width 80 -wraplength 550 -justify center -text "Important: If the wireless update fails during the firmware download to flash memory, the watch display will be blank and the watch will be in sleep mode. To restart the update, press the down button." -font "Helvetica 10 bold"
-grid $w.note.wbsl.importantNote -row 5 -column 0 -sticky ew -columnspan 3 -pady 20 -padx 10
-
-# Frame for status display
-labelframe $w.note.wbsl.frame0b -borderwidth 1 -background "Yellow"
-ttk::label $w.note.wbsl.frame0b.lblStatus -text "Status:" -font "Helvetica 10 bold" -background "Yellow"
-ttk::label $w.note.wbsl.frame0b.lblStatusText -text "Access Point is off." -font "Helvetica 10" -background "Yellow"
-grid $w.note.wbsl.frame0b -row 6 -column 0 -pady 13 -padx 10 -sticky ew -columnspan 3
-pack $w.note.wbsl.frame0b.lblStatus -side left -fill x 
-pack $w.note.wbsl.frame0b.lblStatusText -side left -fill x 
-
-
-
 
 # ----------------------------------------------------------------------------------------
 # About pane -----------------------------------------------------------------------------
@@ -751,6 +857,33 @@ proc get_files { ext } {
 }
 set all_ini_files [get_files ".ini"]
 # $w.note.keys.fSel.combo1 configure -values $all_ini_files
+
+proc load_report { } {
+  global w
+  
+  # Try to open file with key definitions
+  catch { set fhandle [open "teste.txt" r] } res
+  
+  # Exit if file is missing
+  if { [string first "couldn't open" $res] == 0 } { return }
+  
+  fconfigure $fhandle -buffering line
+
+  # Read file line by line and set global variables
+  while { ![eof $fhandle] } {
+    # Get next line
+    gets $fhandle line
+    
+	set data [ split $line "," ]
+    # Verify that extracted strings consist of ASCII characters
+    if { [string is ascii [ lindex $data 0 ]] && [string is ascii [ lindex $data 1 ]] } {
+      # Set variable
+      lappend wave_report [ lindex $data 0 ] [ lindex $data 1 ]
+    }
+  }
+  
+  close $fhandle  
+}
 
 
 
