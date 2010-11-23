@@ -232,6 +232,14 @@ set wbsl_timer_counter      0
 set wbsl_timer_flag         0
 set wbsl_timer_timeout      0
 
+set varDate ""
+
+set cbSpeed 1
+set cbDistance 1
+set cbAltitude 1
+set cbTemperature 1
+
+
 # Function required by WBSL
 proc ceil x  {expr {ceil($x)} }
 
@@ -250,39 +258,93 @@ proc wbsl_reset_timer {} {}
 
 # ----
 
+proc clearCanvas {can} {
+	foreach id [$can find all] { $can delete $id }
+}
+
+proc update_report { } {
+  global w
+  global varDate
+  global waveSpeed waveDistance waveAltitude waveTemperature
+  global cbSpeed cbDistance cbAltitude cbTemperature
+
+  if { $varDate == "" } return
+
+  clearCanvas $w.note.report.frame2.canvas
+
+  if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create line $waveSpeed -width 2 -fill red -smooth 1 }
+  if { $cbDistance == 1 } { $w.note.report.frame2.canvas create line $waveDistance -width 2 -fill black -smooth 1 }
+  if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create line $waveAltitude -width 2 -fill blue -smooth 1 }
+  if { $cbTemperature == 1 } { $w.note.report.frame2.canvas create line $waveTemperature -width 2 -fill green -smooth 1 }
+
+  set square {50 5 600 5 600 420 50 420 50 5}
+  $w.note.report.frame2.canvas create line $square -width 1 -fill black 
+
+  $w.note.report.frame2.canvas create text 45 15 -text "100 km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se  
+  $w.note.report.frame2.canvas create text 45 25 -text "60 km" -fill black -font "Helvetica 7 bold" -justify left -anchor se
+  $w.note.report.frame2.canvas create text 45 35 -text "2000 m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se
+  $w.note.report.frame2.canvas create text 45 45 -text "50 C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
+
+  $w.note.report.frame2.canvas create text 45 390 -text "0 km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se  
+  $w.note.report.frame2.canvas create text 45 400 -text "0 km" -fill black -font "Helvetica 7 bold" -justify left -anchor se
+  $w.note.report.frame2.canvas create text 45 410 -text "0 m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se
+  $w.note.report.frame2.canvas create text 45 420 -text "0 C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
+
+}
+
+proc generate_report { } {
+	# Analisa dados e preenche vars
+
+	# Determina Scale e Offset
+
+	# Gera Wave
+
+}
+
 proc load_report { } {
   global w
-  global waveSpeed
-  global waveDistance
-  global waveAltitude
-  global waveTemperature
+  global waveSpeed waveDistance waveAltitude waveTemperature
+  global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   
+  set waveSpeed {}
+  set waveDistance {}
+  set waveAltitude {}
+  set waveTemperature {}
+
   # Try to open file with key definitions
-  catch { set fhandle [open "teste.txt" r] } res
+  catch { set fhandle [open [$w.note.report.frame2.combo1 get] r] } res
 
   # Exit if file is missing
   if { [string first "couldn't open" $res] == 0 } { return }
  
   fconfigure $fhandle -buffering line
 
+  gets $fhandle varDate
+  gets $fhandle varDistance
+  gets $fhandle varTime
+  gets $fhandle varAvgSpeed
+  gets $fhandle varMaxSpeed
+  gets $fhandle varTemperature
+  gets $fhandle varAltitude
+
   # Read file line by line and set global variables
   while { ![eof $fhandle] } {
     # Get next line
     gets $fhandle line
 
-	set data [ split $line "," ]
+    set data [ split $line "," ]
+    
     # Verify that extracted strings consist of ASCII characters
     if { [string is ascii [ lindex $data 0 ]] && [string is ascii [ lindex $data 1 ]] } {
-      # Set variable
-	  #tk_dialog .dialog1 "Error in communication" {The the same way as before.} info 0 OK
-      lappend waveSpeed [ lindex $data 0 ] [ lindex $data 1 ]
-	  lappend waveDistance [ lindex $data 0 ] [ lindex $data 2 ]
-	  lappend waveAltitude [ lindex $data 0 ] [ lindex $data 3 ]
-	  lappend waveTemperature [ lindex $data 0 ] [ lindex $data 4 ]
+
+        lappend waveSpeed [expr ([ lindex $data 0 ] + 50)] [expr (420 - [ lindex $data 1 ])] 
+	  lappend waveDistance [expr ([ lindex $data 0 ] + 50)] [expr (420 - [ lindex $data 2 ])] 
+	  lappend waveAltitude [expr ([ lindex $data 0 ] + 50)] [expr (420 - [ lindex $data 3 ])]
+	  lappend waveTemperature [expr ([ lindex $data 0 ] + 50)] [expr (420 - [ lindex $data 4 ])]
     }
   }
-  
   close $fhandle  
+  update_report 
 }
 
 
@@ -369,35 +431,35 @@ ttk::frame $w.note.report -style custom.TFrame
 $w.note add $w.note.report -text "Report Charts" -underline 0 -padding 2 
 grid columnconfigure $w.note.report {0 1} -weight 1 -uniform 1
 
-
 ttk::frame $w.note.report.frame2 -style custom.TFrame
-canvas $w.note.report.frame2.canvas -width 600 -height 420 -background "gray95" -borderwidth 0
+canvas $w.note.report.frame2.canvas -width 600 -height 420 -background "White" -borderwidth 0
 ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
-ttk::combobox $w.note.report.frame2.combo1 -textvariable ini_file -state readonly -values $all_ini_files -width 90
+ttk::combobox $w.note.report.frame2.combo1 -state readonly -values $all_ini_files -width 90
 ttk::label $w.note.report.frame2.lblDisplay -text "Display:" -justify left -font "Helvetica 10 bold"
-ttk::checkbutton $w.note.report.frame2.cb1 -text "Speed" -variable cb_speed -style custom.cbRed
-ttk::checkbutton $w.note.report.frame2.cb2 -text "Distance" -variable cb_distance
-ttk::checkbutton $w.note.report.frame2.cb3 -text "Altitude" -variable cb_altitude 
-ttk::checkbutton $w.note.report.frame2.cb4 -text "Temperature" -variable cb_temperature
+ttk::checkbutton $w.note.report.frame2.cb1 -text "Speed" -variable cbSpeed -style custom.cbRed -command {update_report}
+ttk::checkbutton $w.note.report.frame2.cb2 -text "Distance" -variable cbDistance -command {update_report}
+ttk::checkbutton $w.note.report.frame2.cb3 -text "Altitude" -variable cbAltitude -command {update_report}
+ttk::checkbutton $w.note.report.frame2.cb4 -text "Temperature" -variable cbTemperature -command {update_report}
 ttk::label $w.note.report.frame2.lblDate -text "Date:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblDate2 -text "12/10/2010 15:30" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblDate2 -textvariable varDate -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblDistance -text "Distance:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblDistance2 -text "3.5 km" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblDistance2 -textvariable varDistance -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblTime -text "Time:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblTime2 -text "35:32" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblTime2 -textvariable varTime -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblAvgSpeed -text "Average Speed:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblAvgSpeed2 -text "24 km/h" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblAvgSpeed2 -textvariable varAvgSpeed -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblMaxSpeed -text "Max Speed:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblMaxSpeed2 -text "35 km/h" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblMaxSpeed2 -textvariable varMaxSpeed -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblAvgTemperature -text "Average Temperature:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblAvgTemperature2 -text "27 C" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblAvgTemperature2 -textvariable varTemperature -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblDiferenceAltitude -text "Diference Altitude:" -justify left -font "Helvetica 10 bold"
-ttk::label $w.note.report.frame2.lblDiferenceAltitude2 -text "75 m" -justify left -font "Helvetica 9"
+ttk::label $w.note.report.frame2.lblDiferenceAltitude2 -textvariable varAltitude -justify left -font "Helvetica 9"
 
 grid $w.note.report.frame2 -row 1 -column 0 -pady 5 -padx 10 -sticky ew -columnspan 2 -rowspan 1
 pack $w.note.report.frame2.canvas -side left -fill x
 pack $w.note.report.frame2.lblReport -side top -fill x -padx 10
 pack $w.note.report.frame2.combo1 -side top -fill x -padx 10 -pady 5
+bind $w.note.report.frame2.combo1 <<ComboboxSelected>> { load_report }
 pack $w.note.report.frame2.lblDisplay -side top -fill x -padx 10
 pack $w.note.report.frame2.cb1 -side top -fill x -padx 20 
 pack $w.note.report.frame2.cb2 -side top -fill x -padx 20 
@@ -426,15 +488,6 @@ set waveTemperature { }
 set waveZero { }
 lappend waveZero 0 360
 lappend waveZero 600 360
-load_report
-
-$w.note.report.frame2.canvas create line $waveZero -tags wave -width 1 -fill black -smooth 1 
-$w.note.report.frame2.canvas create line $waveSpeed -tags wave -width 1 -fill red -smooth 1  
-$w.note.report.frame2.canvas create line $waveDistance -tags wave -width 1 -fill green -smooth 1
-$w.note.report.frame2.canvas create line $waveAltitude -tags wave -width 1 -fill blue -smooth 1
-$w.note.report.frame2.canvas create line $waveTemperature -tags wave -width 1 -fill black -smooth 1
-
-
 
 # ----------------------------------------------------------------------------------------
 # Bike pane -------------------------------------------------------------------------
@@ -855,36 +908,8 @@ proc get_files { ext } {
 
   return $files
 }
-set all_ini_files [get_files ".ini"]
-# $w.note.keys.fSel.combo1 configure -values $all_ini_files
-
-proc load_report { } {
-  global w
-  
-  # Try to open file with key definitions
-  catch { set fhandle [open "teste.txt" r] } res
-  
-  # Exit if file is missing
-  if { [string first "couldn't open" $res] == 0 } { return }
-  
-  fconfigure $fhandle -buffering line
-
-  # Read file line by line and set global variables
-  while { ![eof $fhandle] } {
-    # Get next line
-    gets $fhandle line
-    
-	set data [ split $line "," ]
-    # Verify that extracted strings consist of ASCII characters
-    if { [string is ascii [ lindex $data 0 ]] && [string is ascii [ lindex $data 1 ]] } {
-      # Set variable
-      lappend wave_report [ lindex $data 0 ] [ lindex $data 1 ]
-    }
-  }
-  
-  close $fhandle  
-}
-
+set all_ini_files [get_files ".bike"]
+$w.note.report.frame2.combo1 configure -values $all_ini_files
 
 
 # Read variables from file 
