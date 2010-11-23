@@ -305,16 +305,24 @@ proc generate_report { } {
   global waveSpeed waveDistance waveAltitude waveTemperature
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
-
-  # Analisa dados e preenche vars
+  global startSpeed
 	
   # Speed
   set maxSpeed 0
+  set sumSpeed 0
+  set countSpeed 0
   foreach {x y} $dataSpeed {
     if { $y > $maxSpeed } { 
       set maxSpeed $y
     }  
+	set sumSpeed [expr ($sumSpeed + $y)]
+	set countSpeed [expr ($countSpeed + 1)]
   }
+  set varAvgSpeed [expr (10 * $sumSpeed/$countSpeed)]
+  set varAvgSpeed [expr (1.0 * $varAvgSpeed/10)]
+  set varAvgSpeed "$varAvgSpeed km/h"  
+  set varMaxSpeed "$startSpeed km/h"  
+  
   set maxSpeed [expr ($maxSpeed/40 + 1) * 40]
   
   set scaleSpeed [expr 418.0 / $maxSpeed]
@@ -326,7 +334,10 @@ proc generate_report { } {
     if { $y > $maxDistance } { 
       set maxDistance $y
     }  
-  }  
+  }
+  set varDistance [expr ($maxDistance/1000.0)]
+  set varDistance "$varDistance km"
+  
   set maxDistance [expr ($maxDistance/1000) + 1]
   
   set scaleDistance [expr 418.0 / ($maxDistance*1000)]
@@ -342,7 +353,10 @@ proc generate_report { } {
 	if { $y < $minAltitude } { 
       set minAltitude $y
     } 
-  }  
+  } 
+  set varAltitude [expr ($maxAltitude - $minAltitude)]
+  set varAltitude "$varAltitude m"
+  
   set maxAltitude [expr (($maxAltitude/100) + 1) * 100]
   set minAltitude [expr (($minAltitude/100) - 1) * 100]
   
@@ -354,6 +368,8 @@ proc generate_report { } {
   # Temperature
   set maxTemperature 0
   set minTemperature 1000000
+  set sumTemperature 0
+  set countTemperature 0
   foreach {x y} $dataTemperature {
     if { $y > $maxTemperature } { 
       set maxTemperature $y
@@ -361,7 +377,13 @@ proc generate_report { } {
 	if { $y < $minTemperature } { 
       set minTemperature $y
     } 
+	set sumTemperature [expr ($sumTemperature + $y)]
+	set countTemperature [expr ($countTemperature + 1)]
   }
+  set varTemperature [expr (10 * $sumTemperature/$countTemperature)]
+  set varTemperature [expr (1.0 * $varTemperature/10)]
+  set varTemperature "$varTemperature C"
+  
   set maxTemperature [expr (($maxTemperature/5) + 1) * 5]
   set minTemperature [expr (($minTemperature/5) - 1) * 5]
   
@@ -375,6 +397,14 @@ proc generate_report { } {
       set maxTime $x
     }  
   }
+  set hours [format "%0d" [expr $maxTime/3600]]
+  set minutes [format "%0d" [expr $maxTime%3600/60]]
+  set seconds [format "%02d" [expr $maxTime%3600%60]]
+  
+  set varTime ""
+  if { $hours > 0 } { set varTime "$hours:" }
+  set varTime "$varTime$minutes:$seconds"
+
   
   set scaleTime [expr 550.0/$maxTime]
 
@@ -402,7 +432,8 @@ proc generate_report { } {
 proc load_report_file { name } {
   global dataSpeed dataDistance dataAltitude dataTemperature
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
-  global startTime
+  global startTime startDistance startSpeed
+
   
   catch { set fhandle [open $name r] } res
 
@@ -412,34 +443,31 @@ proc load_report_file { name } {
   fconfigure $fhandle -buffering line
 
   gets $fhandle varDate
-  gets $fhandle varDistance
-  gets $fhandle varTime
-  gets $fhandle varAvgSpeed
-  gets $fhandle varMaxSpeed
-  gets $fhandle varTemperature
-  gets $fhandle varAltitude
-
+  gets $fhandle maxSpeed
+  if { $maxSpeed > $startSpeed } { set startSpeed $maxSpeed }
+  
+  
   set offsetTime $startTime
-  tk_dialog .dialog1 "No file selected" "$offsetTime" info 0 OK
+  set offsetDistance $startDistance
   
   # Read file line by line and set global variables
   while { ![eof $fhandle] } {
     # Get next line
     gets $fhandle line
 
-    set data [ split $line "," ]
-	
+    set data [ split $line "," ]	
     
     # Verify that extracted strings consist of ASCII characters
     if { [string is ascii [ lindex $data 0 ]] && [string is ascii [ lindex $data 1 ]] } {
 
 		# SE: CONVERT TO UNIT
 		lappend dataSpeed [expr ($offsetTime + [lindex $data 0])] [ lindex $data 1 ]
-		lappend dataDistance [expr ($offsetTime + [lindex $data 0])] [ lindex $data 2 ]
+		lappend dataDistance [expr ($offsetTime + [lindex $data 0])] [expr ($offsetDistance + [ lindex $data 2 ])]
 		lappend dataAltitude [expr ($offsetTime + [lindex $data 0])] [expr [ lindex $data 3 ] *1]
 		lappend dataTemperature [expr ($offsetTime + [lindex $data 0])] [ lindex $data 4 ]
 		
-		set startTime [ lindex $data 0 ]
+		set startTime [expr ($offsetTime + [lindex $data 0])]
+		set startDistance [expr ($offsetDistance + [ lindex $data 2 ])]
     }
   }
   close $fhandle  
@@ -449,7 +477,7 @@ proc load_report { } {
   global w
   global dataSpeed dataDistance dataAltitude dataTemperature
   global waveSpeed waveDistance waveAltitude waveTemperature
-  global startTime
+  global startTime startDistance startSpeed
   
   # Resets values
   set dataSpeed {}
@@ -462,13 +490,21 @@ proc load_report { } {
   set waveAltitude {}
   set waveTemperature {}
 
+  set startTime 0
+  set startDistance 0
+  set startSpeed 0
+  
   # Check for day, week, year
   
-  # Load selected file
-  set startTime 0
+  # Load selected file  
   load_report_file [$w.note.report.frame2.combo1 get]
-  load_report_file "teste2.bike"
-  
+  load_report_file [$w.note.report.frame2.combo1 get]
+  load_report_file [$w.note.report.frame2.combo1 get]
+  load_report_file [$w.note.report.frame2.combo1 get]
+  load_report_file [$w.note.report.frame2.combo1 get]
+  load_report_file [$w.note.report.frame2.combo1 get]
+
+    
   # Generate
   generate_report
   
