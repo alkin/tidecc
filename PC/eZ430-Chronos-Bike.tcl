@@ -269,15 +269,8 @@ proc update_report { } {
   global cbSpeed cbDistance cbAltitude cbTemperature
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
 
-  if { $varDate == "" } return
-
   clearCanvas $w.note.report.frame2.canvas
-
-  if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create line $waveSpeed -width 2 -fill red -smooth 1 }
-  if { $cbDistance == 1 } { $w.note.report.frame2.canvas create line $waveDistance -width 2 -fill black -smooth 1 }
-  if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create line $waveAltitude -width 2 -fill blue -smooth 1 }
-  if { $cbTemperature == 1 } { $w.note.report.frame2.canvas create line $waveTemperature -width 2 -fill green -smooth 1 }
-
+  
   $w.note.report.frame2.canvas create line {50 2 600 2 600 420 50 420 50 2} -width 1 -fill black
   $w.note.report.frame2.canvas create line {50 86 600 86} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {50 170 600 170} -width 1 -fill gray -dash 1
@@ -287,7 +280,15 @@ proc update_report { } {
   $w.note.report.frame2.canvas create line {270 2 270 420} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {380 2 380 420} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {490 2 490 420} -width 1 -fill gray -dash 1
+  
+  if { $varDate == "" } return
 
+  if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create line $waveSpeed -width 2 -fill red -smooth 1 }
+  if { $cbDistance == 1 } { $w.note.report.frame2.canvas create line $waveDistance -width 2 -fill black -smooth 1 }
+  if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create line $waveAltitude -width 2 -fill blue -smooth 1 }
+  if { $cbTemperature == 1 } { $w.note.report.frame2.canvas create line $waveTemperature -width 2 -fill green -smooth 1 }
+
+  
   if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create text 45 15 -text "$maxSpeed km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se }
   if { $cbDistance == 1 } { $w.note.report.frame2.canvas create text 45 25 -text "$maxDistance km" -fill black -font "Helvetica 7 bold" -justify left -anchor se }
   if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create text 45 35 -text "$maxAltitude m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se }
@@ -498,13 +499,8 @@ proc load_report { } {
   
   # Load selected file  
   load_report_file [$w.note.report.frame2.combo1 get]
-  load_report_file [$w.note.report.frame2.combo1 get]
-  load_report_file [$w.note.report.frame2.combo1 get]
-  load_report_file [$w.note.report.frame2.combo1 get]
-  load_report_file [$w.note.report.frame2.combo1 get]
-  load_report_file [$w.note.report.frame2.combo1 get]
 
-    
+  
   # Generate
   generate_report
   
@@ -646,6 +642,8 @@ pack $w.note.report.frame2.lblAvgTemperature -side top -fill x -padx 10
 pack $w.note.report.frame2.lblAvgTemperature2 -side top -fill x -padx 20
 pack $w.note.report.frame2.lblDiferenceAltitude -side top -fill x -padx 10
 pack $w.note.report.frame2.lblDiferenceAltitude2 -side top -fill x -padx 20
+
+update_report
 
 # ----------------------------------------------------------------------------------------
 # Bike pane -------------------------------------------------------------------------
