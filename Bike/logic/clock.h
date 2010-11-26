@@ -50,7 +50,7 @@ extern void display_time(u8 line, u8 update);
 // Global Variable section
 struct time
 {
-	u32 	system_time;
+	u16 	system_time;
 
 	u8		hour;
 	u8		minute;

@@ -104,20 +104,21 @@ u16 convert_speed_to_mi_h(u16 speed)
 
 // *************************************************************************************************
 // @fn          do_speed_measurement
-// @brief       Updates speed in meters per second with 1 decimal.
+// @brief       Updates speed value in meters per second with 1 decimal.
 // @param       none
 // @return      none
 // *************************************************************************************************
 void do_speed_measurement(void)
 {
 	//speed.value = sensor_get_distance();
+	
 	speed.value = sensor.value * 10;
+	
 	/*
-		 	u16 voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_11);
+	 	u16 voltage = adc12_single_conversion(REFVSEL_1, ADC12SHT0_10, ADC12INCH_11);
 		voltage = (voltage * 2 * 2) / 41 * 10;	
 		speed.value = voltage;
-		
-		*/
+	*/
 }
 
 // *************************************************************************************************

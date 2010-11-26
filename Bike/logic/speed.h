@@ -44,10 +44,10 @@
 // *************************************************************************************************
 // Prototypes section
 extern void reset_speed(void);
-extern void do_speed_measurement(void);
 extern u16  convert_speed_to_km_h(u16 speed_ms);
 extern u16  convert_speed_to_m_s(u16 speed_ms);
 extern u16  convert_speed_to_mi_h(u16 speed_ms);
+extern void do_speed_measurement(void);
 extern void display_speed(u8 line, u8 update);
 
 // *************************************************************************************************

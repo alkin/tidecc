@@ -124,7 +124,6 @@ void clock_tick(void)
 // *************************************************************************************************
 void display_time(u8 line, u8 update)
 {	
-	// Partial update
  	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
 		if(sTime.hour > 0)

@@ -44,10 +44,10 @@
 // *************************************************************************************************
 // Prototypes section
 extern void reset_distance(void);
-extern void do_distance_measurement(void);
-extern void display_distance(u8 line, u8 update);
 extern u32 convert_distance_to_km(u32 distance);
 extern u32 convert_distance_to_mi(u32 distance);
+extern void do_distance_measurement(void);
+extern void display_distance(u8 line, u8 update);
 
 
 // *************************************************************************************************
@@ -56,16 +56,8 @@ extern u32 convert_distance_to_mi(u32 distance);
 #define DISTANCE_KM				(0u)
 #define DISTANCE_MI				(1u)
 
-typedef union
-{
-    u16 unit      				: 2;    // Unit for speed display
-   	u16 size    				: 6;    // Bike Frame Size
-
-} u_distance_config;
-
 typedef struct
 {
-	u_distance_config config;    
     u32 value;    						// Lock buttons
 } s_distance;
 

@@ -93,7 +93,7 @@ u32 convert_distance_to_mi(u32 distance)
 
 // *************************************************************************************************
 // @fn          do_distance_measurement
-// @brief       
+// @brief       Increases the distance value by the distance travelled in the last second
 // @param       none
 // @return      none
 // *************************************************************************************************

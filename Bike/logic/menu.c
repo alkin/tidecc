@@ -46,15 +46,10 @@
 #include "display.h"
 
 // logic
-#include "clock.h"
-#include "battery.h"
-
 #include "menu.h"
-#include "altitude.h"
-#include "rfsimpliciti.h"
 #include "speed.h"
+#include "clock.h"
 #include "distance.h"
-#include "time.h"
 
 
 // *************************************************************************************************

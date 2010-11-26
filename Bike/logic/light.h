@@ -45,9 +45,10 @@
 extern void reset_light(void);
 extern void do_light_measurement(void);
 extern void update_light(void);
+extern void set_light(u8 light_unit, u8 status);
 extern void toggle_light_front(void);
 extern void toggle_light_back(void);
-extern void set_light(u8 light_unit, u8 status);
+
 
 // *************************************************************************************************
 // Defines section
@@ -64,7 +65,7 @@ extern void set_light(u8 light_unit, u8 status);
 
 typedef struct
 {
-    u16 value			: 9;    // Lock buttons
+    u16 value			: 9;
     u16 enable			: 1;
     u16 back_enable		: 1;
     u16 front_enable	: 1;
@@ -84,4 +85,3 @@ extern volatile s_light light;
 
 
 #endif /*LIGHT_H_*/
-

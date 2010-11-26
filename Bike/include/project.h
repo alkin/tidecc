@@ -45,9 +45,8 @@
 // *************************************************************************************************
 // Defines section
 
-
-#define CHANGE_MENU_PERIOD			(5u) // period to change menu (seconds)
-
+// Period to change menu (seconds)
+#define CHANGE_MENU_PERIOD			(5u) 
 
 // Comment this to not use the LCD charge pump
 //#define USE_LCD_CHARGE_PUMP
@@ -58,10 +57,6 @@
 // Use/not use filter when measuring physical values
 #define FILTER_OFF						(0u)
 #define FILTER_ON						(1u)
-
-// Value of PI
-#define PI_INT						(31415u)
-
 
 // *************************************************************************************************
 // Macro section
