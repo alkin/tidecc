@@ -22,9 +22,7 @@
 
 // logic
 #include "menu.h"
-#include "date.h"
 #include "battery.h"
-#include "temperature.h"
 #include "altitude.h"
 #include "battery.h"
 #include "acceleration.h"
@@ -289,9 +287,6 @@ void init_global_variables(void)
 	
 	// Set system time to default value
 	reset_clock();
-	
-	// Set date to default value
-	reset_date();
 	
 	// Set buzzer to default value
 	reset_buzzer();

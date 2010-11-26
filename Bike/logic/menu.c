@@ -47,11 +47,9 @@
 
 // logic
 #include "clock.h"
-#include "date.h"
 #include "battery.h"
 
 #include "menu.h"
-#include "temperature.h"
 #include "altitude.h"
 #include "rfsimpliciti.h"
 #include "acceleration.h"

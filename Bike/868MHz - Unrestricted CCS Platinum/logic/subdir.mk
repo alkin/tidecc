@@ -9,15 +9,13 @@ C_SRCS += \
 ../logic/battery.c \
 ../logic/clock.c \
 ../logic/datalog.c \
-../logic/date.c \
 ../logic/distance.c \
 ../logic/light.c \
 ../logic/menu.c \
 ../logic/rfbike.c \
 ../logic/rfsimpliciti.c \
 ../logic/sensor.c \
-../logic/speed.c \
-../logic/temperature.c 
+../logic/speed.c 
 
 OBJS += \
 ./logic/acceleration.obj \
@@ -25,15 +23,13 @@ OBJS += \
 ./logic/battery.obj \
 ./logic/clock.obj \
 ./logic/datalog.obj \
-./logic/date.obj \
 ./logic/distance.obj \
 ./logic/light.obj \
 ./logic/menu.obj \
 ./logic/rfbike.obj \
 ./logic/rfsimpliciti.obj \
 ./logic/sensor.obj \
-./logic/speed.obj \
-./logic/temperature.obj 
+./logic/speed.obj 
 
 C_DEPS += \
 ./logic/acceleration.pp \
@@ -41,15 +37,13 @@ C_DEPS += \
 ./logic/battery.pp \
 ./logic/clock.pp \
 ./logic/datalog.pp \
-./logic/date.pp \
 ./logic/distance.pp \
 ./logic/light.pp \
 ./logic/menu.pp \
 ./logic/rfbike.pp \
 ./logic/rfsimpliciti.pp \
 ./logic/sensor.pp \
-./logic/speed.pp \
-./logic/temperature.pp 
+./logic/speed.pp 
 
 OBJS__QTD += \
 ".\logic\acceleration.obj" \
@@ -57,15 +51,13 @@ OBJS__QTD += \
 ".\logic\battery.obj" \
 ".\logic\clock.obj" \
 ".\logic\datalog.obj" \
-".\logic\date.obj" \
 ".\logic\distance.obj" \
 ".\logic\light.obj" \
 ".\logic\menu.obj" \
 ".\logic\rfbike.obj" \
 ".\logic\rfsimpliciti.obj" \
 ".\logic\sensor.obj" \
-".\logic\speed.obj" \
-".\logic\temperature.obj" 
+".\logic\speed.obj" 
 
 C_DEPS__QTD += \
 ".\logic\acceleration.pp" \
@@ -73,15 +65,13 @@ C_DEPS__QTD += \
 ".\logic\battery.pp" \
 ".\logic\clock.pp" \
 ".\logic\datalog.pp" \
-".\logic\date.pp" \
 ".\logic\distance.pp" \
 ".\logic\light.pp" \
 ".\logic\menu.pp" \
 ".\logic\rfbike.pp" \
 ".\logic\rfsimpliciti.pp" \
 ".\logic\sensor.pp" \
-".\logic\speed.pp" \
-".\logic\temperature.pp" 
+".\logic\speed.pp" 
 
 C_SRCS_QUOTED += \
 "../logic/acceleration.c" \
@@ -89,15 +79,13 @@ C_SRCS_QUOTED += \
 "../logic/battery.c" \
 "../logic/clock.c" \
 "../logic/datalog.c" \
-"../logic/date.c" \
 "../logic/distance.c" \
 "../logic/light.c" \
 "../logic/menu.c" \
 "../logic/rfbike.c" \
 "../logic/rfsimpliciti.c" \
 "../logic/sensor.c" \
-"../logic/speed.c" \
-"../logic/temperature.c" 
+"../logic/speed.c" 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -198,26 +186,6 @@ logic/datalog.obj: ../logic/datalog.c $(GEN_OPTS) $(GEN_SRCS)
 	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/datalog_ccsCompiler.opt"))
 	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/datalog_ccsCompiler.opt"))
 	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/datalog_ccsCompiler.opt"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-logic/date.obj: ../logic/date.c $(GEN_OPTS) $(GEN_SRCS)
-	@echo 'Building file: $<'
-	@echo 'Invoking: Compiler'
-	$(shell echo --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "logic/date_ccsCompiler.opt")
-	$(shell echo -vmspx >> "logic/date_ccsCompiler.opt")
-	$(shell echo -g >> "logic/date_ccsCompiler.opt")
-	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "logic/date_ccsCompiler.opt")
-	$(shell echo --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="C:/Texas Instruments/ccsv4/tools/compiler/msp430/include" --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="R:/Documentos/Chronos/tidecc/Bike" --include_path="R:/Documentos/Chronos/tidecc/Bike/driver" --include_path="R:/Documentos/Chronos/tidecc/Bike/include" --include_path="R:/Documentos/Chronos/tidecc/Bike/logic" --include_path="R:/Documentos/Chronos/tidecc/Bike/bluerobin" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Applications/application/End Device" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM/bsp_external" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers/code" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/mcus" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios/family5" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/smartrf" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk_applications" >> "logic/date_ccsCompiler.opt")
-	$(shell echo --diag_warning=225 >> "logic/date_ccsCompiler.opt")
-	$(shell echo --printf_support=minimal >> "logic/date_ccsCompiler.opt")
-	$(shell echo --asm_listing >> "logic/date_ccsCompiler.opt")
-	$(shell echo --preproc_with_compile >> "logic/date_ccsCompiler.opt")
-	$(shell echo --preproc_dependency="logic/date.pp" >> "logic/date_ccsCompiler.opt")
-	$(shell echo --obj_directory="logic" >> "logic/date_ccsCompiler.opt")
-	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/date_ccsCompiler.opt"))
-	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/date_ccsCompiler.opt"))
-	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/date_ccsCompiler.opt"
 	@echo 'Finished building: $<'
 	@echo ' '
 
@@ -358,26 +326,6 @@ logic/speed.obj: ../logic/speed.c $(GEN_OPTS) $(GEN_SRCS)
 	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/speed_ccsCompiler.opt"))
 	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/speed_ccsCompiler.opt"))
 	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/speed_ccsCompiler.opt"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-logic/temperature.obj: ../logic/temperature.c $(GEN_OPTS) $(GEN_SRCS)
-	@echo 'Building file: $<'
-	@echo 'Invoking: Compiler'
-	$(shell echo --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "logic/temperature_ccsCompiler.opt")
-	$(shell echo -vmspx >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo -g >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="C:/Texas Instruments/ccsv4/tools/compiler/msp430/include" --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="R:/Documentos/Chronos/tidecc/Bike" --include_path="R:/Documentos/Chronos/tidecc/Bike/driver" --include_path="R:/Documentos/Chronos/tidecc/Bike/include" --include_path="R:/Documentos/Chronos/tidecc/Bike/logic" --include_path="R:/Documentos/Chronos/tidecc/Bike/bluerobin" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Applications/application/End Device" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM/bsp_external" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers/code" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/mcus" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios/family5" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/smartrf" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk_applications" >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --diag_warning=225 >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --printf_support=minimal >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --asm_listing >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --preproc_with_compile >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --preproc_dependency="logic/temperature.pp" >> "logic/temperature_ccsCompiler.opt")
-	$(shell echo --obj_directory="logic" >> "logic/temperature_ccsCompiler.opt")
-	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/temperature_ccsCompiler.opt"))
-	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/temperature_ccsCompiler.opt"))
-	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/temperature_ccsCompiler.opt"
 	@echo 'Finished building: $<'
 	@echo ' '
 

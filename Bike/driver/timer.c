@@ -57,7 +57,6 @@
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
 #include "acceleration.h"
-#include "temperature.h"
 #include "datalog.h"
 
 

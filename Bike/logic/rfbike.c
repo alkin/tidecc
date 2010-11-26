@@ -57,7 +57,6 @@
 #include "distance.h"
 #include "light.h"
 #include "speed.h"
-#include "temperature.h"
 
 // *************************************************************************************************
 // Prototypes section

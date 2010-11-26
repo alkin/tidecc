@@ -55,8 +55,6 @@
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
 #include "clock.h"
-#include "date.h"
-#include "temperature.h"
 #include "vti_ps.h"
 #include "altitude.h"
 #include "datalog.h"
@@ -259,9 +257,9 @@ void simpliciti_sync_decode_ap_cmd_callback(void)
 										sTime.hour 			= simpliciti_data[1] & 0x7F;
 										sTime.minute 		= simpliciti_data[2];
 										sTime.second 		= simpliciti_data[3];
-										sDate.year 			= (simpliciti_data[4]<<8) + simpliciti_data[5];
-										sDate.month 		= simpliciti_data[6];
-										sDate.day 			= simpliciti_data[7];
+										//sDate.year 			= (simpliciti_data[4]<<8) + simpliciti_data[5];
+										//sDate.month 		= simpliciti_data[6];
+										//sDate.day 			= simpliciti_data[7];
 										// Set temperature and temperature offset
 										t1 = (s16)((simpliciti_data[10]<<8) + simpliciti_data[11]);
 										offset = t1 - (sAlt.temperature_C - sAlt.temperature_C_offset);
@@ -344,10 +342,10 @@ void simpliciti_sync_get_data_callback(unsigned int index)
 										simpliciti_data[2]  = sTime.minute;
 										simpliciti_data[3]  = sTime.second;
 										// Date
-										simpliciti_data[4]  = sDate.year >> 8;
-										simpliciti_data[5]  = sDate.year & 0xFF;
-										simpliciti_data[6]  = sDate.month;
-										simpliciti_data[7]  = sDate.day;
+										//simpliciti_data[4]  = sDate.year >> 8;
+										//simpliciti_data[5]  = sDate.year & 0xFF;
+										//simpliciti_data[6]  = sDate.month;
+										//simpliciti_data[7]  = sDate.day;
 										// Unused
 										simpliciti_data[8]  = 0; 
 										simpliciti_data[9]  = 0; 

@@ -48,10 +48,8 @@
 
 // logic
 #include "datalog.h"
-#include "date.h"
 #include "clock.h"
 #include "altitude.h"
-#include "temperature.h"
 
 
 #include "speed.h"
@@ -388,9 +386,9 @@ void datalog_sm(u8 * data, u8 len, u8 cmd)
 								    datalog_add_to_buffer((u8*)&sDatalog.interval, 1);
 
 									// Add date to buffer (DD.MM.YYYY) (4 bytes)
-									datalog_add_to_buffer((u8*)&sDate.day, 1);
-									datalog_add_to_buffer((u8*)&sDate.month, 1);
-									datalog_add_to_buffer((u8*)&sDate.year, 2);
+									//datalog_add_to_buffer((u8*)&sDate.day, 1);
+									//datalog_add_to_buffer((u8*)&sDate.month, 1);
+									//datalog_add_to_buffer((u8*)&sDate.year, 2);
 									
 									// Add system time to buffer (HH.MM.SS) (3 bytes)
 									datalog_add_to_buffer((u8*)&sTime.hour, 3);
