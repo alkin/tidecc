@@ -42,17 +42,12 @@ void init_application(void);
 void init_global_variables(void);
 void display_update(void);
 void idle_loop(void);
-void configure_ports(void);
-void read_configuration_values(void);
+void reset_config(void);
 void do_measurements(void);
 
 
 // *************************************************************************************************
 // Defines section
-
-// Number of calibration data bytes in INFOA memory
-#define CALIBRATION_DATA_LENGTH		(13u)
-
 
 // *************************************************************************************************
 // Global Variable section
@@ -94,14 +89,6 @@ int main(void)
 
 	// Assign initial value to global variables
 	init_global_variables();
-	
-	// Cheat: Ground
-	//P2IE  &= ~BUTTON_NUM_PIN;
-	//P2DIR |=  BUTTON_NUM_PIN;
-	//P2OUT &= ~BUTTON_NUM_PIN;
-	
-	// Cheat: Backlight ON
-	//set_light(LIGHT_BACKLIGHT, LIGHT_ON);
 	
 	// Main control loop: wait in low power mode until some event needs to be processed
 	while(1)
@@ -225,10 +212,6 @@ void init_application(void)
 	radio_powerdown();	
 	
 	// ---------------------------------------------------------------------
-	// Init acceleration sensor
-	as_init();
-	
-	// ---------------------------------------------------------------------
 	// Init LCD
 	lcd_init();
   
@@ -281,7 +264,7 @@ void init_global_variables(void)
 #endif
 
 	// Read calibration values from info memory
-	read_configuration_values();
+	reset_config();
 	
 	// Set system time to default value
 	reset_clock();
@@ -433,80 +416,23 @@ void idle_loop(void)
 }
 
 // *************************************************************************************************
-// @fn          read_configuration_values
-// @brief       Read calibration values for temperature measurement, voltage measurement
-//				and radio from INFO memory.
+// @fn          reset_config
+// @brief       Resets the configuration values from determined values.
 // @param       none
 // @return      none
 // *************************************************************************************************
-void read_configuration_values(void)
+void reset_config(void)
 {
-	u8 config_data[32];
-	u8 i;
-	u8 *flash_mem;
-	
-	flash_mem = (u8 *)0x1800;
-	for (i=0; i<32; i++)
-	{
-		config_data[i] = *flash_mem++;
-	}
-	
-	if (config_data[0] == 0xFF) 
-	{
-		// If no values are available (i.e. INFO D memory has been erased by user), assign experimentally derived values	
-		rf_frequoffset	= 4;
-		sBatt.offset 	= -10;	
-		simpliciti_ed_address[0] = 0x79;
-		simpliciti_ed_address[1] = 0x56;
-		simpliciti_ed_address[2] = 0x34;
-		simpliciti_ed_address[3] = 0x12;
-		sAlt.altitude_offset	 = 0;
+	rf_frequoffset	= 4;
+	sBatt.offset 	= -10;	
+	simpliciti_ed_address[0] = 0x79;
+	simpliciti_ed_address[1] = 0x56;
+	simpliciti_ed_address[2] = 0x34;
+	simpliciti_ed_address[3] = 0x12;
+	sAlt.altitude_offset	 = 0;
 		
-		config.bike_size = 60;
-		config.sensor_count = 9;
-		config.speed_unit = SPEED_M_S;
-		config.distance_unit = DISTANCE_KM;
-	}
-	else
-	{
-		/*
-		// Assign calibration data to global variables
-		rf_frequoffset	= cal_data[1];	
-		// Range check for calibrated FREQEST value (-20 .. + 20 is ok, else use default value)
-		if ((rf_frequoffset > 20) && (rf_frequoffset < (256-20)))
-		{
-			rf_frequoffset = 0;
-		} 
-		sBatt.offset 	= (s16)((cal_data[4] << 8) + cal_data[5]);
-		simpliciti_ed_address[0] = cal_data[6];
-		simpliciti_ed_address[1] = cal_data[7];
-		simpliciti_ed_address[2] = cal_data[8];
-		simpliciti_ed_address[3] = cal_data[9];
-		// S/W version byte set during calibration?
-		if (cal_data[12] != 0xFF)
-		{
-			sAlt.altitude_offset = (s16)((cal_data[10] << 8) + cal_data[11]);;
-		}
-		else
-		{
-			sAlt.altitude_offset = 0;	
-		}
-		*/
-	}
+	config.bike_size = 60;
+	config.sensor_count = 9;
+	config.speed_unit = SPEED_M_S;
+	config.distance_unit = DISTANCE_KM;
 }
-
-
-// *************************************************************************************************
-// @fn          save_configuration_values
-// @brief       Read calibration values for temperature measurement, voltage measurement
-//				and radio from INFO memory.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void save_configuration_values(void)
-{
-	
-}
-
-
-
