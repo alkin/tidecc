@@ -56,8 +56,6 @@
 #include "display.h"
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
-#include "acceleration.h"
-
 
 // *************************************************************************************************
 // Prototypes section

@@ -51,7 +51,6 @@
 #include "flash.h"
 
 // logic
-#include "acceleration.h"
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
 #include "clock.h"

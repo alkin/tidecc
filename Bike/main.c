@@ -25,7 +25,6 @@
 #include "battery.h"
 #include "altitude.h"
 #include "battery.h"
-#include "acceleration.h"
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
 
@@ -292,9 +291,6 @@ void init_global_variables(void)
 	
 	// Reset altitude measurement
 	reset_altitude_measurement();
-	
-	// Reset acceleration measurement
-	reset_acceleration();
 
 	// Reset SimpliciTI stack
 	reset_rf();

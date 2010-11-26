@@ -52,7 +52,6 @@
 #include "menu.h"
 #include "altitude.h"
 #include "rfsimpliciti.h"
-#include "acceleration.h"
 #include "speed.h"
 #include "distance.h"
 #include "time.h"

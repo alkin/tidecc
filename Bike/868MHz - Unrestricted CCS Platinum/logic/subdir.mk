@@ -4,7 +4,6 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../logic/acceleration.c \
 ../logic/altitude.c \
 ../logic/battery.c \
 ../logic/clock.c \
@@ -17,7 +16,6 @@ C_SRCS += \
 ../logic/speed.c 
 
 OBJS += \
-./logic/acceleration.obj \
 ./logic/altitude.obj \
 ./logic/battery.obj \
 ./logic/clock.obj \
@@ -30,7 +28,6 @@ OBJS += \
 ./logic/speed.obj 
 
 C_DEPS += \
-./logic/acceleration.pp \
 ./logic/altitude.pp \
 ./logic/battery.pp \
 ./logic/clock.pp \
@@ -43,7 +40,6 @@ C_DEPS += \
 ./logic/speed.pp 
 
 OBJS__QTD += \
-".\logic\acceleration.obj" \
 ".\logic\altitude.obj" \
 ".\logic\battery.obj" \
 ".\logic\clock.obj" \
@@ -56,7 +52,6 @@ OBJS__QTD += \
 ".\logic\speed.obj" 
 
 C_DEPS__QTD += \
-".\logic\acceleration.pp" \
 ".\logic\altitude.pp" \
 ".\logic\battery.pp" \
 ".\logic\clock.pp" \
@@ -69,7 +64,6 @@ C_DEPS__QTD += \
 ".\logic\speed.pp" 
 
 C_SRCS_QUOTED += \
-"../logic/acceleration.c" \
 "../logic/altitude.c" \
 "../logic/battery.c" \
 "../logic/clock.c" \
@@ -83,26 +77,6 @@ C_SRCS_QUOTED += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-logic/acceleration.obj: ../logic/acceleration.c $(GEN_OPTS) $(GEN_SRCS)
-	@echo 'Building file: $<'
-	@echo 'Invoking: Compiler'
-	$(shell echo --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "logic/acceleration_ccsCompiler.opt")
-	$(shell echo -vmspx >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo -g >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="C:/Texas Instruments/ccsv4/tools/compiler/msp430/include" --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="R:/Documentos/Chronos/tidecc/Bike" --include_path="R:/Documentos/Chronos/tidecc/Bike/driver" --include_path="R:/Documentos/Chronos/tidecc/Bike/include" --include_path="R:/Documentos/Chronos/tidecc/Bike/logic" --include_path="R:/Documentos/Chronos/tidecc/Bike/bluerobin" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Applications/application/End Device" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM/bsp_external" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers/code" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/mcus" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios/family5" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/smartrf" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk_applications" >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --diag_warning=225 >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --printf_support=minimal >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --asm_listing >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --preproc_with_compile >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --preproc_dependency="logic/acceleration.pp" >> "logic/acceleration_ccsCompiler.opt")
-	$(shell echo --obj_directory="logic" >> "logic/acceleration_ccsCompiler.opt")
-	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/acceleration_ccsCompiler.opt"))
-	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/acceleration_ccsCompiler.opt"))
-	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/acceleration_ccsCompiler.opt"
-	@echo 'Finished building: $<'
-	@echo ' '
-
 logic/altitude.obj: ../logic/altitude.c $(GEN_OPTS) $(GEN_SRCS)
 	@echo 'Building file: $<'
 	@echo 'Invoking: Compiler'
