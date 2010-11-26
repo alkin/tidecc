@@ -80,8 +80,8 @@ void reset_light(void)
 	
 	// Initialize light values
 	light.value = 0;
-	light.back_enable = 0;
-	light.front_enable = 0;
+	light.back_enable = FALSE;
+	light.front_enable = FALSE;
 	light.front_blink = 1;
 	light.front_duty = 50;
 	
@@ -166,7 +166,7 @@ void set_light(u8 light_unit, u8 status)
 	if(status == LIGHT_ON)
 	{
 		BUTTONS_OUT &= ~(light_unit & (LIGHT_FRONT | LIGHT_BACK));
-		//BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
+		BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
 	}
 	else
 	{

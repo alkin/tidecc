@@ -73,12 +73,7 @@ const struct menu * ptrMenu_L2 = NULL;
 
 void display_nothing(u8 line, u8 update) {}
 void dummy(u8 line) {}
-
-
-u8 update_time(void)
-{
-	return (display.flag.update_time);
-}
+u8 update_display(void) { return 1; }
 
 // *************************************************************************************************
 // User navigation ( [____] = default menu item after reset )
@@ -88,13 +83,12 @@ u8 update_time(void)
 //	LINE2: 	[Time] -> Distance
 // *************************************************************************************************
 
-
 const struct menu menu_L1_Speed =
 {
 	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),			// sub menu function
 	FUNCTION(display_speed),	// display function
-	FUNCTION(update_time),		// new display data
+	FUNCTION(update_display),		// new display data
 	&menu_L1_Speed,
 };
 
@@ -103,7 +97,7 @@ const struct menu menu_L2_Time =
 	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),			// sub menu function
 	FUNCTION(display_time),		// display function
-	FUNCTION(update_time),		// new display data
+	FUNCTION(update_display),		// new display data
 	&menu_L2_Distance,
 };
 
@@ -112,6 +106,6 @@ const struct menu menu_L2_Distance =
 	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),				// sub menu function
 	FUNCTION(display_distance),		// display function
-	FUNCTION(update_time),			// new display data
+	FUNCTION(update_display),			// new display data
 	&menu_L2_Time,
 };

@@ -71,7 +71,7 @@ void reset_distance(void)
 
 // *************************************************************************************************
 // @fn          convert_distance_to_km
-// @brief       Converts distance into kilometers with 2 decimals
+// @brief       Converts distance into kilometers
 // @param       u16 distance	Distance in meters with 1 decimal
 // @return      u16 			Distance in kilometers with 2 decimals
 // *************************************************************************************************
@@ -82,7 +82,7 @@ u32 convert_distance_to_km(u32 distance)
 
 // *************************************************************************************************
 // @fn          convert_distance_to_mi
-// @brief       Converts distance into miles with 2 decimals
+// @brief       Converts distance into miles
 // @param       u16 speed_ms	Distance in meters with 1 decimal
 // @return      u16 			Distance in miles with 2 decimals
 // *************************************************************************************************

@@ -109,12 +109,5 @@ void battery_measurement(void)
 	sBatt.voltage = voltage;
 
 	// If battery voltage falls below low battery threshold, set system flag and modify LINE2 display function pointer
-	if (sBatt.voltage < BATTERY_LOW_THRESHOLD) 
-	{
-		sys.flag.low_battery = 1;
-	}
-	else
-	{
-		sys.flag.low_battery = 0;
-	}
+	sys.flag.low_battery = (sBatt.voltage < BATTERY_LOW_THRESHOLD); 
 }
