@@ -50,7 +50,6 @@
 // logic
 #include "menu.h"
 #include "clock.h"
-#include "user.h"
 #include "date.h"
 
 

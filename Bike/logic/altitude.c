@@ -50,7 +50,6 @@
 #include "timer.h"
 
 // logic
-#include "user.h"
 #include "datalog.h"
 
 

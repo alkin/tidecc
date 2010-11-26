@@ -46,7 +46,6 @@
 #include "display.h"
 
 // logic
-#include "user.h"
 #include "clock.h"
 #include "date.h"
 #include "battery.h"
@@ -83,14 +82,6 @@ void dummy(u8 line) {}
 u8 update_time(void)
 {
 	return (display.flag.update_time);
-}
-u8 update_date(void)
-{
-	return (display.flag.update_date);
-}
-u8 update_temperature(void)
-{
-	return (display.flag.update_temperature);
 }
 
 // *************************************************************************************************
