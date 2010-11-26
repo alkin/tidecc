@@ -50,7 +50,6 @@
 #include "timer.h"
 
 // logic
-#include "datalog.h"
 
 
 // *************************************************************************************************
@@ -192,9 +191,6 @@ void stop_altitude_measurement(void)
 	// Not on?
 	if (!sAlt.on) return;
 
-	// Logging data?
-	if (is_datalog()) return;
-	
 	// Stop pressure sensor
 	ps_stop();
 	

@@ -8,7 +8,6 @@ C_SRCS += \
 ../logic/altitude.c \
 ../logic/battery.c \
 ../logic/clock.c \
-../logic/datalog.c \
 ../logic/distance.c \
 ../logic/light.c \
 ../logic/menu.c \
@@ -22,7 +21,6 @@ OBJS += \
 ./logic/altitude.obj \
 ./logic/battery.obj \
 ./logic/clock.obj \
-./logic/datalog.obj \
 ./logic/distance.obj \
 ./logic/light.obj \
 ./logic/menu.obj \
@@ -36,7 +34,6 @@ C_DEPS += \
 ./logic/altitude.pp \
 ./logic/battery.pp \
 ./logic/clock.pp \
-./logic/datalog.pp \
 ./logic/distance.pp \
 ./logic/light.pp \
 ./logic/menu.pp \
@@ -50,7 +47,6 @@ OBJS__QTD += \
 ".\logic\altitude.obj" \
 ".\logic\battery.obj" \
 ".\logic\clock.obj" \
-".\logic\datalog.obj" \
 ".\logic\distance.obj" \
 ".\logic\light.obj" \
 ".\logic\menu.obj" \
@@ -64,7 +60,6 @@ C_DEPS__QTD += \
 ".\logic\altitude.pp" \
 ".\logic\battery.pp" \
 ".\logic\clock.pp" \
-".\logic\datalog.pp" \
 ".\logic\distance.pp" \
 ".\logic\light.pp" \
 ".\logic\menu.pp" \
@@ -78,7 +73,6 @@ C_SRCS_QUOTED += \
 "../logic/altitude.c" \
 "../logic/battery.c" \
 "../logic/clock.c" \
-"../logic/datalog.c" \
 "../logic/distance.c" \
 "../logic/light.c" \
 "../logic/menu.c" \
@@ -166,26 +160,6 @@ logic/clock.obj: ../logic/clock.c $(GEN_OPTS) $(GEN_SRCS)
 	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/clock_ccsCompiler.opt"))
 	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/clock_ccsCompiler.opt"))
 	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/clock_ccsCompiler.opt"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-logic/datalog.obj: ../logic/datalog.c $(GEN_OPTS) $(GEN_SRCS)
-	@echo 'Building file: $<'
-	@echo 'Invoking: Compiler'
-	$(shell echo --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="R:\Documentos\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "logic/datalog_ccsCompiler.opt")
-	$(shell echo -vmspx >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo -g >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="C:/Texas Instruments/ccsv4/tools/compiler/msp430/include" --include_path="C:/Texas Instruments/ccsv4/msp430/include" --include_path="R:/Documentos/Chronos/tidecc/Bike" --include_path="R:/Documentos/Chronos/tidecc/Bike/driver" --include_path="R:/Documentos/Chronos/tidecc/Bike/include" --include_path="R:/Documentos/Chronos/tidecc/Bike/logic" --include_path="R:/Documentos/Chronos/tidecc/Bike/bluerobin" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Applications/application/End Device" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/boards/CC430EM/bsp_external" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/drivers/code" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/bsp/mcus" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/radios/family5" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/mrfi/smartrf" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk" --include_path="R:/Documentos/Chronos/tidecc/Bike/simpliciti/Components/nwk_applications" >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --diag_warning=225 >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --printf_support=minimal >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --asm_listing >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --preproc_with_compile >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --preproc_dependency="logic/datalog.pp" >> "logic/datalog_ccsCompiler.opt")
-	$(shell echo --obj_directory="logic" >> "logic/datalog_ccsCompiler.opt")
-	$(if $(strip $(GEN_OPTS_QUOTED)), $(shell echo $(GEN_OPTS_QUOTED) >> "logic/datalog_ccsCompiler.opt"))
-	$(if $(strip $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#")), $(shell echo $(subst #,$(wildcard $(subst $(SPACE),\$(SPACE),$<)),"#") >> "logic/datalog_ccsCompiler.opt"))
-	"C:/Texas Instruments/ccsv4/tools/compiler/msp430/bin/cl430" -@"logic/datalog_ccsCompiler.opt"
 	@echo 'Finished building: $<'
 	@echo ' '
 

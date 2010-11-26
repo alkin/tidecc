@@ -53,7 +53,6 @@
 #include "altitude.h"
 #include "rfsimpliciti.h"
 #include "acceleration.h"
-#include "datalog.h"
 #include "speed.h"
 #include "distance.h"
 #include "time.h"

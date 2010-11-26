@@ -43,7 +43,6 @@
 #include "project.h"
 
 // logic
-#include "datalog.h"
 
 
 // *************************************************************************************************
@@ -63,7 +62,7 @@ void flash_erase_page(u8 page)
 	u16 * wptr = (u16*)(page * 512);
 
 	// Range check
-	if ((page < DATALOG_PAGE_START) || (page > DATALOG_PAGE_END)) return;
+	//if ((page < DATALOG_PAGE_START) || (page > DATALOG_PAGE_END)) return;
 	
 	// Wait until not busy
   	while ((FCTL3 & BUSY) != 0);

@@ -28,7 +28,6 @@
 #include "acceleration.h"
 #include "rfsimpliciti.h"
 #include "simpliciti.h"
-#include "datalog.h"
 
 
 #include "rfbike.h"
@@ -302,9 +301,6 @@ void init_global_variables(void)
 	
 	// Reset battery measurement
 	reset_batt_measurement();
-	
-	// Reset data logger
-	reset_datalog();
 	
 	// Reset sensor
 	reset_sensor();

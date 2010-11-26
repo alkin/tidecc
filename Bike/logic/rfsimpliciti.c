@@ -57,7 +57,6 @@
 #include "clock.h"
 #include "vti_ps.h"
 #include "altitude.h"
-#include "datalog.h"
 
 
 // *************************************************************************************************
@@ -180,9 +179,6 @@ void start_simpliciti_sync(void)
 	clear_line(LINE1);  	
 	fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
 	
-	// Stop data logging and close session
-	stop_datalog();
-
 	// Turn on beeper icon to show activity
 	display_symbol(LCD_ICON_BEEPER1, SEG_ON_BLINK_ON);
 	display_symbol(LCD_ICON_BEEPER2, SEG_ON_BLINK_ON);
@@ -269,9 +265,9 @@ void simpliciti_sync_decode_ap_cmd_callback(void)
 										sAlt.altitude = (s16)((simpliciti_data[12]<<8) + simpliciti_data[13]);
 										update_pressure_table(sAlt.altitude, sAlt.pressure, sAlt.temperature_K);
 										// Data logging mode
-										sDatalog.mode = simpliciti_data[14];
+										// sDatalog.mode = simpliciti_data[14];
 										// Data logging interval
-										sDatalog.interval = simpliciti_data[15];
+										//sDatalog.interval = simpliciti_data[15];
 										break;
 												
 		case SYNC_AP_CMD_GET_MEMORY_BLOCKS_MODE_1:	
@@ -301,12 +297,14 @@ void simpliciti_sync_decode_ap_cmd_callback(void)
 										break;
 		
 		case SYNC_AP_CMD_ERASE_MEMORY:	// Erase data logger memory
+										/*
 										for (i=DATALOG_PAGE_START; i<=DATALOG_PAGE_END; i++)
 										{
 											flash_erase_page(i);
 										}	
 										sDatalog.wptr = (u16*)DATALOG_MEMORY_START;
 										sDatalog.flags.flag.memory_full = 0;
+										*/
 										break;
 										
 		case SYNC_AP_CMD_EXIT:			// Exit sync mode
@@ -331,7 +329,7 @@ void simpliciti_sync_get_data_callback(unsigned int index)
 	volatile u16 addr, mem;
 	
 	// Calculate bytes ready for sync
-  	bytes_ready = (sDatalog.wptr - (u16*)DATALOG_MEMORY_START)*2; 
+  	//bytes_ready = (sDatalog.wptr - (u16*)DATALOG_MEMORY_START)*2; 
 	
 	// simpliciti_data[0] contains data type and needs to be returned to AP
 	switch (simpliciti_data[0])
@@ -356,9 +354,9 @@ void simpliciti_sync_get_data_callback(unsigned int index)
 										simpliciti_data[12] = sAlt.altitude >> 8;
 										simpliciti_data[13] = sAlt.altitude & 0xFF;
 										// Data logging mode
-										simpliciti_data[14] = sDatalog.mode;
+										//simpliciti_data[14] = sDatalog.mode;
 										// Data logging interval
-										simpliciti_data[15] = sDatalog.interval;
+										//simpliciti_data[15] = sDatalog.interval;
 										// Bytes ready for download
 										simpliciti_data[16] = bytes_ready >> 8;
 										simpliciti_data[17] = bytes_ready & 0xFF;
@@ -374,7 +372,7 @@ void simpliciti_sync_get_data_callback(unsigned int index)
 											simpliciti_data[1] = ((burst_start + index) >> 8) & 0xFF;
 											simpliciti_data[2] = (burst_start + index) & 0xFF;
 											// Assemble payload
-											flash_ptr = (u8*)(DATALOG_MEMORY_START + (burst_start + index)*16);
+											//flash_ptr = (u8*)(DATALOG_MEMORY_START + (burst_start + index)*16);
 											for (i=3; i<BM_SYNC_DATA_LENGTH; i++) simpliciti_data[i] = *flash_ptr++;
 										} 
 										else if (burst_mode == 2)
@@ -383,7 +381,7 @@ void simpliciti_sync_get_data_callback(unsigned int index)
 											simpliciti_data[1] = (burst_packet[index] >> 8) & 0xFF;
 											simpliciti_data[2] = burst_packet[index] & 0xFF;
 											// Assemble payload
-											flash_ptr = (u8*)(DATALOG_MEMORY_START + burst_packet[index]*16);
+											//flash_ptr = (u8*)(DATALOG_MEMORY_START + burst_packet[index]*16);
 											for (i=3; i<BM_SYNC_DATA_LENGTH; i++) simpliciti_data[i] = *flash_ptr++;
 										}
 										break;
