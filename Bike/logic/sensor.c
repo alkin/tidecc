@@ -59,18 +59,18 @@ volatile s_sensor sensor;
 
 // *************************************************************************************************
 // @fn          reset_sensor
-// @brief       
+// @brief       Resets the value of the sensor
 // @param       none
 // @return      none
 // *************************************************************************************************
 void reset_sensor(void)
 {
-	sensor.value = 9;	
+	sensor.value = 0;	
 }
 
 // *************************************************************************************************
 // @fn          sensor_tick
-// @brief       
+// @brief       Incresases the value of sensor ticks
 // @param       none
 // @return      none
 // *************************************************************************************************
@@ -81,9 +81,9 @@ void sensor_tick(void)
 
 // *************************************************************************************************
 // @fn          sensor_get_distance
-// @brief       
+// @brief       Returns the calculated distance based on the count of sensor ticks
 // @param       none
-// @return      u16 			Speed in decimeter per second
+// @return      u16 			Distance done in one second
 // *************************************************************************************************
 u16 sensor_get_distance(void)
 {
