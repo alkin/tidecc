@@ -10,10 +10,8 @@
 //
 //====================================================================
 
-
 #ifndef __PMM
 #define __PMM
-
 
 //====================================================================
 /**
@@ -21,7 +19,7 @@
   *
   * \param level       PMM level ID
   */
-void SetVCore (unsigned char level);
+void SetVCore(unsigned char level);
 
 //====================================================================
 /**
@@ -29,7 +27,7 @@ void SetVCore (unsigned char level);
   *
   * \param level       PMM level ID
   */
-void SetVCoreUp (unsigned char level);
+void SetVCoreUp(unsigned char level);
 
 //====================================================================
 /**
@@ -37,6 +35,6 @@ void SetVCoreUp (unsigned char level);
   *
   * \param level       PMM level ID
   */
-void SetVCoreDown (unsigned char level);
+void SetVCoreDown(unsigned char level);
 
-#endif /* __PMM */
+#endif                          /* __PMM */

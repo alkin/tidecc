@@ -1,58 +1,54 @@
 // *************************************************************************************************
 //
-//	Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/ 
-//	 
-//	 
-//	  Redistribution and use in source and binary forms, with or without 
-//	  modification, are permitted provided that the following conditions 
-//	  are met:
-//	
-//	    Redistributions of source code must retain the above copyright 
-//	    notice, this list of conditions and the following disclaimer.
-//	 
-//	    Redistributions in binary form must reproduce the above copyright
-//	    notice, this list of conditions and the following disclaimer in the 
-//	    documentation and/or other materials provided with the   
-//	    distribution.
-//	 
-//	    Neither the name of Texas Instruments Incorporated nor the names of
-//	    its contributors may be used to endorse or promote products derived
-//	    from this software without specific prior written permission.
-//	
-//	  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-//	  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-//	  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-//	  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-//	  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-//	  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-//	  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-//	  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-//	  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-//	  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-//	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//      Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/ 
+//       
+//       
+//        Redistribution and use in source and binary forms, with or without 
+//        modification, are permitted provided that the following conditions 
+//        are met:
+//      
+//          Redistributions of source code must retain the above copyright 
+//          notice, this list of conditions and the following disclaimer.
+//       
+//          Redistributions in binary form must reproduce the above copyright
+//          notice, this list of conditions and the following disclaimer in the 
+//          documentation and/or other materials provided with the   
+//          distribution.
+//       
+//          Neither the name of Texas Instruments Incorporated nor the names of
+//          its contributors may be used to endorse or promote products derived
+//          from this software without specific prior written permission.
+//      
+//        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+//        "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+//        LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//        A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
+//        OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+//        SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+//        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//        DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//        THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+//        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+//        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
 
 #ifndef __DISPLAY_H
 #define __DISPLAY_H
 
-
 // *************************************************************************************************
 // Include section
 
 #include <project.h>
-
-
 
 // *************************************************************************************************
 // Extern section
 
 // Constants defined in library
 extern const u8 lcd_font[];
-extern const u8 * segments_lcdmem[];
+extern const u8 *segments_lcdmem[];
 extern const u8 segments_bitmask[];
-extern const u8 itoa_conversion_table[][3];
-
+extern const u8 int_to_array_conversion_table[][3];
 
 // *************************************************************************************************
 // Global Variable section
@@ -60,30 +56,28 @@ extern const u8 itoa_conversion_table[][3];
 // Set of display flags
 typedef union
 {
-  struct
-  {
-  	// Line1 + Line2 + Icons
-    u16 full_update      		: 1;    // 1 = Redraw all content
-    u16 partial_update      	: 1;    // 1 = Update changes
-  	
-  	// Line only
-    u16 line1_full_update     	: 1;    // 1 = Redraw Line1 content
-    u16 line2_full_update     	: 1;    // 1 = Redraw Line2 content
+   struct
+   {
+      // Line1 + Line2 + Icons
+      u16 full_update            :1;     // 1 = Redraw all content
+      u16 partial_update         :1;     // 1 = Update changes
 
-	// Logic module data update flags
-    u16 update_time      		: 1;    // 1 = Time was updated 
-    u16 update_stopwatch     	: 1;    // 1 = Stopwatch was updated
-    u16 update_temperature   	: 1;    // 1 = Temperature was updated
-    u16 update_battery_voltage 	: 1;    // 1 = Battery voltage was updated
-    u16 update_date      		: 1;    // 1 = Date was updated
-    u16 update_alarm      		: 1;    // 1 = Alarm time was updated
-    u16 update_acceleration		: 1; 	// 1 = Acceleration data was updated
-  } flag;
-  u16 all_flags;            // Shortcut to all display flags (for reset)
+      // Line only
+      u16 line1_full_update       :1;    // 1 = Redraw Line1 content
+      u16 line2_full_update       :1;    // 1 = Redraw Line2 content
+
+      // Logic module data update flags
+      u16 update_time              :1;   // 1 = Time was updated 
+      u16 update_stopwatch         :1;   // 1 = Stopwatch was updated
+      u16 update_temperature       :1;   // 1 = Temperature was updated
+      u16 update_battery_voltage   :1;   // 1 = Battery voltage was updated
+      u16 update_date              :1;   // 1 = Date was updated
+      u16 update_alarm             :1;   // 1 = Alarm time was updated
+      u16 update_acceleration      :1;   // 1 = Acceleration data was updated
+   } flag;
+   u16 all_flags;        // Shortcut to all display flags (for reset)
 } s_display_flags;
-
 extern volatile s_display_flags display;
-
 
 // *************************************************************************************************
 // Defines section
@@ -96,7 +90,7 @@ extern volatile s_display_flags display;
 // Definitions for line view style
 #define DISPLAY_DEFAULT_VIEW			(0u)
 #define DISPLAY_ALTERNATIVE_VIEW		(1u)
- 
+
 // Definitions for line access
 #define LINE1							(1u)
 #define LINE2							(2u)
@@ -120,12 +114,12 @@ extern volatile s_display_flags display;
 // ------------------------------------------
 // LCD symbols for easier access
 //
-// xxx_SEG_xxx 		= Seven-segment character (sequence 5-4-3-2-1-0)
-// xxx_SYMB_xxx 	= Display symbol, e.g. "AM" for ante meridiem 
-// xxx_UNIT_xxx 	= Display unit, e.g. "km/h" for kilometers per hour
-// xxx_ICON_xxx 	= Display icon, e.g. heart to indicate reception of heart rate data
-// xxx_L1_xxx 		= Item is part of Line1 information 
-// xxx_L2_xxx 		= Item is part of Line2 information
+// xxx_SEG_xxx          = Seven-segment character (sequence 5-4-3-2-1-0)
+// xxx_SYMB_xxx         = Display symbol, e.g. "AM" for ante meridiem 
+// xxx_UNIT_xxx         = Display unit, e.g. "km/h" for kilometers per hour
+// xxx_ICON_xxx         = Display icon, e.g. heart to indicate reception of heart rate data
+// xxx_L1_xxx           = Item is part of Line1 information 
+// xxx_L2_xxx           = Item is part of Line2 information
 
 // Symbols for Line1
 #define LCD_SYMB_AM					0
@@ -183,7 +177,6 @@ extern volatile s_display_flags display;
 #define LCD_SEG_L2_COL0				40
 #define LCD_SEG_L2_DP				41
 
-
 // Line1 7-segment arrays
 #define LCD_SEG_L1_3_0				70
 #define LCD_SEG_L1_2_0				71
@@ -202,7 +195,6 @@ extern volatile s_display_flags display;
 #define LCD_SEG_L2_5_4				97
 #define LCD_SEG_L2_4_2				98
 
-
 // LCD controller memory map
 #define LCD_MEM_1          			((u8*)0x0A20)
 #define LCD_MEM_2          			((u8*)0x0A21)
@@ -216,7 +208,6 @@ extern volatile s_display_flags display;
 #define LCD_MEM_10         			((u8*)0x0A29)
 #define LCD_MEM_11         			((u8*)0x0A2A)
 #define LCD_MEM_12         			((u8*)0x0A2B)
-
 
 // Memory assignment
 #define LCD_SEG_L1_0_MEM			(LCD_MEM_6)
@@ -292,7 +283,7 @@ extern volatile s_display_flags display;
 #define LCD_UNIT_L1_K_MASK			(BIT6)
 #define LCD_UNIT_L1_M_MASK			(BIT1)
 #define LCD_UNIT_L1_I_MASK			(BIT0)
-#define LCD_UNIT_L1_PER_S_MASK		(BIT3)
+#define LCD_UNIT_L1_PER_S_MASK		(BIT7)
 #define LCD_UNIT_L1_PER_H_MASK		(BIT2)
 #define LCD_UNIT_L1_DEGREE_MASK		(BIT1)
 #define LCD_UNIT_L2_KCAL_MASK		(BIT4)
@@ -305,8 +296,6 @@ extern volatile s_display_flags display;
 #define LCD_ICON_BEEPER1_MASK		(BIT3)
 #define LCD_ICON_BEEPER2_MASK		(BIT3)
 #define LCD_ICON_BEEPER3_MASK		(BIT3)
-
-
 
 // *************************************************************************************************
 // API section
@@ -336,13 +325,14 @@ extern void DisplayTime(u8 updateMode);
 extern void display_am_pm_symbol(u8 timeAM);
 
 // Set_value display functions
-extern void display_value1(u8 segments, u32 value, u8 digits, u8 blanks);
-extern void display_hours1(u8 segments, u32 value, u8 digits, u8 blanks);
+extern void display_value(u8 segments, u32 value, u8 digits, u8 blanks);
+extern void display_hours(u8 segments, u32 value, u8 digits, u8 blanks);
 
 // Integer to string conversion 
-extern u8 * itoa(u32 n, u8 digits, u8 blanks);
+extern u8 *int_to_array(u32 n, u8 digits, u8 blanks);
 
 // Segment index helper function
 extern u8 switch_seg(u8 line, u8 index1, u8 index2);
 
-#endif // __DISPLAY_
+#endif   /*__DISPLAY_H*/ 
+

@@ -133,6 +133,7 @@ extern void simpliciti_get_ed_data_callback(void);
 
 // Sync data length
 #define BM_SYNC_DATA_LENGTH                     (19u)
+#define BIKE_DATA_LENGTH                        (19u)
 
 // Device data  (0)TYPE   (1) - (18) DATA 
 #define SYNC_ED_TYPE_R2R                        (1u)
@@ -148,16 +149,40 @@ extern void simpliciti_get_ed_data_callback(void);
 #define SYNC_AP_CMD_ERASE_MEMORY                (6u)
 #define SYNC_AP_CMD_EXIT						(7u)
 
+// Bike Data (0)CMD    (1) - (18) DATA 
+#define BIKE_CMD_NOP                           (1u)
+#define BIKE_CMD_CONFIG				           (2u)  // Flag to check config data
+#define BIKE_CMD_DATA                          (3u)  
+#define BIKE_CMD_ERASE_MEMORY                  (4u)
+#define BIKE_CMD_EXIT						   (5u)
+
+// Watch (0)CMD   (1) - (18) DATA 
+#define WATCH_CMD_NOP                          (6u)
+#define WATCH_CMD_GET_CONFIG				   (7u)  // Flag to check config data
+#define WATCH_CMD_SET_CONFIG                   (8u)  // Flag to send config data
+#define WATCH_CMD_GET_DATA                     (9u)
+#define WATCH_CMD_RESTART                      (10u)
+#define WATCH_CMD_EXIT						   (11u)
+
 
 // Entry point into SimpliciTI library
 extern void simpliciti_main_sync(void);
 
 // Callback function to decode access point command
 extern void simpliciti_sync_decode_ap_cmd_callback(void);
-
 // Callback function to read data from application and trigger sending
 extern void simpliciti_sync_get_data_callback(unsigned int index);
 
+
+extern void simpliciti_watch_decode_bike_callback(void);
+extern void simpliciti_watch_get_data_callback(void);
+
 // Send reply packets (>0), 0=no need to reply
 extern unsigned char simpliciti_reply_count;
+
+extern unsigned char simpliciti_listen_to(void);
+
+extern void listen(void);
+
+extern void reset_simpliciti(void);
 

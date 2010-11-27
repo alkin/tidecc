@@ -1,35 +1,35 @@
 // *************************************************************************************************
 //
-//	Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/ 
-//	 
-//	 
-//	  Redistribution and use in source and binary forms, with or without 
-//	  modification, are permitted provided that the following conditions 
-//	  are met:
-//	
-//	    Redistributions of source code must retain the above copyright 
-//	    notice, this list of conditions and the following disclaimer.
-//	 
-//	    Redistributions in binary form must reproduce the above copyright
-//	    notice, this list of conditions and the following disclaimer in the 
-//	    documentation and/or other materials provided with the   
-//	    distribution.
-//	 
-//	    Neither the name of Texas Instruments Incorporated nor the names of
-//	    its contributors may be used to endorse or promote products derived
-//	    from this software without specific prior written permission.
-//	
-//	  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-//	  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-//	  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-//	  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-//	  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-//	  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-//	  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-//	  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-//	  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-//	  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-//	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//      Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/ 
+//       
+//       
+//        Redistribution and use in source and binary forms, with or without 
+//        modification, are permitted provided that the following conditions 
+//        are met:
+//      
+//          Redistributions of source code must retain the above copyright 
+//          notice, this list of conditions and the following disclaimer.
+//       
+//          Redistributions in binary form must reproduce the above copyright
+//          notice, this list of conditions and the following disclaimer in the 
+//          documentation and/or other materials provided with the   
+//          distribution.
+//       
+//          Neither the name of Texas Instruments Incorporated nor the names of
+//          its contributors may be used to endorse or promote products derived
+//          from this software without specific prior written permission.
+//      
+//        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+//        "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+//        LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//        A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
+//        OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+//        SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+//        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//        DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//        THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+//        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+//        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // *************************************************************************************************
 
@@ -38,7 +38,6 @@
 
 // *************************************************************************************************
 // Include section
-
 
 // *************************************************************************************************
 // Prototypes section
@@ -52,21 +51,27 @@ extern void display_sync(u8 line, u8 update);
 extern void send_smpl_data(u16 data);
 extern u8 is_rf(void);
 
-
+extern void sx_bike_chronos(u8 line);
+extern void display_rfbike(u8 line, u8 update);
+extern void sx_link(u8 line);
+extern void display_link(u8 line, u8 update);
+	
 // *************************************************************************************************
 // Defines section
 
 // SimpliciTI connection states
 typedef enum
 {
-  SIMPLICITI_OFF = 0,       // Not connected
-  SIMPLICITI_ACCELERATION,	// Transmitting acceleration data and button events
-  SIMPLICITI_BUTTONS,		// Transmitting button events
-  SIMPLICITI_SYNC			// Syncing
+   SIMPLICITI_OFF = 0,          // Not connected
+   SIMPLICITI_ACCELERATION,     // Transmitting acceleration data and button events
+   SIMPLICITI_BUTTONS,          // Transmitting button events
+   SIMPLICITI_SYNC,              // Syncing
+   SIMPLICITI_BIKE				// Bike mode
 } simpliciti_mode_t;
 
 // Stop SimpliciTI transmission after 60 minutes to save power
-#define SIMPLICITI_TIMEOUT									(60*60u)
+#define SIMPLICITI_TIMEOUT								(60*60u)
+#define SIMPLICITI_BIKE_TRANSMISSION_TIMEOUT			(6u)
 
 // Button flags for SimpliciTI data
 #define SIMPLICITI_BUTTON_STAR			(0x10)
@@ -77,22 +82,26 @@ typedef enum
 #define SIMPLICITI_MOUSE_EVENTS			(0x01)
 #define SIMPLICITI_KEY_EVENTS			(0x02)
 
-
 // *************************************************************************************************
 // Global Variable section
 struct RFsmpl
 {
-	// SIMPLICITI_OFF, SIMPLICITI_ACCELERATION, SIMPLICITI_BUTTONS
-	simpliciti_mode_t 	mode;
-	
-	// Timeout until SimpliciTI transmission is automatically stopped
-	u16					timeout;
+   // SIMPLICITI_OFF, SIMPLICITI_ACCELERATION, SIMPLICITI_BUTTONS
+   simpliciti_mode_t mode;
+
+   // Timeout until SimpliciTI transmission is automatically stopped
+   u16 timeout;
 };
 extern struct RFsmpl sRFsmpl;
 
+extern u16 timer_begin;
+extern u16 timer_end;
+extern u16 segundos;
+extern u8 rfbike_delay_transmission; // decreased each second. Send request data when this variable reaches 0
+extern u8 bike_try;
 extern unsigned char simpliciti_flag;
 
 // *************************************************************************************************
 // Extern section
 
-#endif /*RFSIMPLICITI_H_*/
+#endif                          /*RFSIMPLICITI_H_ */

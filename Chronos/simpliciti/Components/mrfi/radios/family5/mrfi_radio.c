@@ -1172,8 +1172,12 @@ void MRFI_WakeUp(void)
  **************************************************************************************************
  */
 // [BM] Changed because CC1101_VECTOR ISR is declared of source code and this handler is called indirect
-//BSP_ISR_FUNCTION( MRFI_RadioIsr, CC1101_VECTOR )
-void MRFI_RadioIsr(void)
+
+#ifdef peer_interrupt
+	BSP_ISR_FUNCTION( MRFI_RadioIsr, CC1101_VECTOR )
+#else
+	void MRFI_RadioIsr(void)
+#endif
 {
   uint16_t coreIntSource = RF1AIV;            /* Radio Core      interrupt register */
   uint16_t interfaceIntSource = RF1AIFIV;     /* Radio Interface interrupt register */

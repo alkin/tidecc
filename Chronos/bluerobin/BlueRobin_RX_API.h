@@ -37,8 +37,8 @@
 // BlueRobin(TM) packet size
 // -------------------------
 // 
-// 		* average packet rate	1 packet/875 msec = ~1.14 packets/second				
-//		* payload per packet	5 bytes 
+//              * average packet rate   1 packet/875 msec = ~1.14 packets/second                                
+//              * payload per packet    5 bytes 
 //
 // BlueRobin(TM) frequency overview 
 // (Please note: Settings apply for the transmitter side, i.e. the USB dongle)
@@ -46,25 +46,25 @@
 //
 // Bluerobin_RX_433MHz.lib (433MHz ISM band)
 //
-//		* frequency				433.30 MHz - 434.00 MHz
-//		* deviation				95 kHz
-//		* channels				3
-//		* data rate				250 kBaud
+//              * frequency                             433.30 MHz - 434.00 MHz
+//              * deviation                             95 kHz
+//              * channels                              3
+//              * data rate                             250 kBaud
 //
 // Bluerobin_RX_868MHz.lib (868MHz ISM band)
 //
-//		* frequency				868.25 MHz - 868.95 MHz
-//		* deviation				95 kHz
-//		* channels				3
-//		* data rate				250 kBaud
+//              * frequency                             868.25 MHz - 868.95 MHz
+//              * deviation                             95 kHz
+//              * channels                              3
+//              * data rate                             250 kBaud
 //
 //
 // Bluerobin_RX_915MHz.lib (915MHz ISM band)
 //
-//		* frequency				914.35 MHz - 917.75 MHz
-//		* deviation				95 kHz
-//		* channels				34
-//		* data rate				250 kBaud
+//              * frequency                             914.35 MHz - 917.75 MHz
+//              * deviation                             95 kHz
+//              * channels                              34
+//              * data rate                             250 kBaud
 //
 // *************************************************************************************************
 
@@ -74,21 +74,19 @@
 // *************************************************************************************************
 // Include section
 
-
 // *************************************************************************************************
 // Defines section
 
 // List of all possible channel states
-typedef enum 
+typedef enum
 {
-  TX_OFF = 0,                // Powerdown mode
-  TX_ACTIVE,                 // Active mode
-  TX_SEARCH                  // Search mode
+   TX_OFF = 0,                  // Powerdown mode
+   TX_ACTIVE,                   // Active mode
+   TX_SEARCH                    // Search mode
 } brtx_state_t;
 
 // Transmitter to channel assignment
 #define HR_CHANNEL           (0)
-
 
 // *************************************************************************************************
 // API section
@@ -97,25 +95,25 @@ typedef enum
 // Functions for initializing and controlling the library
 
 // Initialize several global variables.
-void  BRRX_Init_v(void);
+void BRRX_Init_v(void);
 
 // Set delay after which a channel will be switched off if no new data can be received.
 // Param1: Powerdown delay in packet intervals (875 ms)
-void  BRRX_SetPowerdownDelay_v(u8 Delay_u8); 
+void BRRX_SetPowerdownDelay_v(u8 Delay_u8);
 
 // Set timeout when searching for a transmitter
 // Param1: Search timeout in seconds
-void  BRRX_SetSearchTimeout_v(u8 Timeout_u8);
+void BRRX_SetSearchTimeout_v(u8 Timeout_u8);
 
 // Set reduction of valid signal level in learn mode.
 // Param1: Reduction of signal level
-void  BRRX_SetSignalLevelReduction_v(u8 Reduction_u8);
+void BRRX_SetSignalLevelReduction_v(u8 Reduction_u8);
 
 // Set ID for a channel. To search for an unknown transmitter the ID has to be set to 0.
 // Can be only executed on channels currently in powerdown mode.
 // Param1: Channel index
 // Param2: New ID
-void  BRRX_SetID_v(u8 Index_u8, u32 ID_u32);
+void BRRX_SetID_v(u8 Index_u8, u32 ID_u32);
 
 // Get current ID of channel.
 // Return: Current ID of channel
@@ -134,13 +132,12 @@ void BRRX_Stop_v(u8 Index_u8);
 // Param1: Channel index
 brtx_state_t BRRX_GetState_t(u8 Index_u8);
 
-
 // ----------------------------------------------------------
 // eZ430-Chronos specific functions
 
 // Get current heart rate.
 // Return: Heart rate in bpm
-u8  BRRX_GetHeartRate_u8(void);
+u8 BRRX_GetHeartRate_u8(void);
 
 // Get current distance.
 // Return: Distance in 10m steps.
@@ -148,7 +145,7 @@ u16 BRRX_GetDistance_u16(void);
 
 // Get current speed.
 // Return: Speed in 0.1km/h steps. Trial version is limited to 25.5km/h.
-u8  BRRX_GetSpeed_u8(void);
+u8 BRRX_GetSpeed_u8(void);
 
 // ----------------------------------------------------------
 // Radio-related functions
@@ -157,5 +154,4 @@ u8  BRRX_GetSpeed_u8(void);
 // Must be called by CC1101_VECTOR ISR
 void BlueRobin_RadioISR_v(void);
 
-
-#endif /*BRRX_API_H_*/
+#endif                          /*BRRX_API_H_ */
