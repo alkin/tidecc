@@ -35,6 +35,7 @@
 // Wireless Update functions.
 // *************************************************************************************************
 
+
 // *************************************************************************************************
 // Include section
 
@@ -49,6 +50,10 @@
 #include "rfbsl.h"
 #include "bluerobin.h"
 #include "rfsimpliciti.h"
+
+// *************************************************************************************************
+// Global Variable section
+u8 rfBSL_button_confirmation;
 
 // *************************************************************************************************
 // @fn          sx_rfbsl
@@ -70,16 +75,22 @@ void sx_rfbsl(u8 line)
    if (is_rf())
       return;
 
-   // Before entering RFBSL clear the LINE1 Symbols
-   display_symbol(LCD_SYMB_AM, SEG_OFF);
-
-   clear_line(LINE1);
-
-   // Write RAM to indicate we will be downloading the RAM Updater first
-   display_chars(LCD_SEG_L1_3_0, (u8 *) " RAM", SEG_ON);
-
-   // Call RFBSL
-   CALL_RFSBL();
+   rfBSL_button_confirmation++;
+   
+   if(rfBSL_button_confirmation==2)
+   {
+	   // Before entering RFBSL clear the LINE1 Symbols
+	   display_symbol(LCD_SYMB_AM, SEG_OFF);
+	
+	   clear_line(LINE1);
+	   
+	   // Write RAM to indicate we will be downloading the RAM Updater first
+	   display_chars(LCD_SEG_L2_5_0, (u8 *) " RFBSL", SEG_ON);
+	   display_chars(LCD_SEG_L1_3_0, (u8 *) " RAM", SEG_ON);
+	
+	   // Call RFBSL
+	   CALL_RFSBL();
+   }
 }
 
 // *************************************************************************************************
@@ -93,6 +104,14 @@ void display_rfbsl(u8 line, u8 update)
 {
    if (update == DISPLAY_LINE_UPDATE_FULL)
    {
-      display_chars(LCD_SEG_L2_5_0, (u8 *) " RFBSL", SEG_ON);
+       if(rfBSL_button_confirmation==0)
+       {
+          display_chars(LCD_SEG_L2_5_0, (u8 *) " RFBSL", SEG_ON);
+       }
+       else if(rfBSL_button_confirmation<2)
+       {
+          // Request one more button press to confirm rfBSL call
+          display_chars(LCD_SEG_L2_5_0, (u8 *) " CONF", SEG_ON);
+       }
    }
 }

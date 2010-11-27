@@ -91,6 +91,9 @@ struct RFsmpl
 
    // Timeout until SimpliciTI transmission is automatically stopped
    u16 timeout;
+
+   // Variable to display
+   u8 display_sync_done;
 };
 extern struct RFsmpl sRFsmpl;
 

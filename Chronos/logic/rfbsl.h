@@ -47,4 +47,9 @@ extern void display_rfbsl(u8 line, u8 update);
 // Entry point of of the Flash Updater in BSL memory
 #define CALL_RFSBL()   ((void (*)())0x1000)()
 
+
+// *************************************************************************************************
+// Global Variable section
+extern u8 rfBSL_button_confirmation;
+
 #endif                          /*RFBSL_H_ */

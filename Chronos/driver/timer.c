@@ -82,7 +82,7 @@ struct timer sTimer;
 // Extern section
 extern void BRRX_TimerTask_v(void);
 extern void to_lpm(void);
-u16 segundos;
+
 // *************************************************************************************************
 // @fn          Timer0_Init
 // @brief       Set Timer0 to a period of 1 or 2 sec. IRQ TACCR0 is asserted when timer overflows.
@@ -236,13 +236,11 @@ void Timer0_A4_Delay(u16 ticks)
 // @param       none
 // @return      none
 // *************************************************************************************************
-
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR(void)
 {
    static u8 button_lock_counter = 0;
-   segundos++;
-   
+
    // Disable IE 
    TA0CCTL0 &= ~CCIE;
    // Reset IRQ flag  
@@ -266,20 +264,7 @@ __interrupt void TIMER0_A0_ISR(void)
       return;
    }
 
-   // -------------------------------------------------------------------
-   // Service modules that require 1/min processing
-   if (sTime.drawFlag >= 2)
-   {
-      // Measure battery voltage
-      request.flag.voltage_measurement = 1;
-   }
-
-   // -------------------------------------------------------------------
-   // Service active modules that require 1/s processing
-
-   // Request data logging
-  
-  if(!is_rf())
+ if(!is_rf())
   {
   	 if (is_datalog())
     	  request.flag.datalog = 1;
@@ -296,7 +281,34 @@ __interrupt void TIMER0_A0_ISR(void)
          }
      }		
   }
-  
+
+   if ((is_rf()) && (sRFsmpl.mode == SIMPLICITI_SYNC))
+   {
+	     if(sRFsmpl.display_sync_done==0)
+	     {
+	        display_chars(LCD_SEG_L2_5_0, (u8 *) "  SYNC", SEG_ON);
+	     }
+	     else
+	     {
+	        sRFsmpl.display_sync_done--;
+	     }
+   }
+
+   // -------------------------------------------------------------------
+   // Service modules that require 1/min processing
+   if (sTime.drawFlag >= 2)
+   {
+      // Measure battery voltage
+      request.flag.voltage_measurement = 1;
+   }
+
+   // -------------------------------------------------------------------
+   // Service active modules that require 1/s processing
+
+   // Request data logging
+   if (is_datalog())
+      request.flag.datalog = 1;
+
    // Request temperature and pressure measurement
    if (is_altitude_measurement())
       request.flag.altitude_measurement = 1;
@@ -333,11 +345,11 @@ __interrupt void TIMER0_A0_ISR(void)
 
    // -------------------------------------------------------------------
    // Check idle timeout, set timeout flag
-   //if (sys.flag.idle_timeout_enabled)
-   //{
-   //   if (sTime.system_time - sTime.last_activity > INACTIVITY_TIME)
-  //       sys.flag.idle_timeout = 1;     //setFlag(sysFlag_g, SYS_TIMEOUT_IDLE);
-  // }
+   if (sys.flag.idle_timeout_enabled)
+   {
+      if (sTime.system_time - sTime.last_activity > INACTIVITY_TIME)
+         sys.flag.idle_timeout = 1;     //setFlag(sysFlag_g, SYS_TIMEOUT_IDLE);
+   }
    
    // -------------------------------------------------------------------
    // Turn the Backlight off after timeout
@@ -394,16 +406,12 @@ __interrupt void TIMER0_A0_ISR(void)
             button.flag.star_long = 1;
             button.flag.star_not_long = 0;
             sButton.star_timeout = 0;
+            // Return interrupt edge to normal value
+   			BUTTONS_IES &= ~BUTTON_STAR_PIN;
          }
       }
       else                      // there was a button press not long enough
       {
-         // Check if the button was released before long button time
-         if (sButton.star_timeout > 0 || button.flag.star_not_long == 1)
-         {
-            button.flag.star_not_long = 0;
-            button.flag.star = 1;
-         }
          sButton.star_timeout = 0;
       }
 
@@ -417,16 +425,12 @@ __interrupt void TIMER0_A0_ISR(void)
             button.flag.num_long = 1;
             button.flag.num_not_long = 0;
             sButton.num_timeout = 0;
+            // Return interrupt edge to normal value
+            BUTTONS_IES &= ~BUTTON_NUM_PIN;
          }
       }
       else                      // there was a button press not long enough
       {
-         // Check if the button was released before long button time
-         if (sButton.num_timeout > 0 || button.flag.num_not_long == 1)
-         {
-            button.flag.num_not_long = 0;
-            button.flag.num = 1;
-         }
          sButton.num_timeout = 0;
       }
    }
@@ -486,4 +490,3 @@ __interrupt void TIMER0_A1_5_ISR(void)
    // Exit from LPM3 on RETI
    _BIC_SR_IRQ(LPM3_bits);
 }
-

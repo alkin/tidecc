@@ -157,26 +157,16 @@ void close_radio(void)
 // @param       none
 // @return      none
 // *************************************************************************************************
-
-
-#ifdef peer_interrupt
-
-#else
-
-#pragma vector = CC1101_VECTOR
+#pragma vector=CC1101_VECTOR
 __interrupt void radio_ISR(void)
 {
-   __disable_interrupt();
-
    u8 rf1aivec = RF1AIV;
-   //MRFI_RadioIsr();
-   
+
    // Forward to SimpliciTI interrupt service routine
    if (is_rf())
    {
       MRFI_RadioIsr();
    }
-   /*
    else                         // BlueRobin packet end interrupt service routine
    {
       if (rf1aivec == RF1AIV_RFIFG9)
@@ -190,10 +180,5 @@ __interrupt void radio_ISR(void)
       {
          asm("	nop");          // break here
       }
-   }*/
-   __enable_interrupt();
-   
+   }
 }
-
-
-#endif

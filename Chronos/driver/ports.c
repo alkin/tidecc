@@ -119,203 +119,218 @@ __interrupt void PORT2_ISR(void)
    u8 simpliciti_button_event = 0;
    static u8 simpliciti_button_repeat = 0;
 
-   // Clear button flags
-   button.all_flags = 0;
-
    // Remember interrupt enable bits
    int_enable = BUTTONS_IE;
 
-   // Store valid button interrupt flag
-   int_flag = BUTTONS_IFG & int_enable;
-
-   // ---------------------------------------------------
-   // While SimpliciTI stack is active, buttons behave differently:
-   //  - Store button events in SimpliciTI packet data
-   //  - Exit SimpliciTI when button DOWN was pressed 
-   if (is_rf())
+   if ((!button.flag.star_long) && (!button.flag.num_long))
    {
-      // Erase previous button press after a number of resends (increase number if link quality is low)
-      // This will create a series of packets containing the same button press
-      // Necessary because we have no acknowledge
-      // Filtering (edge detection) will be done by receiver software
-      if (simpliciti_button_repeat++ > 6)
+      // Clear button flags
+      button.all_flags = 0;
+
+      // Store valid button interrupt flag
+      int_flag = BUTTONS_IFG & int_enable;
+
+      // ---------------------------------------------------
+      // While SimpliciTI stack is active, buttons behave differently:
+      //  - Store button events in SimpliciTI packet data
+      //  - Exit SimpliciTI when button DOWN was pressed 
+      if (is_rf())
       {
-         simpliciti_data[0] &= ~0xF0;
-         simpliciti_button_repeat = 0;
+         // Erase previous button press after a number of resends (increase number if link quality is low)
+         // This will create a series of packets containing the same button press
+         // Necessary because we have no acknowledge
+         // Filtering (edge detection) will be done by receiver software
+         if (simpliciti_button_repeat++ > 6)
+         {
+            simpliciti_data[0] &= ~0xF0;
+            simpliciti_button_repeat = 0;
+         }
+
+         if ((int_flag & BUTTON_STAR_PIN) == BUTTON_STAR_PIN)
+         {
+            simpliciti_data[0] |= SIMPLICITI_BUTTON_STAR;
+            simpliciti_button_event = 1;
+         }
+         else if ((int_flag & BUTTON_NUM_PIN) == BUTTON_NUM_PIN)
+         {
+            simpliciti_data[0] |= SIMPLICITI_BUTTON_NUM;
+            simpliciti_button_event = 1;
+         }
+         else if ((int_flag & BUTTON_UP_PIN) == BUTTON_UP_PIN)
+         {
+            simpliciti_data[0] |= SIMPLICITI_BUTTON_UP;
+            simpliciti_button_event = 1;
+         }
+         else if ((int_flag & BUTTON_DOWN_PIN) == BUTTON_DOWN_PIN)
+         {
+            simpliciti_flag |= SIMPLICITI_TRIGGER_STOP;
+         }
+
+         // Trigger packet sending inside SimpliciTI stack
+         if (simpliciti_button_event)
+            simpliciti_flag |= SIMPLICITI_TRIGGER_SEND_DATA;
+      }
+      else                      // Normal operation
+      {
+         // Debounce buttons
+         if ((int_flag & ALL_BUTTONS) != 0)
+         {
+            // Disable PORT2 IRQ
+            __disable_interrupt();
+            BUTTONS_IE = 0x00;
+            __enable_interrupt();
+
+            // Debounce delay 1
+            Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_IN));
+
+            // Reset inactivity detection
+            sTime.last_activity = sTime.system_time;
+         }
+
+         // ---------------------------------------------------
+         // STAR button IRQ
+         if (IRQ_TRIGGERED(int_flag, BUTTON_STAR_PIN))
+         {
+            // Filter bouncing noise 
+            if (BUTTON_STAR_IS_PRESSED)
+            {
+               button.flag.star = 1;
+               button.flag.star_not_long = 0;
+               // Generate button click
+               buzzer = 1;
+            }
+            else if ((BUTTONS_IES & BUTTON_STAR_PIN) == BUTTON_STAR_PIN)
+            {
+               button.flag.star = 1;
+               button.flag.star_not_long = 0;
+               BUTTONS_IES &= ~BUTTON_STAR_PIN;
+            }
+         }
+         // ---------------------------------------------------
+         // NUM button IRQ
+         else if (IRQ_TRIGGERED(int_flag, BUTTON_NUM_PIN))
+         {
+            // Filter bouncing noise 
+            if (BUTTON_NUM_IS_PRESSED)
+            {
+               button.flag.num = 1;
+               button.flag.num_not_long = 0;
+               // Generate button click
+               buzzer = 1;
+            }
+            else if ((BUTTONS_IES & BUTTON_NUM_PIN) == BUTTON_NUM_PIN)
+            {
+               button.flag.num = 1;
+               button.flag.num_not_long = 0;
+               BUTTONS_IES &= ~BUTTON_NUM_PIN;
+            }
+         }
+         // ---------------------------------------------------
+         // UP button IRQ
+         else if (IRQ_TRIGGERED(int_flag, BUTTON_UP_PIN))
+         {
+            // Filter bouncing noise 
+            if (BUTTON_UP_IS_PRESSED)
+            {
+               button.flag.up = 1;
+
+               // Generate button click
+               buzzer = 1;
+            }
+         }
+         // ---------------------------------------------------
+         // DOWN button IRQ
+         else if (IRQ_TRIGGERED(int_flag, BUTTON_DOWN_PIN))
+         {
+            // Filter bouncing noise 
+            if (BUTTON_DOWN_IS_PRESSED)
+            {
+               button.flag.down = 1;
+
+               // Generate button click
+               buzzer = 1;
+            }
+         }
+         // ---------------------------------------------------
+         // B/L button IRQ
+         else if (IRQ_TRIGGERED(int_flag, BUTTON_BACKLIGHT_PIN))
+         {
+            // Filter bouncing noise 
+            if (BUTTON_BACKLIGHT_IS_PRESSED)
+            {
+               sButton.backlight_status = 1;
+               sButton.backlight_timeout = 0;
+               P2OUT |= BUTTON_BACKLIGHT_PIN;
+               P2DIR |= BUTTON_BACKLIGHT_PIN;
+            }
+         }
       }
 
-      if ((int_flag & BUTTON_STAR_PIN) == BUTTON_STAR_PIN)
+      // Trying to lock/unlock buttons?
+      if (button.flag.num && button.flag.down)
       {
-         simpliciti_data[0] |= SIMPLICITI_BUTTON_STAR;
-         simpliciti_button_event = 1;
-      }
-      else if ((int_flag & BUTTON_NUM_PIN) == BUTTON_NUM_PIN)
-      {
-         simpliciti_data[0] |= SIMPLICITI_BUTTON_NUM;
-         simpliciti_button_event = 1;
-      }
-      else if ((int_flag & BUTTON_UP_PIN) == BUTTON_UP_PIN)
-      {
-         simpliciti_data[0] |= SIMPLICITI_BUTTON_UP;
-         simpliciti_button_event = 1;
-      }
-      else if ((int_flag & BUTTON_DOWN_PIN) == BUTTON_DOWN_PIN)
-      {
-         simpliciti_flag |= SIMPLICITI_TRIGGER_STOP;
+         // No buzzer output
+         buzzer = 0;
+         button.all_flags = 0;
       }
 
-      // Trigger packet sending inside SimpliciTI stack
-      if (simpliciti_button_event)
-         simpliciti_flag |= SIMPLICITI_TRIGGER_SEND_DATA;
-   }
-   else                         // Normal operation
-   {
-      // Debounce buttons
-      if ((int_flag & ALL_BUTTONS) != 0)
+      // Generate button click when button was activated
+      if (buzzer)
       {
-         // Disable PORT2 IRQ
-         __disable_interrupt();
-         BUTTONS_IE = 0x00;
-         __enable_interrupt();
 
-         // Debounce delay 1
-         Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_IN));
+         if (!sys.flag.up_down_repeat_enabled)
+         {
+            start_buzzer(1, CONV_MS_TO_TICKS(20), CONV_MS_TO_TICKS(150));
+         }
 
-         // Reset inactivity detection
-         sTime.last_activity = sTime.system_time;
+         // Debounce delay 2
+         Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
       }
 
       // ---------------------------------------------------
-      // STAR button IRQ
-      if (IRQ_TRIGGERED(int_flag, BUTTON_STAR_PIN))
+      // Acceleration sensor IRQ
+      if (IRQ_TRIGGERED(int_flag, AS_INT_PIN))
       {
-         // Filter bouncing noise 
+         // Get data from sensor
+         request.flag.acceleration_measurement = 1;
+      }
+
+      // ---------------------------------------------------
+      // Pressure sensor IRQ
+      if (IRQ_TRIGGERED(int_flag, PS_INT_PIN))
+      {
+         // Get data from sensor
+         request.flag.altitude_measurement = 1;
+      }
+
+      // ---------------------------------------------------
+      // Safe long button event detection
+      if (button.flag.star || button.flag.num)
+      {
+         // Additional debounce delay to enable safe high detection - 50ms
+         Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_LEFT));
+
+         // Check if this button event is short enough
          if (BUTTON_STAR_IS_PRESSED)
          {
-            button.flag.star = 1;
-            button.flag.star_not_long = 0;
-
-            // Generate button click
-            buzzer = 1;
+            // Change interrupt edge to detect button release 
+            BUTTONS_IES |= BUTTON_STAR_PIN;
+            button.flag.star = 0;
+            // This flag is used to detect if the user released the button before the  
+            // time for a long button press (3s)
+            button.flag.star_not_long = 1;
          }
-      }
-      // ---------------------------------------------------
-      // NUM button IRQ
-      else if (IRQ_TRIGGERED(int_flag, BUTTON_NUM_PIN))
-      {
-         // Filter bouncing noise 
          if (BUTTON_NUM_IS_PRESSED)
          {
-            button.flag.num = 1;
-            button.flag.num_not_long = 0;
-
-            // Generate button click
-            buzzer = 1;
-         }
-      }
-      // ---------------------------------------------------
-      // UP button IRQ
-      else if (IRQ_TRIGGERED(int_flag, BUTTON_UP_PIN))
-      {
-         // Filter bouncing noise 
-         if (BUTTON_UP_IS_PRESSED)
-         {
-            button.flag.up = 1;
-
-            // Generate button click
-            buzzer = 1;
-         }
-      }
-      // ---------------------------------------------------
-      // DOWN button IRQ
-      else if (IRQ_TRIGGERED(int_flag, BUTTON_DOWN_PIN))
-      {
-         // Filter bouncing noise 
-         if (BUTTON_DOWN_IS_PRESSED)
-         {
-        
-            button.flag.down = 1;
-
-            // Generate button click
-            buzzer = 1;
-         }
-      }
-      // ---------------------------------------------------
-      // B/L button IRQ
-      else if (IRQ_TRIGGERED(int_flag, BUTTON_BACKLIGHT_PIN))
-      {
-         // Filter bouncing noise 
-         if (BUTTON_BACKLIGHT_IS_PRESSED)
-         {
-            sButton.backlight_status = 1;
-            sButton.backlight_timeout = 0;
-	        P2OUT |= BUTTON_BACKLIGHT_PIN;
-	   	    P2DIR |= BUTTON_BACKLIGHT_PIN;
+            // Change interrupt edge to detect button release
+            BUTTONS_IES |= BUTTON_NUM_PIN;
+            button.flag.num = 0;
+            // This flag is used to detect if the user released the button before the  
+            // time for a long button press (3s)
+            button.flag.num_not_long = 1;
          }
       }
    }
-
-   // Trying to lock/unlock buttons?
-   if (button.flag.num && button.flag.down)
-   {
-      // No buzzer output
-      buzzer = 0;
-      button.all_flags = 0;
-   }
-
-   // Generate button click when button was activated
-   if (buzzer)
-   {
-
-      if (!sys.flag.up_down_repeat_enabled)
-      {
-         start_buzzer(1, CONV_MS_TO_TICKS(20), CONV_MS_TO_TICKS(150));
-      }
-
-      // Debounce delay 2
-      Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
-   }
-
-   // ---------------------------------------------------
-   // Acceleration sensor IRQ
-   if (IRQ_TRIGGERED(int_flag, AS_INT_PIN))
-   {
-      // Get data from sensor
-      request.flag.acceleration_measurement = 1;
-   }
-
-   // ---------------------------------------------------
-   // Pressure sensor IRQ
-   if (IRQ_TRIGGERED(int_flag, PS_INT_PIN))
-   {
-      // Get data from sensor
-      request.flag.altitude_measurement = 1;
-   }
-
-   // ---------------------------------------------------
-   // Safe long button event detection
-   if (button.flag.star || button.flag.num)
-   {
-      // Additional debounce delay to enable safe high detection - 50ms
-      Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_LEFT));
-
-      // Check if this button event is short enough
-      if (BUTTON_STAR_IS_PRESSED)
-      {
-         button.flag.star = 0;
-         // This flag is used to detect if the user released the button before the  
-         // time for a long button press (3s)
-         button.flag.star_not_long = 1;
-      }
-      if (BUTTON_NUM_IS_PRESSED)
-      {
-         button.flag.num = 0;
-         // This flag is used to detect if the user released the button before the  
-         // time for a long button press (3s)
-         button.flag.num_not_long = 1;
-      }
-   }
-
    // Reenable PORT2 IRQ
    __disable_interrupt();
    BUTTONS_IFG = 0x00;

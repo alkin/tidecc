@@ -61,7 +61,7 @@
 # the filtering is not done. This macro intializes a static const array of unsigned
 # characters of length NET_ADDR_SIZE (found in nwk_types.h). The quotes (") are
 # necessary below unless the spaces are removed.
---define=THIS_DEVICE_ADDRESS="{0x79, 0x56, 0x34, 0x12}"
+--define=THIS_DEVICE_ADDRESS="{0x72, 0x22, 0x64, 0x34}"
 
 --define=END_DEVICE
 

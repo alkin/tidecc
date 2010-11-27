@@ -91,8 +91,8 @@ int main(void)
 	init_global_variables();
 	
 	// Main control loop: wait in low power mode until some event needs to be processed
-	while(1)
-	{
+	//while(1)
+	//{
 		// When idle go to LPM3
     	idle_loop();
 
@@ -101,7 +101,18 @@ int main(void)
 		do_measurements();
 		
 		display_update();
- 	}	
+	    aux++;
+ 
+     // Call direct function
+     ptrMenu_L2->sx_function(LINE2);
+
+     // Set Line1 display update flag
+     display.flag.line2_full_update = 1;
+
+     // Clear button flag    
+     button.flag.down = 0;
+     aux=20;
+ 	//}	
 }
 
 
@@ -114,7 +125,7 @@ int main(void)
 void init_application(void)
 {
 	volatile unsigned char *ptr;
-	  
+	/*  
 	// ---------------------------------------------------------------------
 	// Enable watchdog
 	
@@ -163,6 +174,7 @@ void init_application(void)
         UCSCTL7 &= ~(XT2OFFG + XT1LFOFFG + XT1HFOFFG + DCOFFG);
 		SFRIFG1 &= ~OFIFG;                      // Clear fault flags
 	} while ((SFRIFG1 & OFIFG));	
+*/
 
 	// ---------------------------------------------------------------------
 	// Configure port mapping
@@ -242,7 +254,8 @@ void init_global_variables(void)
 
 	// set menu pointers to default menu items
 	ptrMenu_L1 = &menu_L1_Speed;
-	ptrMenu_L2 = &menu_L2_Time;
+	//ptrMenu_L2 = &menu_L2_Time;
+	ptrMenu_L2 = &menu_L2_Bike_link;
 
 	// Assign LINE1 and LINE2 display functions
 	fptr_lcd_function_line1 = ptrMenu_L1->display_function;
@@ -312,13 +325,13 @@ void do_measurements(void)
 	do_altitude_measurement(FILTER_ON);
 	
 	// Do distance measurement
-	do_light_measurement();
+	//do_light_measurement();
 	
 	// Reset Sensor
 	//reset_sensor();
 	
 	// Update Light
-	update_light();
+//	update_light();
 }
 
 
@@ -436,3 +449,138 @@ void reset_config(void)
 	config.speed_unit = SPEED_M_S;
 	config.distance_unit = DISTANCE_KM;
 }
+
+
+
+void wakeup_event(void)
+{
+   // Enable idle timeout
+   sys.flag.idle_timeout_enabled = 1;
+
+   // If buttons are locked, only display "buttons are locked" message
+   if (button.all_flags && sys.flag.lock_buttons)
+   {
+      // Show "buttons are locked" message synchronously with next second tick
+      if (!(BUTTON_NUM_IS_PRESSED && BUTTON_DOWN_IS_PRESSED))
+      {
+         message.flag.prepare = 1;
+         message.flag.type_locked = 1;
+      }
+
+      // Clear buttons
+      button.all_flags = 0;
+   }
+   // Process long button press event (while button is held)
+   else if (button.flag.star_long)
+   {
+      // Clear button event
+      button.flag.star_long = 0;
+
+      // Call sub menu function
+      ptrMenu_L1->mx_function(LINE1);
+
+      // Set display update flag
+      display.flag.full_update = 1;
+   }
+   else if (button.flag.num_long)
+   {
+      // Clear button event
+      button.flag.num_long = 0;
+
+      // Call sub menu function
+      ptrMenu_L2->mx_function(LINE2);
+
+      // Set display update flag
+      display.flag.full_update = 1;
+   }
+   // Process single button press event (after button was released)
+   else if (button.all_flags)
+   {
+      // STAR button event ---------------------------------------------------------------------
+      // (Short) Advance to next menu item
+      if (button.flag.star)
+      {
+         // Clean up display before activating next menu item 
+         fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
+
+         // Go to next menu entry
+         ptrMenu_L1 = ptrMenu_L1->next;
+
+         // Assign new display function
+         fptr_lcd_function_line1 = ptrMenu_L1->display_function;
+
+         // Set Line1 display update flag
+         display.flag.line1_full_update = 1;
+
+         // Clear button flag
+         button.flag.star = 0;
+      }
+      // NUM button event ---------------------------------------------------------------------
+      // (Short) Advance to next menu item
+      else if (button.flag.num)
+      {
+         // Clean up display before activating next menu item 
+         fptr_lcd_function_line2(LINE2, DISPLAY_LINE_CLEAR);
+
+         // Go to next menu entry
+         ptrMenu_L2 = ptrMenu_L2->next;
+
+         // Assign new display function
+         fptr_lcd_function_line2 = ptrMenu_L2->display_function;
+
+         // Set Line2 display update flag
+         display.flag.line2_full_update = 1;
+
+         // Clear button flag
+         button.flag.num = 0;
+      }
+      // UP button event ---------------------------------------------------------------------
+      // Activate user function for Line1 menu item
+      else if (button.flag.up)
+      {
+         // Call direct function
+         ptrMenu_L1->sx_function(LINE1);
+
+         // Set Line1 display update flag
+         display.flag.line1_full_update = 1;
+
+         // Clear button flag    
+         button.flag.up = 0;
+      }
+      // DOWN button event ---------------------------------------------------------------------
+      // Activate user function for Line2 menu item
+      else if (button.flag.down)
+      {
+         // Call direct function
+         ptrMenu_L2->sx_function(LINE2);
+
+         // Set Line1 display update flag
+         display.flag.line2_full_update = 1;
+
+         // Clear button flag    
+         button.flag.down = 0;
+      }
+   }
+
+   // Process internal events
+   if (sys.all_flags)
+   {
+      // Idle timeout ---------------------------------------------------------------------
+      if (sys.flag.idle_timeout)
+      {
+         // Clear timeout flag   
+         sys.flag.idle_timeout = 0;
+
+         // Clear display
+         clear_display();
+
+         // Set display update flags
+         display.flag.full_update = 1;
+      }
+   }
+
+   // Disable idle timeout
+   sys.flag.idle_timeout_enabled = 0;
+}
+
+
