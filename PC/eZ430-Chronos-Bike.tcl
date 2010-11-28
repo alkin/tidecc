@@ -182,7 +182,9 @@ proc inc_heartrate {} {}
 proc inc_speed {} {}
 proc move_cursor {} {}
 
-# ----
+# ------------------------------------------------------------------------
+# Report Procedures
+
 proc clearCanvas {can} {
 	foreach id [$can find all] { $can delete $id }
 }
@@ -200,7 +202,6 @@ proc createGrid {} {
   $w.note.report.frame2.canvas create line {490 2 490 420} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {50 2 600 2 600 420 50 420 50 2} -width 1 -fill black
 }
-
 
 proc update_report { } {
   global w
@@ -249,8 +250,9 @@ proc generate_report { } {
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
   global startSpeed
-	
-  # Speed
+
+  # ------------------------------------------------------------------------
+  # Adjust Speed data, scale and offset
   set maxSpeed 0
   set sumSpeed 0
   set countSpeed 0
@@ -275,7 +277,8 @@ proc generate_report { } {
   set scaleSpeed [expr 418.0 / $maxSpeed]
   set offsetSpeed [expr 0]
   
-  # Distance
+  # ------------------------------------------------------------------------
+  # Adjust Distance data, scale and offset
   set maxDistance 0
   foreach {x y} $dataDistance {
     if { $y > $maxDistance } { 
@@ -290,7 +293,8 @@ proc generate_report { } {
   set scaleDistance [expr 418.0 / ($maxDistance*1000)]
   set offsetDistance [expr 0]
   
-  # Altitude
+  # ------------------------------------------------------------------------
+  # Adjust Altitude data, scale and offset
   set maxAltitude 0
   set minAltitude 10000
   foreach {x y} $dataAltitude {
@@ -312,11 +316,13 @@ proc generate_report { } {
   set scaleAltitude [expr 418.0 / ($maxAltitude-$minAltitude)]
   set offsetAltitude [expr ($minAltitude*$scaleAltitude)]  
   
-  # Temperature
+  # ------------------------------------------------------------------------
+  # Adjust Time data, scale and offset
   set maxTemperature 0
   set minTemperature 1000000
   set sumTemperature 0
   set countTemperature 0
+  
   foreach {x y} $dataTemperature {
     if { $y > $maxTemperature } { 
       set maxTemperature $y
@@ -327,6 +333,7 @@ proc generate_report { } {
 	set sumTemperature [expr ($sumTemperature + $y)]
 	set countTemperature [expr ($countTemperature + 1)]
   }
+  
   set varTemperature [expr (10 * $sumTemperature/$countTemperature)]
   set varTemperature [expr (1.0 * $varTemperature/100)]
   set varTemperature "$varTemperature C"
@@ -337,7 +344,8 @@ proc generate_report { } {
   set scaleTemperature [expr 418.0 / ($maxTemperature-$minTemperature)]
   set offsetTemperature [expr ($minTemperature*$scaleTemperature)] 
 
-  # Time
+  # ------------------------------------------------------------------------
+  # Adjust Time data and scale
   set maxTime 0
   foreach {x y} $dataSpeed {
     if { $x > $maxTime } { 
@@ -351,22 +359,21 @@ proc generate_report { } {
   set varTime ""
   if { $hours > 0 } { set varTime "$hours:" }
   set varTime "$varTime$minutes:$seconds"
-
-  
+ 
   set scaleTime [expr 550.0/$maxTime]
 
-  # Gera Wave
-  # tk_dialog .dialog1 "No file selected" "$scaleSpeed $offsetSpeed" info 0 OK
+  # ------------------------------------------------------------------------
+  # Generate Waves
   foreach {x y} $dataSpeed {
-	lappend waveSpeed [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y*3.6/10] * $scaleSpeed) + $offsetSpeed)] 
+	lappend waveSpeed 		[expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y*3.6/10] * $scaleSpeed) + $offsetSpeed)] 
   }
   
   foreach {x y} $dataDistance {
-	lappend waveDistance [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y/10.0] * $scaleDistance) + $offsetDistance)] 
+	lappend waveDistance 	[expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y/10.0] * $scaleDistance) + $offsetDistance)] 
   }
   
   foreach {x y} $dataAltitude {
-	lappend waveAltitude [expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleAltitude) + $offsetAltitude)] 
+	lappend waveAltitude 	[expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleAltitude) + $offsetAltitude)] 
   }
   
   foreach {x y} $dataTemperature {
@@ -374,11 +381,11 @@ proc generate_report { } {
   }
 }
 
+
 proc load_report_file { name } {
   global dataSpeed dataDistance dataAltitude dataTemperature
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   global startTime startDistance startSpeed
-
   
   catch { set fhandle [open $name r] } res
 
@@ -390,7 +397,7 @@ proc load_report_file { name } {
   set offsetTime $startTime
   set offsetDistance $startDistance
   
-  # Read file line by line and set global variables
+  # Read file line by line
   while { ![eof $fhandle] } {
     # Get next line
 	gets $fhandle line
@@ -404,10 +411,9 @@ proc load_report_file { name } {
 	}
 	
 	if { [lindex $data 0] == "D" } {
-		# SE: CONVERT TO UNIT
 		lappend dataSpeed [expr ($offsetTime + [lindex $data 1])] [lindex $data 2]
 		lappend dataDistance [expr ($offsetTime + [lindex $data 1])] [expr ($offsetDistance + [lindex $data 3])]
-		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [expr [ lindex $data 4 ] *1]
+		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [ lindex $data 4 ]
 		lappend dataTemperature [expr ($offsetTime + [lindex $data 1])] [ lindex $data 5 ]
 		
 		set startTime [expr ($offsetTime + [lindex $data 1])]
