@@ -1,0 +1,254 @@
+MSP430 C/C++ Optimizer                  v3.3.1
+Build Number 1KGCQ-KDADEMDK-RTARQ-TAV-ZACIF_T_T_R
+
+		======File-level Analysis Summary======
+
+
+extern void display_rfbike() is called from 0 sites in this file.
+    It appears to be inlineable (size = 5 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	display_chars() (1 times)
+
+extern void display_sync() is called from 0 sites in this file.
+    It appears to be inlineable (size = 12 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	display_chars() (1 times)
+
+extern unsigned char is_rf() is called from 0 sites in this file.
+    It appears to be inlineable (size = 6 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void reset_rf() is called from 0 sites in this file.
+    It appears to be inlineable (size = 4 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void simpliciti_sync_decode_ap_cmd_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 272 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	update_pressure_table() (1 times)
+	flash_erase_page() (1 times)
+
+extern void simpliciti_sync_get_data_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 241 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 35 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	do_bike_datalog() (1 times)
+
+extern void simpliciti_watch_get_data_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 76 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern void start_simpliciti_sync() is called from 1 sites in this file.
+    It appears to be inlineable (size = 54 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Timer0_A4_Delay() (1 times)
+	close_radio() (1 times)
+	simpliciti_main_sync() (1 times)
+	simpliciti_link() (1 times)
+	open_radio() (1 times)
+	display_symbol() (6 times)
+	stop_datalog() (1 times)
+	 ? () (1 times)
+	clear_line() (1 times)
+
+extern void sx_bike_chronos() is called from 0 sites in this file.
+    It appears to be inlineable (size = 59 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Timer0_A4_Delay() (1 times)
+	do_bike_datalog() (1 times)
+	close_radio() (1 times)
+	listen() (1 times)
+	simpliciti_listen_to() (1 times)
+	reset_simpliciti() (2 times)
+	open_radio() (1 times)
+	toggle_bike_datalog() (2 times)
+	display_symbol() (6 times)
+	 ? () (1 times)
+	clear_line() (1 times)
+
+extern void sx_sync() is called from 0 sites in this file.
+    It appears to be inlineable (size = 32 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	start_simpliciti_sync() (1 times)
+	is_bluerobin() (1 times)
+
+
+These functions may be recursive:
+	display_rfbike()
+	display_sync()
+	simpliciti_sync_decode_ap_cmd_callback()
+	simpliciti_watch_decode_bike_callback()
+	sx_bike_chronos()
+	sx_sync()
+	start_simpliciti_sync()
+
+These external functions are called but not defined here:
+	is_bluerobin()
+	toggle_bike_datalog()
+	reset_simpliciti()
+	simpliciti_listen_to()
+	listen()
+	clear_line()
+	 ? ()
+	stop_datalog()
+	display_symbol()
+	open_radio()
+	simpliciti_link()
+	simpliciti_main_sync()
+	close_radio()
+	Timer0_A4_Delay()
+	do_bike_datalog()
+	flash_erase_page()
+	update_pressure_table()
+	display_chars()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern void start_simpliciti_sync() is called from 1 sites in this file.
+    It appears to be inlineable (size = 54 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void sx_sync() is called from 0 sites in this file.
+    It appears to be inlineable (size = 32 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	start_simpliciti_sync() (1 times)
+
+==============================================================================
+
+extern void sx_bike_chronos() is called from 0 sites in this file.
+    It appears to be inlineable (size = 59 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void simpliciti_watch_get_data_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 76 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 35 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void simpliciti_sync_get_data_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 241 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
+	in the 'for' loop at lines 400-401
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 401
+
+	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
+	to assert that lvalues **&flash_ptr;
+	and                    simpliciti_data[i];
+	do not access the same object in memory.
+
+ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
+	in the 'for' loop at lines 400-401
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 401
+	and the statement ++(*&flash_ptr); at line 401
+
+	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
+	to assert that lvalues **&flash_ptr;
+	and                    *&flash_ptr;
+	do not access the same object in memory.
+
+ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
+	in the 'for' loop at lines 390-391
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 391
+
+	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
+	to assert that lvalues **&flash_ptr;
+	and                    simpliciti_data[i];
+	do not access the same object in memory.
+
+ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
+	in the 'for' loop at lines 390-391
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 391
+	and the statement ++(*&flash_ptr); at line 391
+
+	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
+	to assert that lvalues **&flash_ptr;
+	and                    *&flash_ptr;
+	do not access the same object in memory.
+
+==============================================================================
+
+extern void simpliciti_sync_decode_ap_cmd_callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 272 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void reset_rf() is called from 0 sites in this file.
+    It appears to be inlineable (size = 4 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern unsigned char is_rf() is called from 0 sites in this file.
+    It appears to be inlineable (size = 6 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void display_sync() is called from 0 sites in this file.
+    It appears to be inlineable (size = 12 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void display_rfbike() is called from 0 sites in this file.
+    It appears to be inlineable (size = 5 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==
