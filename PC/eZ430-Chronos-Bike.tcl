@@ -55,7 +55,7 @@ package require Tk
 package require Ttk
 
 set exit_prog 0
-catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
+catch { load [file [join [pwd]/eZ430_Chronos_CC.dll]] } result
 if { [string first "couldn't" $result] != -1 } {
   tk_dialog .dialog1 "DLL not found" {Press OK to close application.} info 0 OK
   set exit_prog 1
@@ -187,16 +187,9 @@ proc clearCanvas {can} {
 	foreach id [$can find all] { $can delete $id }
 }
 
-proc update_report { } {
+proc createGrid {} {
   global w
-  global varDate
-  global waveSpeed waveDistance waveAltitude waveTemperature
-  global cbSpeed cbDistance cbAltitude cbTemperature
-  global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
-
-  clearCanvas $w.note.report.frame2.canvas
   
-  $w.note.report.frame2.canvas create line {50 2 600 2 600 420 50 420 50 2} -width 1 -fill black
   $w.note.report.frame2.canvas create line {50 86 600 86} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {50 170 600 170} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {50 253 600 253} -width 1 -fill gray -dash 1
@@ -205,25 +198,49 @@ proc update_report { } {
   $w.note.report.frame2.canvas create line {270 2 270 420} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {380 2 380 420} -width 1 -fill gray -dash 1
   $w.note.report.frame2.canvas create line {490 2 490 420} -width 1 -fill gray -dash 1
+  $w.note.report.frame2.canvas create line {50 2 600 2 600 420 50 420 50 2} -width 1 -fill black
+}
+
+
+proc update_report { } {
+  global w
+  global varDate
+  global waveSpeed waveDistance waveAltitude waveTemperature
+  global cbSpeed cbDistance cbAltitude cbTemperature
+  global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
+
+  clearCanvas $w.note.report.frame2.canvas
+  createGrid 
   
   if { $varDate == "" } return
 
-  if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create line $waveSpeed -width 2 -fill red -smooth 1 }
-  if { $cbDistance == 1 } { $w.note.report.frame2.canvas create line $waveDistance -width 2 -fill black -smooth 1 }
-  if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create line $waveAltitude -width 2 -fill blue -smooth 1 }
-  if { $cbTemperature == 1 } { $w.note.report.frame2.canvas create line $waveTemperature -width 2 -fill green -smooth 1 }
-
+  # Draw Speed Data
+  if { $cbSpeed == 1 } { 
+	$w.note.report.frame2.canvas create line $waveSpeed -width 2 -fill red -smooth 1 
+	$w.note.report.frame2.canvas create text 45 15 -text "$maxSpeed km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se
+	$w.note.report.frame2.canvas create text 45 390 -text "0 km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se
+  }
   
-  if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create text 45 15 -text "$maxSpeed km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se }
-  if { $cbDistance == 1 } { $w.note.report.frame2.canvas create text 45 25 -text "$maxDistance km" -fill black -font "Helvetica 7 bold" -justify left -anchor se }
-  if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create text 45 35 -text "$maxAltitude m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se }
-  if { $cbTemperature == 1 } { $w.note.report.frame2.canvas create text 45 45 -text "$maxTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se }
-
-  if { $cbSpeed == 1 } { $w.note.report.frame2.canvas create text 45 390 -text "0 km/h" -fill red -font "Helvetica 7 bold" -justify left -anchor se }
-  if { $cbDistance == 1 } { $w.note.report.frame2.canvas create text 45 400 -text "0 km" -fill black -font "Helvetica 7 bold" -justify left -anchor se }
-  if { $cbAltitude == 1 } { $w.note.report.frame2.canvas create text 45 410 -text "$minAltitude m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se }
-  if { $cbTemperature == 1 } { $w.note.report.frame2.canvas create text 45 420 -text "$minTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se }
-
+  # Draw Distance Data
+  if { $cbDistance == 1 } {
+	$w.note.report.frame2.canvas create line $waveDistance -width 2 -fill black -smooth 1 
+	$w.note.report.frame2.canvas create text 45 25 -text "$maxDistance km" -fill black -font "Helvetica 7 bold" -justify left -anchor se
+	$w.note.report.frame2.canvas create text 45 400 -text "0 km" -fill black -font "Helvetica 7 bold" -justify left -anchor se
+  }
+  
+  # Draw Altitude Data
+  if { $cbAltitude == 1 } { 
+    $w.note.report.frame2.canvas create line $waveAltitude -width 2 -fill blue -smooth 1 
+	$w.note.report.frame2.canvas create text 45 35 -text "$maxAltitude m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se
+	$w.note.report.frame2.canvas create text 45 410 -text "$minAltitude m" -fill blue -font "Helvetica 7 bold" -justify left -anchor se
+  }
+  
+  # Draw Temperature Data
+  if { $cbTemperature == 1 } {
+    $w.note.report.frame2.canvas create line $waveTemperature -width 2 -fill green -smooth 1 
+	$w.note.report.frame2.canvas create text 45 45 -text "$maxTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
+	$w.note.report.frame2.canvas create text 45 420 -text "$minTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
+  }
 }
 
 proc generate_report { } {
@@ -245,10 +262,14 @@ proc generate_report { } {
 	set countSpeed [expr ($countSpeed + 1)]
   }
   set varAvgSpeed [expr (10 * $sumSpeed/$countSpeed)]
-  set varAvgSpeed [expr (1.0 * $varAvgSpeed/10)]
+  set varAvgSpeed [expr (3.6 * $varAvgSpeed/100)]
+  set varAvgSpeed [format "%.1f" $varAvgSpeed]
   set varAvgSpeed "$varAvgSpeed km/h"  
-  set varMaxSpeed "$startSpeed km/h"  
   
+  set varMaxSpeed [expr (3.6 * $startSpeed/10)]
+  set varMaxSpeed "$varMaxSpeed km/h"  
+  
+  set maxSpeed [expr (36 * $maxSpeed/100)]
   set maxSpeed [expr ($maxSpeed/40 + 1) * 40]
   
   set scaleSpeed [expr 418.0 / $maxSpeed]
@@ -261,10 +282,10 @@ proc generate_report { } {
       set maxDistance $y
     }  
   }
-  set varDistance [expr ($maxDistance/1000.0)]
+  set varDistance [format "%0.1f" [expr ($maxDistance/10000.0)]]
   set varDistance "$varDistance km"
   
-  set maxDistance [expr ($maxDistance/1000) + 1]
+  set maxDistance [expr ($maxDistance/10000) + 1]
   
   set scaleDistance [expr 418.0 / ($maxDistance*1000)]
   set offsetDistance [expr 0]
@@ -307,11 +328,11 @@ proc generate_report { } {
 	set countTemperature [expr ($countTemperature + 1)]
   }
   set varTemperature [expr (10 * $sumTemperature/$countTemperature)]
-  set varTemperature [expr (1.0 * $varTemperature/10)]
+  set varTemperature [expr (1.0 * $varTemperature/100)]
   set varTemperature "$varTemperature C"
   
-  set maxTemperature [expr (($maxTemperature/5) + 1) * 5]
-  set minTemperature [expr (($minTemperature/5) - 1) * 5]
+  set maxTemperature [expr (($maxTemperature/50) + 1) * 5]
+  set minTemperature [expr (($minTemperature/50)) * 5]
   
   set scaleTemperature [expr 418.0 / ($maxTemperature-$minTemperature)]
   set offsetTemperature [expr ($minTemperature*$scaleTemperature)] 
@@ -337,11 +358,11 @@ proc generate_report { } {
   # Gera Wave
   # tk_dialog .dialog1 "No file selected" "$scaleSpeed $offsetSpeed" info 0 OK
   foreach {x y} $dataSpeed {
-	lappend waveSpeed [expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleSpeed) + $offsetSpeed)] 
+	lappend waveSpeed [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y*3.6/10] * $scaleSpeed) + $offsetSpeed)] 
   }
   
   foreach {x y} $dataDistance {
-	lappend waveDistance [expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleDistance) + $offsetDistance)] 
+	lappend waveDistance [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y/10.0] * $scaleDistance) + $offsetDistance)] 
   }
   
   foreach {x y} $dataAltitude {
@@ -349,7 +370,7 @@ proc generate_report { } {
   }
   
   foreach {x y} $dataTemperature {
-	lappend waveTemperature [expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleTemperature) + $offsetTemperature)] 
+	lappend waveTemperature [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y/10.0] * $scaleTemperature) + $offsetTemperature)] 
   }
 
 
@@ -368,33 +389,33 @@ proc load_report_file { name } {
  
   fconfigure $fhandle -buffering line
 
-  gets $fhandle varDate
-  gets $fhandle maxSpeed
-  if { $maxSpeed > $startSpeed } { set startSpeed $maxSpeed }
-  
-  
   set offsetTime $startTime
   set offsetDistance $startDistance
   
   # Read file line by line and set global variables
   while { ![eof $fhandle] } {
     # Get next line
-    gets $fhandle line
+	gets $fhandle line
 
     set data [ split $line "," ]	
-    
-    # Verify that extracted strings consist of ASCII characters
-    if { [string is ascii [ lindex $data 0 ]] && [string is ascii [ lindex $data 1 ]] } {
 
+	if { [lindex $data 0] == "S" } {
+		set varDate [lindex $data 1]
+		set maxSpeed [lindex $data 2]
+		if { $maxSpeed > $startSpeed } { set startSpeed $maxSpeed }
+	}
+	
+	if { [lindex $data 0] == "D" } {
 		# SE: CONVERT TO UNIT
-		lappend dataSpeed [expr ($offsetTime + [lindex $data 0])] [ lindex $data 1 ]
-		lappend dataDistance [expr ($offsetTime + [lindex $data 0])] [expr ($offsetDistance + [ lindex $data 2 ])]
-		lappend dataAltitude [expr ($offsetTime + [lindex $data 0])] [expr [ lindex $data 3 ] *1]
-		lappend dataTemperature [expr ($offsetTime + [lindex $data 0])] [ lindex $data 4 ]
+		lappend dataSpeed [expr ($offsetTime + [lindex $data 1])] [lindex $data 2]
+		lappend dataDistance [expr ($offsetTime + [lindex $data 1])] [expr ($offsetDistance + [lindex $data 3])]
+		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [expr [ lindex $data 4 ] *1]
+		lappend dataTemperature [expr ($offsetTime + [lindex $data 1])] [ lindex $data 5 ]
 		
-		set startTime [expr ($offsetTime + [lindex $data 0])]
-		set startDistance [expr ($offsetDistance + [ lindex $data 2 ])]
-    }
+		set startTime [expr ($offsetTime + [lindex $data 1])]
+		set startDistance [expr ($offsetDistance + [ lindex $data 3 ])]
+	}
+    
   }
   close $fhandle  
 }
@@ -424,7 +445,6 @@ proc load_report { } {
   
   # Load selected file  
   load_report_file [$w.note.report.frame2.combo1 get]
-
   
   # Generate
   generate_report
