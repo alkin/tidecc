@@ -351,8 +351,6 @@ proc generate_report { } {
   foreach {x y} $dataTemperature {
 	lappend waveTemperature [expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleTemperature) + $offsetTemperature)] 
   }
-
-
 }
 
 proc load_report_file { name } {
@@ -1341,7 +1339,10 @@ proc sync_decode_data {} {
   global sync_use_metric_units
   
   updateStatusSYNC "Writing data to file."
-  set wp [open $sync_file w]
+  #set wp [open $sync_file w]
+  #ez430_chronos.bike
+  #set wp [open "Teste.bike" w]
+  set data_bike ""
   set end_packet 0
   # Write raw data and create a hex array
   set decode 1
@@ -1466,8 +1467,9 @@ proc sync_decode_data {} {
 					 
 		  # Write data set to file
 		  # time,speed,distance,altitude,temperature
-		 # puts $wp "$byte0,$byte1,$byte2,$byte3,$byte4,$byte5,$byte6,$byte7,$byte8,$byte9,$byte10"
-		  puts $wp "D,$system_time,$speed_log,$distance,$rec_alt,$rec_temp"
+		  # puts $wp "$byte0,$byte1,$byte2,$byte3,$byte4,$byte5,$byte6,$byte7,$byte8,$byte9,$byte10"
+		  # puts $wp "D,$system_time,$speed_log,$distance,$rec_alt,$rec_temp"
+		  append data_bike "D,$system_time,$speed_log,$distance,$rec_alt,$rec_temp\n"
        }
   		  # Move to next data set        
           set i [expr $i+12-1]
@@ -1475,9 +1477,13 @@ proc sync_decode_data {} {
   }
 
   # Save initial time, date and max speed
-   puts $wp "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
-
-  close $wp
+   #puts $wp "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
+   append data_bike "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
+   #close $wp
+  
+   set report_file [open "[clock format $start_time -format {%d-%m-%Y}] [clock format $start_time -format {%H-%M-%S}].bike" w]
+   puts $report_file $data_bike
+   close $report_file
   
   after 500
   updateStatusSYNC "Data download finished."

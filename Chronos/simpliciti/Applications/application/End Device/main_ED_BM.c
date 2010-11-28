@@ -284,7 +284,8 @@ unsigned char simpliciti_listen_to(void)
 
   SMPL_Init(Listen_Callback);
    
-  pwr = IOCTL_LEVEL_2;
+//  pwr = IOCTL_LEVEL_2;
+  pwr = IOCTL_LEVEL_0;
   SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &pwr);
   
   while (1)
