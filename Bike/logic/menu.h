@@ -68,13 +68,28 @@ struct menu
 
 // *************************************************************************************************
 // Extern section
+extern void dummy(u8 line);
 
-// Line1 navigation
 extern const struct menu menu_L1_Speed;
 
 // Line2 navigation
+
 extern const struct menu menu_L2_Time;
 extern const struct menu menu_L2_Distance;
+extern const struct menu menu_L2_Bike_link;
+
+/*// Line1 navigation
+extern const struct menu menu_L1_Time;
+extern const struct menu menu_L1_Temperature;
+extern const struct menu menu_L1_Altitude;
+extern const struct menu menu_L1_Heartrate;
+
+// Line2 navigation
+extern const struct menu menu_L2_Date;
+extern const struct menu menu_L2_DataLog;
+extern const struct menu menu_L2_Sync;
+extern const struct menu menu_L2_RFBSL;
+*/
 
 // Pointers to current menu item
 extern const struct menu * ptrMenu_L1;

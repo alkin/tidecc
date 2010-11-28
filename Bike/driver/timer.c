@@ -54,7 +54,7 @@
 #include "battery.h"
 #include "altitude.h"
 #include "display.h"
-#include "rfsimpliciti.h"
+#include "rfbike.h"
 #include "simpliciti.h"
 
 // *************************************************************************************************
@@ -82,7 +82,7 @@ u8 change_menu = 0;
 // *************************************************************************************************
 // Extern section
 
-
+extern void to_lpm(void);
 // *************************************************************************************************
 // @fn          Timer0_Init
 // @brief       Set Timer0 to a period of 1 or 2 sec. IRQ TACCR0 is asserted when timer overflows.
@@ -207,13 +207,16 @@ void Timer0_A2_Stop(void)
 // *************************************************************************************************
 void Timer0_A3_Start(u16 ticks)
 {
-	u16 value;
+	u16 value=0;
 	
 	// Store timer ticks in global variable
 	sTimer.timer0_A3_ticks = ticks;
 	
 	// Delay based on current counter value
-	value = TA0R + ticks;
+    while (value != TA0R)
+    value = TA0R;
+  
+    value += ticks;
 	
 	// Update CCR
 	TA0CCR3 = value;   
@@ -248,44 +251,50 @@ void Timer0_A3_Stop(void)
 // *************************************************************************************************
 void Timer0_A4_Delay(u16 ticks)
 {
-	u16 value;
-	
-	// Exit immediately if Timer0 not running - otherwise we'll get stuck here
-	if ((TA0CTL & (BIT4 | BIT5)) == 0) return;    
+   u16 value = 0;
 
-	// Disable timer interrupt    
-	TA0CCTL4 &= ~CCIE; 	
+   // Exit immediately if Timer0 not running - otherwise we'll get stuck here
+   if ((TA0CTL & (BIT4 | BIT5)) == 0)
+      return;
 
-	// Clear delay_over flag
-	sys.flag.delay_over = 0;
-	
-	// Add delay to current timer value
-	value = TA0R + ticks;
-	
-	// Update CCR
-	TA0CCR4 = value;   
+   // Disable timer interrupt    
+   TA0CCTL4 &= ~CCIE;
 
-	// Reset IRQ flag    
-	TA0CCTL4 &= ~CCIFG; 
-	          
-	// Enable timer interrupt    
-	TA0CCTL4 |= CCIE; 
-	
-	// Wait for timer IRQ
-	while (1)
-	{
-		_BIS_SR(LPM3_bits + GIE); 
+   // Clear delay_over flag
+   sys.flag.delay_over = 0;
 
-#ifdef USE_WATCHDOG		
-		// Service watchdog
-		WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
+   // Add delay to current timer value
+   // To make sure this value is correctly read
+   while (value != TA0R)
+      value = TA0R;
+   value += ticks;
+
+   // Update CCR
+   TA0CCR4 = value;
+
+   // Reset IRQ flag    
+   TA0CCTL4 &= ~CCIFG;
+
+   // Enable timer interrupt    
+   TA0CCTL4 |= CCIE;
+
+   // Wait for timer IRQ
+   while (1)
+   {
+      // Delay in LPM
+      to_lpm();                 // will also set GIE again
+
+#ifdef USE_WATCHDOG
+      // Service watchdog
+      WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
 #endif
-		// Check stop condition
-		if (sys.flag.delay_over) break;
-	}
-	
-	// Exit from LPM3
-	_BIC_SR(LPM3_bits); 
+      // Check stop condition
+      // disable interrupt to prevent flag's change caused by interrupt methods 
+      __disable_interrupt();
+      if (sys.flag.delay_over)
+         break;
+   }
+   __enable_interrupt();
 }
 
 

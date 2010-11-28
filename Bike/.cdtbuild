@@ -305,6 +305,7 @@
 <option id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.OPT_LEVEL.381556018" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.OPT_LEVEL" value="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.OPT_LEVEL._none" valueType="enumerated"/>
 <option id="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.DEFINE.843344062" superClass="com.ti.ccstudio.buildDefinitions.MSP430_3.3.compilerID.DEFINE" valueType="definedSymbols">
 <listOptionValue builtIn="false" value="__CCE__"/>
+<listOptionValue builtIn="false" value="peer"/>
 <listOptionValue builtIn="false" value="ISM_EU"/>
 <listOptionValue builtIn="false" value="MRFI_CC430"/>
 <listOptionValue builtIn="false" value="__CC430F6137__"/>

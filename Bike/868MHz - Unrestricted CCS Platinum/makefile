@@ -23,7 +23,6 @@ $(GEN_CMDS_QUOTED) \
 "./driver/adc12.obj" \
 "./logic/speed.obj" \
 "./logic/sensor.obj" \
-"./logic/rfsimpliciti.obj" \
 "./logic/rfbike.obj" \
 "./logic/menu.obj" \
 "./logic/light.obj" \
@@ -158,7 +157,7 @@ ez430_chronos_datalogger_868MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 	$(shell echo --cmd_file="C:\Users\Patrick\Chronos\tidecc\Bike\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="C:\Users\Patrick\Chronos\tidecc\Bike\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "ccsLinker.opt")
 	$(shell echo -vmspx >> "ccsLinker.opt")
 	$(shell echo -g >> "ccsLinker.opt")
-	$(shell echo --define=__CCE__ --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "ccsLinker.opt")
+	$(shell echo --define=__CCE__ --define=peer --define=ISM_EU --define=MRFI_CC430 --define=__CC430F6137__ >> "ccsLinker.opt")
 	$(shell echo --diag_warning=225 >> "ccsLinker.opt")
 	$(shell echo --printf_support=minimal >> "ccsLinker.opt")
 	$(shell echo --asm_listing >> "ccsLinker.opt")
@@ -180,10 +179,10 @@ ez430_chronos_datalogger_868MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QTD) "ez430_chronos_datalogger_868MHz.out"
-	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.obj" ".\simpliciti\Components\nwk_applications\nwk_ioctl.obj" ".\simpliciti\Components\nwk_applications\nwk_join.obj" ".\simpliciti\Components\nwk_applications\nwk_link.obj" ".\simpliciti\Components\nwk_applications\nwk_mgmt.obj" ".\simpliciti\Components\nwk_applications\nwk_ping.obj" ".\simpliciti\Components\nwk_applications\nwk_security.obj" ".\simpliciti\Components\nwk\nwk.obj" ".\simpliciti\Components\nwk\nwk_QMgmt.obj" ".\simpliciti\Components\nwk\nwk_api.obj" ".\simpliciti\Components\nwk\nwk_frame.obj" ".\simpliciti\Components\nwk\nwk_globals.obj" ".\simpliciti\Components\mrfi\mrfi.obj" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.obj" ".\simpliciti\Applications\application\End Device\main_ED_BM.obj" ".\main.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\clock.obj" ".\logic\distance.obj" ".\logic\light.obj" ".\logic\menu.obj" ".\logic\rfbike.obj" ".\logic\rfsimpliciti.obj" ".\logic\sensor.obj" ".\logic\speed.obj" 
-	-$(RM) ".\driver\adc12.obj" ".\driver\buzzer.obj" ".\driver\display.obj" ".\driver\display1.obj" ".\driver\flash.obj" ".\driver\pmm.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" ".\driver\timer.obj" ".\driver\vti_as.obj" ".\driver\vti_ps.obj" 
-	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.pp" ".\simpliciti\Components\nwk_applications\nwk_ioctl.pp" ".\simpliciti\Components\nwk_applications\nwk_join.pp" ".\simpliciti\Components\nwk_applications\nwk_link.pp" ".\simpliciti\Components\nwk_applications\nwk_mgmt.pp" ".\simpliciti\Components\nwk_applications\nwk_ping.pp" ".\simpliciti\Components\nwk_applications\nwk_security.pp" ".\simpliciti\Components\nwk\nwk.pp" ".\simpliciti\Components\nwk\nwk_QMgmt.pp" ".\simpliciti\Components\nwk\nwk_api.pp" ".\simpliciti\Components\nwk\nwk_frame.pp" ".\simpliciti\Components\nwk\nwk_globals.pp" ".\simpliciti\Components\mrfi\mrfi.pp" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.pp" ".\simpliciti\Applications\application\End Device\main_ED_BM.pp" ".\main.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\clock.pp" ".\logic\distance.pp" ".\logic\light.pp" ".\logic\menu.pp" ".\logic\rfbike.pp" ".\logic\rfsimpliciti.pp" ".\logic\sensor.pp" ".\logic\speed.pp" ".\driver\adc12.pp" ".\driver\buzzer.pp" 
-	-$(RM) ".\driver\display.pp" ".\driver\display1.pp" ".\driver\flash.pp" ".\driver\pmm.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" ".\driver\timer.pp" ".\driver\vti_as.pp" ".\driver\vti_ps.pp" 
+	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.obj" ".\simpliciti\Components\nwk_applications\nwk_ioctl.obj" ".\simpliciti\Components\nwk_applications\nwk_join.obj" ".\simpliciti\Components\nwk_applications\nwk_link.obj" ".\simpliciti\Components\nwk_applications\nwk_mgmt.obj" ".\simpliciti\Components\nwk_applications\nwk_ping.obj" ".\simpliciti\Components\nwk_applications\nwk_security.obj" ".\simpliciti\Components\nwk\nwk.obj" ".\simpliciti\Components\nwk\nwk_QMgmt.obj" ".\simpliciti\Components\nwk\nwk_api.obj" ".\simpliciti\Components\nwk\nwk_frame.obj" ".\simpliciti\Components\nwk\nwk_globals.obj" ".\simpliciti\Components\mrfi\mrfi.obj" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.obj" ".\simpliciti\Applications\application\End Device\main_ED_BM.obj" ".\main.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\clock.obj" ".\logic\distance.obj" ".\logic\light.obj" ".\logic\menu.obj" ".\logic\rfbike.obj" ".\logic\sensor.obj" ".\logic\speed.obj" ".\driver\adc12.obj" ".\driver\buzzer.obj" 
+	-$(RM) ".\driver\display.obj" ".\driver\display1.obj" ".\driver\flash.obj" ".\driver\pmm.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" ".\driver\timer.obj" ".\driver\vti_as.obj" ".\driver\vti_ps.obj" 
+	-$(RM) ".\simpliciti\Components\nwk_applications\nwk_freq.pp" ".\simpliciti\Components\nwk_applications\nwk_ioctl.pp" ".\simpliciti\Components\nwk_applications\nwk_join.pp" ".\simpliciti\Components\nwk_applications\nwk_link.pp" ".\simpliciti\Components\nwk_applications\nwk_mgmt.pp" ".\simpliciti\Components\nwk_applications\nwk_ping.pp" ".\simpliciti\Components\nwk_applications\nwk_security.pp" ".\simpliciti\Components\nwk\nwk.pp" ".\simpliciti\Components\nwk\nwk_QMgmt.pp" ".\simpliciti\Components\nwk\nwk_api.pp" ".\simpliciti\Components\nwk\nwk_frame.pp" ".\simpliciti\Components\nwk\nwk_globals.pp" ".\simpliciti\Components\mrfi\mrfi.pp" ".\simpliciti\Components\bsp\boards\CC430EM\bsp_board.pp" ".\simpliciti\Applications\application\End Device\main_ED_BM.pp" ".\main.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\clock.pp" ".\logic\distance.pp" ".\logic\light.pp" ".\logic\menu.pp" ".\logic\rfbike.pp" ".\logic\sensor.pp" ".\logic\speed.pp" ".\driver\adc12.pp" ".\driver\buzzer.pp" ".\driver\display.pp" 
+	-$(RM) ".\driver\display1.pp" ".\driver\flash.pp" ".\driver\pmm.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" ".\driver\timer.pp" ".\driver\vti_as.pp" ".\driver\vti_ps.pp" 
 	-@echo ' '
 
 post-build:

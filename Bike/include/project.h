@@ -45,18 +45,23 @@
 // *************************************************************************************************
 // Defines section
 
-// Period to change menu (seconds)
-#define CHANGE_MENU_PERIOD			(5u) 
+
+#define CHANGE_MENU_PERIOD			(5u) // period to change menu (seconds)
+#define GET_DATA_PERIOD	     		(1u) 
 
 // Comment this to not use the LCD charge pump
 //#define USE_LCD_CHARGE_PUMP
 
 // Uncomment this define to build the application without watchdog support
-#define USE_WATCHDOG
+//#define USE_WATCHDOG
 
 // Use/not use filter when measuring physical values
 #define FILTER_OFF						(0u)
 #define FILTER_ON						(1u)
+
+// Value of PI
+#define PI_INT						(31415u)
+
 
 // *************************************************************************************************
 // Macro section
@@ -135,17 +140,21 @@ typedef union
 } s_message_flags;
 extern volatile s_message_flags message;
 
-typedef struct
+typedef union
 {
+  struct
+  {
    u16 bike_size : 6; 		// Frame size in cm
    u16 sensor_count : 4;
    u16 speed_unit : 2;
    u16 distance_unit : 1;
    u16 datalogger_en : 1;
+}data;
+u16 all_flags;
 } s_config;
 extern volatile s_config config;
 
-
+//extern u8 time_over;
 
 
 // *************************************************************************************************

@@ -136,17 +136,17 @@ void display_speed(u8 line, u8 update)
 
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(config.speed_unit == SPEED_M_S)
+		if(config.data.speed_unit == SPEED_M_S)
 		{
 			speed_m_s = convert_speed_to_m_s(speed.value);
 			display_chars(LCD_SEG_L1_2_0, itoa(speed_m_s, 3, 2), SEG_ON);
 		}		
-		else if(config.speed_unit == SPEED_KM_H)
+		else if(config.data.speed_unit == SPEED_KM_H)
 		{
 			speed_km_h = convert_speed_to_km_h(speed.value);
 			display_chars(LCD_SEG_L1_2_0, itoa(speed_km_h, 3, 2), SEG_ON);	
 		}
-		else if(config.speed_unit == SPEED_MI_H)
+		else if(config.data.speed_unit == SPEED_MI_H)
 		{
 			speed_mi_h = convert_speed_to_mi_h(speed.value);
 			display_chars(LCD_SEG_L1_2_0, itoa(speed_mi_h, 3, 2), SEG_ON);
@@ -156,7 +156,7 @@ void display_speed(u8 line, u8 update)
 	{
 		display_speed(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		
-		if(config.speed_unit == SPEED_M_S)
+		if(config.data.speed_unit == SPEED_M_S)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_ON);
@@ -166,7 +166,7 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_PER_H, SEG_OFF);
 			
 		}
-		else if(config.speed_unit == SPEED_KM_H)
+		else if(config.data.speed_unit == SPEED_KM_H)
 		{
 			display_symbol(LCD_UNIT_L1_K, SEG_ON);
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
@@ -175,7 +175,7 @@ void display_speed(u8 line, u8 update)
 			display_symbol(LCD_UNIT_L1_I, SEG_OFF);
 			display_symbol(LCD_UNIT_L1_PER_S, SEG_OFF);
 		}
-		else if(config.speed_unit == SPEED_MI_H)
+		else if(config.data.speed_unit == SPEED_MI_H)
 		{
 			display_symbol(LCD_UNIT_L1_M, SEG_ON);
 			display_symbol(LCD_UNIT_L1_I, SEG_ON);

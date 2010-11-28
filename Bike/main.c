@@ -25,7 +25,7 @@
 #include "battery.h"
 #include "altitude.h"
 #include "battery.h"
-#include "rfsimpliciti.h"
+#include "rfbike.h"
 #include "simpliciti.h"
 
 
@@ -96,12 +96,11 @@ int main(void)
 		// When idle go to LPM3
     	idle_loop();
 
-		rfbike_sync();
+		//rfbike_sync();
 
 		do_measurements();
 		
 		display_update();
-	    aux++;
  
      // Call direct function
      ptrMenu_L2->sx_function(LINE2);
@@ -111,7 +110,6 @@ int main(void)
 
      // Clear button flag    
      button.flag.down = 0;
-     aux=20;
  	//}	
 }
 
@@ -207,14 +205,15 @@ void init_application(void)
 	
 	// ---------------------------------------------------------------------
 	// Wait until 3V in DVcc is settled
- 	Timer0_Init();
+ 	/*
+ 	 * Timer0_Init();
  	TA0CCTL0 &= ~CCIE;
  	do
  	{
  		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000));
 	 	battery_measurement();
  	} while (sys.flag.low_battery);
-		
+		*/
 	// ---------------------------------------------------------------------
 	// Configure ports
 
@@ -444,10 +443,10 @@ void reset_config(void)
 	simpliciti_ed_address[3] = 0x12;
 	sAlt.altitude_offset	 = 0;
 		
-	config.bike_size = 60;
-	config.sensor_count = 9;
-	config.speed_unit = SPEED_M_S;
-	config.distance_unit = DISTANCE_KM;
+	config.data.bike_size = 60;
+	config.data.sensor_count = 9;
+	config.data.speed_unit = SPEED_M_S;
+	config.data.distance_unit = DISTANCE_KM;
 }
 
 

@@ -87,5 +87,5 @@ void sensor_tick(void)
 // *************************************************************************************************
 u16 sensor_get_distance(void)
 {
-	return (u16)(sensor.value * 3.1415 * config.bike_size / 10 / config.sensor_count);	
+	return (u16)(sensor.value * 3.1415 * config.data.bike_size / 10 / config.data.sensor_count);	
 }

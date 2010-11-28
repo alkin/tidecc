@@ -8,7 +8,7 @@ simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Dokumente\ und\ Einstell
 simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Programme/Texas\ Instruments/ccsv4/msp430/include/cc430x613x.h
 simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Programme/Texas\ Instruments/ccsv4/msp430/include/In430.h
 simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Programme/Texas\ Instruments/ccsv4/tools/compiler/msp430/include/intrinsics.h
-simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Dokumente\ und\ Einstellungen/anton/Eigene\ Dateien/workspace/ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_config.h
+simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Dokumente\ und\ Einstellungen/anton/Eigene\ Dateien/workspace/ez430_chronos_datalogger/simpliciti/Components/bsp/boards/CC430EM/bsp_config.data.h
 simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Dokumente\ und\ Einstellungen/anton/Eigene\ Dateien/workspace/ez430_chronos_datalogger/simpliciti/Components/bsp/bsp_macros.h
 simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Dokumente\ und\ Einstellungen/anton/Eigene\ Dateien/workspace/ez430_chronos_datalogger/simpliciti/Components/mrfi/mrfi.h
 simpliciti/Components/nwk_applications/nwk_freq.obj: C:/Dokumente\ und\ Einstellungen/anton/Eigene\ Dateien/workspace/ez430_chronos_datalogger/simpliciti/Components/mrfi/mrfi_defs.h

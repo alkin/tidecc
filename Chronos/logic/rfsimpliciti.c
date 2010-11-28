@@ -417,7 +417,7 @@ void sx_bike_chronos(u8 line)
    
    toggle_bike_datalog();
    
-	u8 aux;
+/*	u8 aux;
 	for (aux=0;aux<10;aux++)
 	{
        do_bike_datalog(DATALOG_BIKE_NORMAL);  
@@ -426,7 +426,7 @@ void sx_bike_chronos(u8 line)
    
     toggle_bike_datalog();
    
-    /*    
+       */ 
    // Prepare radio for RF communication
    open_radio();
    
@@ -439,7 +439,6 @@ void sx_bike_chronos(u8 line)
    {
        listen();
    }
-   toggle_bike_datalog();
       
    reset_simpliciti();
      
@@ -460,7 +459,7 @@ void sx_bike_chronos(u8 line)
    Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
    BUTTONS_IFG = 0x00;
    button.all_flags = 0;
-*/
+
    // Clear icons
    display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
    display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);

@@ -116,12 +116,12 @@ void display_distance(u8 line, u8 update)
 	
 	if (update == DISPLAY_LINE_UPDATE_PARTIAL) 
 	{
-		if(config.distance_unit == DISTANCE_KM)
+		if(config.data.distance_unit == DISTANCE_KM)
 		{
 			distance_km = convert_distance_to_km(distance.value);
 			display_chars(LCD_SEG_L2_4_0, itoa(distance_km, 5, 2), SEG_ON);	
 		}
-		else if(config.distance_unit == DISTANCE_MI)
+		else if(config.data.distance_unit == DISTANCE_MI)
 		{
 			distance_mi = convert_distance_to_mi(distance.value);
 			display_chars(LCD_SEG_L2_4_0, itoa(distance_mi, 5, 2), SEG_ON);
@@ -132,12 +132,12 @@ void display_distance(u8 line, u8 update)
 		display_distance(line, DISPLAY_LINE_UPDATE_PARTIAL);
 		display_symbol(LCD_SEG_L2_DP, SEG_ON);
 		
-		if(config.distance_unit == DISTANCE_KM)
+		if(config.data.distance_unit == DISTANCE_KM)
 		{
 			display_symbol(LCD_UNIT_L2_KM, SEG_ON);
 			display_symbol(LCD_UNIT_L2_MI, SEG_OFF);
 		}
-		else if(config.distance_unit == DISTANCE_MI)
+		else if(config.data.distance_unit == DISTANCE_MI)
 		{
 			display_symbol(LCD_UNIT_L2_KM, SEG_OFF);
 			display_symbol(LCD_UNIT_L2_MI, SEG_ON);

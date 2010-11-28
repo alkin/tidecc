@@ -364,6 +364,8 @@ void listen()
       }
 		// Put radio back to sleep  		
   		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
+  		
+  		simpliciti_flag = SIMPLICITI_TRIGGER_STOP; 
       
       clearFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA);
     }

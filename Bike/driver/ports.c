@@ -52,7 +52,7 @@
 
 // logic
 #include "clock.h"
-#include "rfsimpliciti.h"
+#include "rfbike.h"
 #include "simpliciti.h"
 #include "sensor.h"
 #include "altitude.h"
