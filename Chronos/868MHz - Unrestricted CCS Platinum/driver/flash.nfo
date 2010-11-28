@@ -1,0 +1,51 @@
+MSP430 C/C++ Optimizer                  v3.3.1
+Build Number 1KGCQ-KDADEMDK-RTARQ-TAV-ZACIF_T_T_R
+
+		======File-level Analysis Summary======
+
+
+extern void flash_erase_page() is called from 0 sites in this file.
+    It appears to be inlineable (size = 42 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	_enable_interrupts() (1 times)
+	_disable_interrupts() (1 times)
+
+extern void flash_write() is called from 0 sites in this file.
+    It appears to be inlineable (size = 28 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	_enable_interrupts() (1 times)
+	_disable_interrupts() (1 times)
+
+
+These functions may be recursive:
+	flash_erase_page()
+	flash_write()
+
+These external functions are called but not defined here:
+	_disable_interrupts()
+	_enable_interrupts()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+extern void flash_write() is called from 0 sites in this file.
+    It appears to be inlineable (size = 28 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void flash_erase_page() is called from 0 sites in this file.
+    It appears to be inlineable (size = 42 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

@@ -257,7 +257,8 @@ unsigned char simpliciti_link_to (void)
   
   uint8_t pwr;
   
-  pwr = IOCTL_LEVEL_2;
+//  pwr = IOCTL_LEVEL_2;
+  pwr = IOCTL_LEVEL_1;
   SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &pwr); 
   
   while (SMPL_SUCCESS != SMPL_Link(&sLinkID3))

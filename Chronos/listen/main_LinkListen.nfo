@@ -1,0 +1,88 @@
+MSP430 C/C++ Optimizer                  v3.3.1
+Build Number 1KGCQ-KDADEMDK-RTARQ-TAV-ZACIF_T_T_R
+
+		======File-level Analysis Summary======
+
+
+static unsigned char Listen_Callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 29 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	show() (1 times)
+	SMPL_Receive() (1 times)
+
+static void listen() is called from 1 sites in this file.
+    It appears to be inlineable (size = 43 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	SMPL_Send() (1 times)
+	SMPL_LinkListen() (1 times)
+	SMPL_Ioctl() (2 times)
+	show() (2 times)
+
+extern void main() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	listen() (1 times)
+	SMPL_Init() (1 times)
+	show() (1 times)
+	BSP_InitBoard() (1 times)
+
+static void show() is called from 4 sites in this file.
+    It appears to be inlineable (size = 153 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+
+These functions may be recursive:
+	Listen_Callback()
+	main()
+	listen()
+
+These external functions are called but not defined here:
+	BSP_InitBoard()
+	SMPL_Init()
+	SMPL_Ioctl()
+	SMPL_LinkListen()
+	SMPL_Send()
+	SMPL_Receive()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+static void show() is called from 4 sites in this file.
+    It appears to be inlineable (size = 153 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+static void listen() is called from 1 sites in this file.
+    It appears to be inlineable (size = 43 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	show() (2 times)
+
+==============================================================================
+
+extern void main() is called from 0 sites in this file.
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	show() (1 times)
+	listen() (1 times)
+
+==============================================================================
+
+static unsigned char Listen_Callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 29 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	show() (1 times)
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==

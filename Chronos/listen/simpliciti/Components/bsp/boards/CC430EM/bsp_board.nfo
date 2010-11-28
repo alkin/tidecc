@@ -1,0 +1,143 @@
+MSP430 C/C++ Optimizer                  v3.3.1
+Build Number 1KGCQ-KDADEMDK-RTARQ-TAV-ZACIF_T_T_R
+
+		======File-level Analysis Summary======
+
+
+extern void BSP_Delay() is called from 0 sites in this file.
+    It appears to be inlineable (size = 38 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	_disable_interrupts() (1 times)
+
+extern void BSP_InitBoard() is called from 0 sites in this file.
+    It appears to be inlineable (size = 10 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+static void Bsp_SetClocks() is called from 1 sites in this file.
+    It appears to be inlineable (size = 52 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+static void Bsp_SetVCore() is called from 1 sites in this file.
+    It appears to be inlineable (size = 3 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	SetVCore() (1 times)
+
+static void SetVCore() is called from 1 sites in this file.
+    It appears to be inlineable (size = 27 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	SetVCoreDown() (1 times)
+	SetVCoreUp() (1 times)
+
+static void SetVCoreDown() is called from 1 sites in this file.
+    It appears to be inlineable (size = 24 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+static void SetVCoreUp() is called from 1 sites in this file.
+    It appears to be inlineable (size = 52 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+extern int _system_pre_init() is called from 0 sites in this file.
+    It appears to be inlineable (size = 7 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Bsp_SetClocks() (1 times)
+	Bsp_SetVCore() (1 times)
+
+
+These functions may be recursive:
+	BSP_Delay()
+
+Function SetVCore() will be specialized on these parameters:
+	[1] level == 3u;
+
+Results of interprocedural value propagation:
+
+   static void SetVCore() has these parameter attributes:
+      unsigned char level :  level == 3u;
+
+These external functions are called but not defined here:
+	_disable_interrupts()
+
+
+		======= End file-level Analysis =======
+
+
+==============================================================================
+
+static void SetVCoreUp() is called from 1 sites in this file.
+    It appears to be inlineable (size = 52 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+static void SetVCoreDown() is called from 1 sites in this file.
+    It appears to be inlineable (size = 24 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+static void SetVCore() is called from 1 sites in this file.
+    It appears to be inlineable (size = 27 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	SetVCoreUp() (1 times)
+	SetVCoreDown() (1 times)
+
+==============================================================================
+
+static void Bsp_SetVCore() is called from 1 sites in this file.
+    It appears to be inlineable (size = 3 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	SetVCore() (1 times)
+
+==============================================================================
+
+static void Bsp_SetClocks() is called from 1 sites in this file.
+    It appears to be inlineable (size = 52 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern int _system_pre_init() is called from 0 sites in this file.
+    It appears to be inlineable (size = 7 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	Bsp_SetVCore() (1 times)
+	Bsp_SetClocks() (1 times)
+
+==============================================================================
+
+extern void BSP_InitBoard() is called from 0 sites in this file.
+    It appears to be inlineable (size = 10 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void BSP_Delay() is called from 0 sites in this file.
+    It appears to be inlineable (size = 38 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+<<NULL MIX DOMAIN>>
+
+== END OF INFO OUTPUT==
