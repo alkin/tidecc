@@ -209,6 +209,7 @@ proc update_report { } {
   global waveSpeed waveDistance waveAltitude waveTemperature
   global cbSpeed cbDistance cbAltitude cbTemperature
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
+  global time1 time2 time3 time4 time5
 
   clearCanvas $w.note.report.frame2.canvas
   createGrid 
@@ -242,6 +243,14 @@ proc update_report { } {
 	$w.note.report.frame2.canvas create text 45 45 -text "$maxTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
 	$w.note.report.frame2.canvas create text 45 420 -text "$minTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
   }
+  
+  # Draw Time Scale
+	$w.note.report.frame2.canvas create text 50 425 -text "00:00" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 160 425 -text "$time1" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 270 425 -text "$time2" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 380 425 -text "$time3" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 490 425 -text "$time4" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 600 425 -text "$time5" -fill black -font "Helvetica 7 bold" -justify left -anchor ne
 }
 
 proc generate_report { } {
@@ -250,6 +259,7 @@ proc generate_report { } {
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
   global startSpeed
+  global time1 time2 time3 time4 time5
 
   # ------------------------------------------------------------------------
   # Adjust Speed data, scale and offset
@@ -361,7 +371,42 @@ proc generate_report { } {
   set varTime "$varTime$minutes:$seconds"
  
   set scaleTime [expr 550.0/$maxTime]
-
+  
+  set hours [format "%0d" [expr $maxTime/5/3600]]
+  set minutes [format "%0d" [expr $maxTime/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime/5%3600%60]]
+  set time1 ""
+  if { $hours > 0 } { set time1 "$hours:" }
+  set time1 "$time1$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime*2/5/3600]]
+  set minutes [format "%0d" [expr $maxTime*2/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime*2/5%3600%60]]
+  set time2 ""
+  if { $hours > 0 } { set time2 "$hours:" }
+  set time2 "$time2$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime*3/5/3600]]
+  set minutes [format "%0d" [expr $maxTime*3/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime*3/5%3600%60]]
+  set time3 ""
+  if { $hours > 0 } { set time3 "$hours:" }
+  set time3 "$time3$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime*4/5/3600]]
+  set minutes [format "%0d" [expr $maxTime*4/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime*4/5%3600%60]]
+  set time4 ""
+  if { $hours > 0 } { set time4 "$hours:" }
+  set time4 "$time4$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime/3600]]
+  set minutes [format "%0d" [expr $maxTime%3600/60]]
+  set seconds [format "%02d" [expr $maxTime%3600%60]]
+  set time5 ""
+  if { $hours > 0 } { set time5 "$hours:" }
+  set time5 "$time5$minutes:$seconds"
+  
   # ------------------------------------------------------------------------
   # Generate Waves
   foreach {x y} $dataSpeed {
@@ -507,7 +552,7 @@ font configure TkDefaultFont -family "tahoma" -size 8
 
 # Define basic window geometry
 wm title . "Chronos Challenge - cBike Control Center v$revision"
-wm geometry . 800x470
+wm geometry . 800x490
 wm resizable . 1 1
 wm iconname . "ttknote"
 ttk::frame .f
@@ -529,7 +574,7 @@ $w.note add $w.note.report -text "Report Charts" -underline 0 -padding 2
 grid columnconfigure $w.note.report {0 1} -weight 1 -uniform 1
 
 ttk::frame $w.note.report.frame2 -style custom.TFrame
-canvas $w.note.report.frame2.canvas -width 600 -height 420 -background "White" -borderwidth 0
+canvas $w.note.report.frame2.canvas -width 600 -height 440 -background "White" -borderwidth 0
 ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
 ttk::combobox $w.note.report.frame2.combo1 -state readonly -values $all_ini_files -width 90
 ttk::label $w.note.report.frame2.lblDisplay -text "Display:" -justify left -font "Helvetica 10 bold"
