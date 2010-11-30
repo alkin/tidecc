@@ -100,9 +100,9 @@ int main(void)
 		do_altitude_measurement(FILTER_ON);
 	
 		// Do distance measurement
-		//do_light_measurement();
+		do_light_measurement();
 		// Update Light
-		//update_light();
+		update_light();
 		
 		display_update();
 
