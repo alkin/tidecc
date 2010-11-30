@@ -12,21 +12,15 @@ $(GEN_CMDS_QUOTED) \
 "./driver/rf1a.obj" \
 "./driver/radio.obj" \
 "./driver/ports.obj" \
-"./logic/user.obj" \
-"./logic/time.obj" \
-"./logic/temperature.obj" \
 "./logic/speed.obj" \
-"./logic/rfsimpliciti.obj" \
-"./logic/rfbsl.obj" \
+"./logic/sensor.obj" \
+"./logic/rfbike.obj" \
 "./logic/menu.obj" \
+"./logic/light.obj" \
 "./logic/distance.obj" \
-"./logic/date.obj" \
-"./logic/datalog.obj" \
 "./logic/clock.obj" \
-"./logic/bluerobin.obj" \
 "./logic/battery.obj" \
 "./logic/altitude.obj" \
-"./logic/acceleration.obj" \
 "./main.obj" \
 -l"rts430x.lib" \
 "../simpliciti/CC430_End_Device_433MHz.lib" \
@@ -141,8 +135,8 @@ ez430_chronos_datalogger_433MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 # Other Targets
 clean:
 	-$(RM) $(MSP430_EXECUTABLE_OUTPUTS__QTD) "ez430_chronos_datalogger_433MHz.out"
-	-$(RM) ".\main.obj" ".\logic\acceleration.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\bluerobin.obj" ".\logic\clock.obj" ".\logic\datalog.obj" ".\logic\date.obj" ".\logic\distance.obj" ".\logic\menu.obj" ".\logic\rfbsl.obj" ".\logic\rfsimpliciti.obj" ".\logic\speed.obj" ".\logic\temperature.obj" ".\logic\time.obj" ".\logic\user.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" 
-	-$(RM) ".\main.pp" ".\logic\acceleration.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\bluerobin.pp" ".\logic\clock.pp" ".\logic\datalog.pp" ".\logic\date.pp" ".\logic\distance.pp" ".\logic\menu.pp" ".\logic\rfbsl.pp" ".\logic\rfsimpliciti.pp" ".\logic\speed.pp" ".\logic\temperature.pp" ".\logic\time.pp" ".\logic\user.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" 
+	-$(RM) ".\main.obj" ".\logic\altitude.obj" ".\logic\battery.obj" ".\logic\clock.obj" ".\logic\distance.obj" ".\logic\light.obj" ".\logic\menu.obj" ".\logic\rfbike.obj" ".\logic\sensor.obj" ".\logic\speed.obj" ".\driver\ports.obj" ".\driver\radio.obj" ".\driver\rf1a.obj" 
+	-$(RM) ".\main.pp" ".\logic\altitude.pp" ".\logic\battery.pp" ".\logic\clock.pp" ".\logic\distance.pp" ".\logic\light.pp" ".\logic\menu.pp" ".\logic\rfbike.pp" ".\logic\sensor.pp" ".\logic\speed.pp" ".\driver\ports.pp" ".\driver\radio.pp" ".\driver\rf1a.pp" 
 	-@echo ' '
 
 post-build:

@@ -75,7 +75,7 @@ void (*fptr_lcd_function_line2)(u8 line, u8 update);
 
 // *************************************************************************************************
 // Extern section
-
+extern void rfbike_sync (void);
 // *************************************************************************************************
 // @fn          main
 // @brief       Main routine
@@ -91,26 +91,17 @@ int main(void)
 	init_global_variables();
 	
 	// Main control loop: wait in low power mode until some event needs to be processed
-	//while(1)
-	//{
+	while(1)
+	{
 		// When idle go to LPM3
     	idle_loop();
 
-		//rfbike_sync();
+		rfbike_sync();
 
 		do_measurements();
 		
 		display_update();
- 
-     // Call direct function
-     ptrMenu_L2->sx_function(LINE2);
-
-     // Set Line1 display update flag
-     display.flag.line2_full_update = 1;
-
-     // Clear button flag    
-     button.flag.down = 0;
- 	//}	
+ 	}	
 }
 
 
@@ -269,6 +260,8 @@ void init_global_variables(void)
 	
 	// Force full display update when starting up
 	display.flag.full_update = 1;
+
+    simpliciti_bike_flag = SIMPLICITI_BIKE_STATUS_LINKING;
 
 #ifndef ISM_US
 	// Use metric units for display

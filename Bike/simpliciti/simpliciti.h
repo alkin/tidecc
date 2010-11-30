@@ -107,6 +107,16 @@ extern unsigned char simpliciti_flag;
 #define SIMPLICITI_TRIGGER_RECEIVED_DATA 	    (BIT4)
 #define SIMPLICITI_TRIGGER_STOP		            (BIT5)
 
+// Flag contains status information and triggers to send data or to exit SimpliciTI library
+// Control is done from outside SimpliciTI library
+extern unsigned char simpliciti_bike_flag;
+#define SIMPLICITI_BIKE_STATUS_LINKING		    	(BIT6) 	
+#define SIMPLICITI_BIKE_STATUS_LINKED		    	(BIT7)
+#define SIMPLICITI_BIKE_STATUS_ERROR		        (BIT8)
+#define SIMPLICITI_BIKE_TRIGGER_SEND_DATA 	        (BIT9)
+#define SIMPLICITI_BIKE_TRIGGER_RECEIVED_DATA 	    (BIT10)
+#define SIMPLICITI_BIKE_TRIGGER_STOP		        (BIT11)
+
 // Radio frequency offset read from calibration memory
 // Compensates crystal deviation from 26MHz nominal value
 extern unsigned char rf_frequoffset;
@@ -126,7 +136,6 @@ extern void simpliciti_main_tx_only(void);
 
 // Callback function to read data from acceleration sensor or buttons and trigger sending 
 extern void simpliciti_get_ed_data_callback(void);
-
 
 // ---------------------------------------------------------------
 // SimpliciTI Sync

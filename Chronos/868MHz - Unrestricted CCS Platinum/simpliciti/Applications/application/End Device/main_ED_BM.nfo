@@ -12,14 +12,14 @@ static unsigned char Listen_Callback() is called from 0 sites in this file.
 	SMPL_Receive() (1 times)
 
 extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 97 units)
+    It appears to be inlineable (size = 124 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	SMPL_Unlink() (1 times)
-	MRFI_DelayMs() (2 times)
-	SMPL_Send() (2 times)
+	MRFI_DelayMs() (3 times)
+	SMPL_Send() (3 times)
 	simpliciti_watch_get_data_callback() (1 times)
-	SMPL_Ioctl() (6 times)
+	SMPL_Ioctl() (8 times)
 
 extern void reset_simpliciti() is called from 0 sites in this file.
     It appears to be inlineable (size = 4 units)
@@ -38,11 +38,11 @@ extern unsigned char simpliciti_link() is called from 0 sites in this file.
 	BSP_InitBoard() (1 times)
 
 extern unsigned char simpliciti_listen_to() is called from 0 sites in this file.
-    It appears to be inlineable (size = 108 units)
+    It appears to be inlineable (size = 116 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	SMPL_LinkListen() (1 times)
-	SMPL_Ioctl() (1 times)
+	SMPL_Ioctl() (3 times)
 	SMPL_Init() (1 times)
 	BSP_InitBoard() (1 times)
 
@@ -118,7 +118,7 @@ extern void simpliciti_main_sync() is called from 0 sites in this file.
 ==============================================================================
 
 extern unsigned char simpliciti_listen_to() is called from 0 sites in this file.
-    It appears to be inlineable (size = 108 units)
+    It appears to be inlineable (size = 116 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
@@ -142,7 +142,7 @@ extern void reset_simpliciti() is called from 0 sites in this file.
 ==============================================================================
 
 extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 97 units)
+    It appears to be inlineable (size = 124 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
