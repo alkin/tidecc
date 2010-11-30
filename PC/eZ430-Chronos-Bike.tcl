@@ -182,7 +182,9 @@ proc inc_heartrate {} {}
 proc inc_speed {} {}
 proc move_cursor {} {}
 
-# ----
+# ------------------------------------------------------------------------
+# Report Procedures
+
 proc clearCanvas {can} {
 	foreach id [$can find all] { $can delete $id }
 }
@@ -201,13 +203,13 @@ proc createGrid {} {
   $w.note.report.frame2.canvas create line {50 2 600 2 600 420 50 420 50 2} -width 1 -fill black
 }
 
-
 proc update_report { } {
   global w
   global varDate
   global waveSpeed waveDistance waveAltitude waveTemperature
   global cbSpeed cbDistance cbAltitude cbTemperature
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
+  global time1 time2 time3 time4 time5
 
   clearCanvas $w.note.report.frame2.canvas
   createGrid 
@@ -241,6 +243,14 @@ proc update_report { } {
 	$w.note.report.frame2.canvas create text 45 45 -text "$maxTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
 	$w.note.report.frame2.canvas create text 45 420 -text "$minTemperature C" -fill green -font "Helvetica 7 bold" -justify left -anchor se
   }
+  
+  # Draw Time Scale
+	$w.note.report.frame2.canvas create text 50 425 -text "00:00" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 160 425 -text "$time1" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 270 425 -text "$time2" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 380 425 -text "$time3" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 490 425 -text "$time4" -fill black -font "Helvetica 7 bold" -justify left -anchor nw
+	$w.note.report.frame2.canvas create text 600 425 -text "$time5" -fill black -font "Helvetica 7 bold" -justify left -anchor ne
 }
 
 proc generate_report { } {
@@ -249,8 +259,10 @@ proc generate_report { } {
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   global maxSpeed maxDistance maxAltitude maxTemperature minAltitude minTemperature
   global startSpeed
-	
-  # Speed
+  global time1 time2 time3 time4 time5
+
+  # ------------------------------------------------------------------------
+  # Adjust Speed data, scale and offset
   set maxSpeed 0
   set sumSpeed 0
   set countSpeed 0
@@ -275,7 +287,8 @@ proc generate_report { } {
   set scaleSpeed [expr 418.0 / $maxSpeed]
   set offsetSpeed [expr 0]
   
-  # Distance
+  # ------------------------------------------------------------------------
+  # Adjust Distance data, scale and offset
   set maxDistance 0
   foreach {x y} $dataDistance {
     if { $y > $maxDistance } { 
@@ -290,7 +303,8 @@ proc generate_report { } {
   set scaleDistance [expr 418.0 / ($maxDistance*1000)]
   set offsetDistance [expr 0]
   
-  # Altitude
+  # ------------------------------------------------------------------------
+  # Adjust Altitude data, scale and offset
   set maxAltitude 0
   set minAltitude 10000
   foreach {x y} $dataAltitude {
@@ -312,11 +326,13 @@ proc generate_report { } {
   set scaleAltitude [expr 418.0 / ($maxAltitude-$minAltitude)]
   set offsetAltitude [expr ($minAltitude*$scaleAltitude)]  
   
-  # Temperature
+  # ------------------------------------------------------------------------
+  # Adjust Time data, scale and offset
   set maxTemperature 0
   set minTemperature 1000000
   set sumTemperature 0
   set countTemperature 0
+  
   foreach {x y} $dataTemperature {
     if { $y > $maxTemperature } { 
       set maxTemperature $y
@@ -327,6 +343,7 @@ proc generate_report { } {
 	set sumTemperature [expr ($sumTemperature + $y)]
 	set countTemperature [expr ($countTemperature + 1)]
   }
+  
   set varTemperature [expr (10 * $sumTemperature/$countTemperature)]
   set varTemperature [expr (1.0 * $varTemperature/100)]
   set varTemperature "$varTemperature C"
@@ -337,7 +354,8 @@ proc generate_report { } {
   set scaleTemperature [expr 418.0 / ($maxTemperature-$minTemperature)]
   set offsetTemperature [expr ($minTemperature*$scaleTemperature)] 
 
-  # Time
+  # ------------------------------------------------------------------------
+  # Adjust Time data and scale
   set maxTime 0
   foreach {x y} $dataSpeed {
     if { $x > $maxTime } { 
@@ -351,22 +369,56 @@ proc generate_report { } {
   set varTime ""
   if { $hours > 0 } { set varTime "$hours:" }
   set varTime "$varTime$minutes:$seconds"
-
-  
+ 
   set scaleTime [expr 550.0/$maxTime]
-
-  # Gera Wave
-  # tk_dialog .dialog1 "No file selected" "$scaleSpeed $offsetSpeed" info 0 OK
+  
+  set hours [format "%0d" [expr $maxTime/5/3600]]
+  set minutes [format "%0d" [expr $maxTime/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime/5%3600%60]]
+  set time1 ""
+  if { $hours > 0 } { set time1 "$hours:" }
+  set time1 "$time1$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime*2/5/3600]]
+  set minutes [format "%0d" [expr $maxTime*2/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime*2/5%3600%60]]
+  set time2 ""
+  if { $hours > 0 } { set time2 "$hours:" }
+  set time2 "$time2$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime*3/5/3600]]
+  set minutes [format "%0d" [expr $maxTime*3/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime*3/5%3600%60]]
+  set time3 ""
+  if { $hours > 0 } { set time3 "$hours:" }
+  set time3 "$time3$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime*4/5/3600]]
+  set minutes [format "%0d" [expr $maxTime*4/5%3600/60]]
+  set seconds [format "%02d" [expr $maxTime*4/5%3600%60]]
+  set time4 ""
+  if { $hours > 0 } { set time4 "$hours:" }
+  set time4 "$time4$minutes:$seconds"
+  
+  set hours [format "%0d" [expr $maxTime/3600]]
+  set minutes [format "%0d" [expr $maxTime%3600/60]]
+  set seconds [format "%02d" [expr $maxTime%3600%60]]
+  set time5 ""
+  if { $hours > 0 } { set time5 "$hours:" }
+  set time5 "$time5$minutes:$seconds"
+  
+  # ------------------------------------------------------------------------
+  # Generate Waves
   foreach {x y} $dataSpeed {
-	lappend waveSpeed [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y*3.6/10] * $scaleSpeed) + $offsetSpeed)] 
+	lappend waveSpeed 		[expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y*3.6/10] * $scaleSpeed) + $offsetSpeed)] 
   }
   
   foreach {x y} $dataDistance {
-	lappend waveDistance [expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y/10.0] * $scaleDistance) + $offsetDistance)] 
+	lappend waveDistance 	[expr (50 + $x * $scaleTime)] [expr (420 - ([expr $y/10.0] * $scaleDistance) + $offsetDistance)] 
   }
   
   foreach {x y} $dataAltitude {
-	lappend waveAltitude [expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleAltitude) + $offsetAltitude)] 
+	lappend waveAltitude 	[expr (50 + $x * $scaleTime)] [expr (420 - ($y * $scaleAltitude) + $offsetAltitude)] 
   }
   
   foreach {x y} $dataTemperature {
@@ -374,11 +426,11 @@ proc generate_report { } {
   }
 }
 
+
 proc load_report_file { name } {
   global dataSpeed dataDistance dataAltitude dataTemperature
   global varDate varDistance varTime varAvgSpeed varMaxSpeed varTemperature varAltitude
   global startTime startDistance startSpeed
-
   
   catch { set fhandle [open $name r] } res
 
@@ -390,7 +442,7 @@ proc load_report_file { name } {
   set offsetTime $startTime
   set offsetDistance $startDistance
   
-  # Read file line by line and set global variables
+  # Read file line by line
   while { ![eof $fhandle] } {
     # Get next line
 	gets $fhandle line
@@ -398,16 +450,17 @@ proc load_report_file { name } {
     set data [ split $line "," ]	
 
 	if { [lindex $data 0] == "S" } {
-		set varDate [lindex $data 1]
+		if { [string length $varDate] == 0 } { 
+			set varDate [lindex $data 1]
+		}		
 		set maxSpeed [lindex $data 2]
 		if { $maxSpeed > $startSpeed } { set startSpeed $maxSpeed }
 	}
 	
 	if { [lindex $data 0] == "D" } {
-		# SE: CONVERT TO UNIT
 		lappend dataSpeed [expr ($offsetTime + [lindex $data 1])] [lindex $data 2]
 		lappend dataDistance [expr ($offsetTime + [lindex $data 1])] [expr ($offsetDistance + [lindex $data 3])]
-		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [expr [ lindex $data 4 ] *1]
+		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [ lindex $data 4 ]
 		lappend dataTemperature [expr ($offsetTime + [lindex $data 1])] [ lindex $data 5 ]
 		
 		set startTime [expr ($offsetTime + [lindex $data 1])]
@@ -423,6 +476,7 @@ proc load_report { } {
   global dataSpeed dataDistance dataAltitude dataTemperature
   global waveSpeed waveDistance waveAltitude waveTemperature
   global startTime startDistance startSpeed
+  global varDate
   
   # Resets values
   set dataSpeed {}
@@ -439,11 +493,41 @@ proc load_report { } {
   set startDistance 0
   set startSpeed 0
   
+  set reportfiles {}
+  set reportname [$w.note.report.frame2.combo1 get]
+
   # Check for day, week, year
-  
-  # Load selected file  
-  load_report_file [$w.note.report.frame2.combo1 get]
-  
+  if { $reportname == "––––––––––––––––––––––––" } {
+	return
+  }
+
+  set varDate ""
+  set date_year    [expr [format "%04.0f" [expr [clock format [clock seconds] -format "%Y"]]]]
+  set date_month   [expr [clock format [clock seconds] -format "%m"]]
+  set date_day    [expr [clock format [clock seconds] -format "%e"]]
+
+  if { $reportname == "All Time" } {
+	set reportfiles [get_files "*.bike"]
+	set varDate "All Time"
+  } elseif { $reportname == "This Year" } {
+	set reportfiles [get_files "*-$date_year*.bike"]
+	set varDate "This Year"
+  } elseif { $reportname == "This Month" } {
+	set reportfiles [get_files "*-$date_month-$date_year*.bike"]
+	set varDate "This Month"
+  } elseif { $reportname == "Today" } {
+	set reportfiles [get_files "$date_day-$date_month-$date_year*.bike"]
+	set varDate "Today"
+  } else {
+	lappend reportfiles "$reportname"
+  }
+
+  if { [string length $reportfiles] == 1 } { return }
+ 
+  foreach file1 $reportfiles {
+  	load_report_file "$file1.bike"
+  }
+
   # Generate
   generate_report
   
@@ -501,7 +585,7 @@ font configure TkDefaultFont -family "tahoma" -size 8
 
 # Define basic window geometry
 wm title . "Chronos Challenge - cBike Control Center v$revision"
-wm geometry . 800x470
+wm geometry . 800x490
 wm resizable . 1 1
 wm iconname . "ttknote"
 ttk::frame .f
@@ -523,7 +607,7 @@ $w.note add $w.note.report -text "Report Charts" -underline 0 -padding 2
 grid columnconfigure $w.note.report {0 1} -weight 1 -uniform 1
 
 ttk::frame $w.note.report.frame2 -style custom.TFrame
-canvas $w.note.report.frame2.canvas -width 600 -height 420 -background "White" -borderwidth 0
+canvas $w.note.report.frame2.canvas -width 600 -height 440 -background "White" -borderwidth 0
 ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
 ttk::combobox $w.note.report.frame2.combo1 -state readonly -values $all_ini_files -width 90
 ttk::label $w.note.report.frame2.lblDisplay -text "Display:" -justify left -font "Helvetica 10 bold"
@@ -873,16 +957,24 @@ proc get_files { ext } {
   set dir [pwd]
   set files { }
 
-  foreach file0 [glob -nocomplain -directory $dir *$ext] {
-    set file1 [file tail [file rootname $file0]]$ext
+  foreach file0 [glob -nocomplain -directory $dir "$ext"] {
+    set file1 [file tail [file rootname $file0]]
     lappend files "$file1"
   }
 
   return $files
 }
 
-set all_ini_files [get_files ".bike"]
-$w.note.report.frame2.combo1 configure -values $all_ini_files
+set report_values {}
+lappend report_values "All Time"
+lappend report_values "This Year"
+lappend report_values "This Month"
+lappend report_values "Today"
+lappend report_values "––––––––––––––––––––––––"
+foreach file1 [get_files "*.bike"] {
+	lappend report_values $file1
+}
+$w.note.report.frame2.combo1 configure -values $report_values 
 
 # Generic file save dialog
 proc file_save_dialog { w } {

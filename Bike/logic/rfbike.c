@@ -332,9 +332,49 @@ void rfbike_sync(void)
 	// sleep -- send data -- sleep
 	
 	
-	if(simpliciti_bike_flag == SIMPLICITI_BIKE_STATUS_LINKING)
+	if(simpliciti_bike_flag == SIMPLICITI_BIKE_NOT_CONNECTED)
 	{
-     sx_link();
+	   // Clear LINE1
+	   clear_line(LINE1);
+	   fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
+	
+	   // Turn on beeper icon to show activity
+	   display_symbol(LCD_ICON_BEEPER1, SEG_ON_BLINK_ON);
+	   display_symbol(LCD_ICON_BEEPER2, SEG_ON_BLINK_ON);
+	   display_symbol(LCD_ICON_BEEPER3, SEG_ON_BLINK_ON);
+	
+	   // Prepare radio for RF communication
+	   open_radio();
+	 
+	   reset_simpliciti();
+	   
+	   // Set SimpliciTI mode
+	   sRFsmpl.mode = SIMPLICITI_SYNC;
+	   
+	   if (simpliciti_link_to())
+	   {
+	       link();
+	   }
+	
+	   reset_simpliciti();
+	   
+	   // Set SimpliciTI state to OFF
+	   sRFsmpl.mode = SIMPLICITI_OFF;
+	   
+	   close_radio();
+	
+	   // Clear last button events
+	   Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
+	   BUTTONS_IFG = 0x00;
+	   button.all_flags = 0;
+	
+	   // Clear icons
+	   display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
+	   display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);
+	   display_symbol(LCD_ICON_BEEPER3, SEG_OFF_BLINK_OFF);
+	
+	   // Force full display update
+	   display.flag.full_update = 1;
 	}
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{

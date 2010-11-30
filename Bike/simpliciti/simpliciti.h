@@ -110,6 +110,8 @@ extern unsigned char simpliciti_flag;
 // Flag contains status information and triggers to send data or to exit SimpliciTI library
 // Control is done from outside SimpliciTI library
 extern unsigned char simpliciti_bike_flag;
+
+#define SIMPLICITI_BIKE_NOT_CONNECTED		    	(BIT6) 	
 #define SIMPLICITI_BIKE_STATUS_LINKING		    	(BIT6) 	
 #define SIMPLICITI_BIKE_STATUS_LINKED		    	(BIT7)
 #define SIMPLICITI_BIKE_STATUS_ERROR		        (BIT8)

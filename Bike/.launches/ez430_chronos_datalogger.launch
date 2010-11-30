@@ -26,5 +26,5 @@
 <booleanAttribute key="CCEDebugOptions.FORBID_DEVICE_MODIFICATION" value="true"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="868MHz - Unrestricted CCS Platinum/ez430_chronos_datalogger_868MHz.out"/>
 <stringAttribute key="com.ti.ccstudio.debug.core.BUILD_CONFIGURATION" value="868MHz - Unrestricted CCS Platinum"/>
-<stringAttribute key="CCEDebugOptions.TARGET_CONFIGURATION_FILE" value="C:\Users\Patrick\Chronos\tidecc\Bike\CC430F6137.ccxml"/>
+<stringAttribute key="CCEDebugOptions.TARGET_CONFIGURATION_FILE" value="R:\Documentos\Chronos\tidecc\Bike\CC430F6137.ccxml"/>
 </launchConfiguration>
