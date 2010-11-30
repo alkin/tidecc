@@ -57,6 +57,10 @@
 #include "rfbike.h"
 #include "simpliciti.h"
 
+#include "speed.h"
+#include "distance.h"
+#include "sensor.h"
+
 // *************************************************************************************************
 // Prototypes section
 void Timer0_Init(void);
@@ -332,6 +336,8 @@ __interrupt void TIMER0_A0_ISR(void)
 	do_speed_measurement();
 	do_distance_measurement();
 	reset_sensor();
+	
+	//push_speed();
 	
 	// -------------------------------------------------------------------
 	// Service active modules that require 1/s processing

@@ -63,6 +63,10 @@
 // *************************************************************************************************
 // Global Variable section
 struct alt sAlt;
+u16 b_altitude[60];
+u8 b_altitude_count;
+u16 b_temperature[60];
+u8 b_temperature_count;
 
 
 // *************************************************************************************************
@@ -86,6 +90,9 @@ void reset_altitude_measurement(void)
 	sAlt.temperature_C			= 0;
 	sAlt.temperature_C_offset 	= 0;
 	
+	b_altitude_count			= 0;
+	b_temperature_count			= 0;
+	
 	// Pressure sensor ok?
 	if (ps_ok)
 	{
@@ -103,6 +110,76 @@ void reset_altitude_measurement(void)
 			update_pressure_table(sAlt.altitude, sAlt.pressure, sAlt.temperature_K);
 		}
 	}
+}
+
+// *************************************************************************************************
+// @fn          push_speed
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void push_altitude(void)
+{
+	if(b_altitude_count == 60) return;
+	
+	b_altitude[b_altitude_count++] = sAlt.altitude;
+}
+
+// *************************************************************************************************
+// @fn          get_speed_average
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+u16 get_altitude_average(void)
+{
+	u8 i;
+	u32 sum=0, average;
+	
+	if(b_altitude_count == 0) return 0;
+	
+	for(i=0; i<b_altitude_count; i++)
+	{
+		sum += b_altitude[i];
+	}
+	average = sum/b_altitude_count;
+	b_altitude_count = 0;
+	return average; 
+}
+
+// *************************************************************************************************
+// @fn          push_speed
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void push_temperature(void)
+{
+	if(b_temperature_count == 60) return;
+	
+	b_temperature[b_temperature_count++] = sAlt.temperature_C;
+}
+
+// *************************************************************************************************
+// @fn          get_speed_average
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+u16 get_temperature_average(void)
+{
+	u8 i;
+	u32 sum=0, average;
+	
+	if(b_temperature_count == 0) return 0;
+	
+	for(i=0; i<b_temperature_count; i++)
+	{
+		sum += b_temperature[i];
+	}
+	average = sum/b_temperature_count;
+	b_temperature_count = 0;
+	return average; 
 }
 
 

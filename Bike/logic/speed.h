@@ -44,6 +44,8 @@
 // *************************************************************************************************
 // Prototypes section
 extern void reset_speed(void);
+void push_speed(void);
+u16 get_speed_average(void);
 extern u16  convert_speed_to_km_h(u16 speed_ms);
 extern u16  convert_speed_to_m_s(u16 speed_ms);
 extern u16  convert_speed_to_mi_h(u16 speed_ms);
@@ -61,10 +63,12 @@ typedef struct
     u16 value;
 } s_speed;
 
+
 // *************************************************************************************************
 // Global Variable section
 extern volatile s_speed speed;
-
+extern u16 b_speed[60];
+extern u8 b_speed_count;
 
 // *************************************************************************************************
 // Extern section

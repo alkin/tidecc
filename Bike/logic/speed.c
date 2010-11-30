@@ -52,7 +52,8 @@
 // *************************************************************************************************
 // Global Variable section
 volatile s_speed speed;
-
+u16 b_speed[60];
+u8 b_speed_count;
 // *************************************************************************************************
 // Extern section
 
@@ -66,7 +67,44 @@ volatile s_speed speed;
 void reset_speed(void)
 {
 	speed.value = 0;
+	b_speed_count = 0;
 }
+
+// *************************************************************************************************
+// @fn          push_speed
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void push_speed(void)
+{
+	if(b_speed_count == 60) return;
+	
+	b_speed[b_speed_count++] = speed.value;
+}
+
+// *************************************************************************************************
+// @fn          get_speed_average
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+u16 get_speed_average(void)
+{
+	u8 i;
+	u32 sum=0, average;
+	
+	if(b_speed_count == 0) return 0;
+	
+	for(i=0; i<b_speed_count; i++)
+	{
+		sum += b_speed[i];
+	}
+	average = sum/b_speed_count;
+	b_speed_count = 0;
+	return average; 
+}
+
 
 // *************************************************************************************************
 // @fn          convert_speed_to_m_s
