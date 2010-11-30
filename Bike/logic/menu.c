@@ -71,19 +71,7 @@ const struct menu * ptrMenu_L2 = NULL;
 // Global Variable section
 
 void display_nothing(u8 line, u8 update) {}
-
-u8 update_time(void)
-{
-	return (display.flag.update_time);
-}
-u8 update_date(void)
-{
-	return (display.flag.update_date);
-}
-u8 update_temperature(void)
-{
-	return (display.flag.update_temperature);
-}
+u8 update_display(void) { return 1; }
 
 // *************************************************************************************************
 // User navigation ( [____] = default menu item after reset )
@@ -99,7 +87,7 @@ const struct menu menu_L1_Speed =
 	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),			// sub menu function
 	FUNCTION(display_speed),	// display function
-	FUNCTION(update_time),		// new display data
+	FUNCTION(update_display),		// new display data
 	&menu_L1_Speed,
 };
 
@@ -108,7 +96,7 @@ const struct menu menu_L2_Time =
 	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),			// sub menu function
 	FUNCTION(display_time),		// display function
-	FUNCTION(update_time),		// new display data
+	FUNCTION(update_display),		// new display data
 	&menu_L2_Distance,
 };
 
@@ -117,15 +105,15 @@ const struct menu menu_L2_Distance =
 	FUNCTION(dummy),			// direct function
 	FUNCTION(dummy),				// sub menu function
 	FUNCTION(display_distance),		// display function
-	FUNCTION(update_time),			// new display data
+	FUNCTION(update_display),			// new display data
 	&menu_L2_Bike_link,
 };
 
 const struct menu menu_L2_Bike_link = {
    FUNCTION(dummy),             // direct function
    FUNCTION(dummy),             // sub menu function
-   FUNCTION(display_link),      // display function
-   FUNCTION(update_time),       // new display data
+   FUNCTION(display_link),     // display function
+   FUNCTION(update_display),       // new display data
    &menu_L2_Time,
 };
 
