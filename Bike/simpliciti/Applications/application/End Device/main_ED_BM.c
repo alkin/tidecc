@@ -8,7 +8,6 @@
 #include "bsp_leds.h"
 #include "bsp_buttons.h"
 #include "simpliciti.h"
-#include "simpliciti.h"
 
 
 // *************************************************************************************************
@@ -36,7 +35,6 @@ extern void simpliciti_watch_decode_bike_callback(void);
 
 // *************************************************************************************************
 // Global Variable section
-static linkID_t sLinkID1;
 
 static void show(uint8_t mode);
 
@@ -46,205 +44,6 @@ static volatile uint8_t  sSemaphore = 0;
 /* Rx callback handler */
 static uint8_t Link_Callback(linkID_t);
 
-
-// *************************************************************************************************
-// @fn          simpliciti_link
-// @brief       Init hardware and try to link to access point.
-// @param       none
-// @return      unsigned char		0 = Could not link, timeout or external cancel.
-//									1 = Linked successful.
-// *************************************************************************************************
-unsigned char simpliciti_link(void)
-{
-  uint8_t timeout;
-  addr_t lAddr;
-  uint8_t i;
-  uint8_t pwr;
-  
-  // Configure timer
-  BSP_InitBoard();
-  
-  // Change network address to value set in calling function
-  for (i=0; i<NET_ADDR_SIZE; i++)
-  {
-    lAddr.addr[i] = simpliciti_ed_address[i];
-  }
-  SMPL_Ioctl(IOCTL_OBJ_ADDR, IOCTL_ACT_SET, &lAddr);
-  
-  // Set flag	
-  simpliciti_flag = SIMPLICITI_STATUS_LINKING;	
-	
-  /* Keep trying to join (a side effect of successful initialization) until
-   * successful. Toggle LEDS to indicate that joining has not occurred.
-   */
-  timeout = 0;
-  while (SMPL_SUCCESS != SMPL_Init(0))
-  {
-    NWK_DELAY(1000);
-
-    // Service watchdog
-	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
-    
-    // Stop connecting after defined numbers of seconds (15)
-    if (timeout++ > TIMEOUT) 
-    {
-		// Clean up SimpliciTI stack to enable restarting
-  		sInit_done = 0;
-	    simpliciti_flag = SIMPLICITI_STATUS_ERROR;
-  		return (0);
-    }
-    
-    // Break when flag bit SIMPLICITI_TRIGGER_STOP is set
-    if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
-    {
-		// Clean up SimpliciTI stack to enable restarting
-    	sInit_done = 0;
-    	return (0);
-	}
-  }
-  
-  // Set output power to +3.3dmB
-  pwr = IOCTL_LEVEL_2;
-  SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &pwr);
-
-  /* Unconditional link to AP which is listening due to successful join. */
-  timeout = 0;
-  while (SMPL_SUCCESS != SMPL_Link(&sLinkID1))
-  {
-    NWK_DELAY(1000);
-    
-    // Service watchdog
-	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
-
-    // Stop linking after timeout
-    if (timeout++ > TIMEOUT) 
-    {
-		// Clean up SimpliciTI stack to enable restarting
-  		sInit_done = 0;
-	    simpliciti_flag = SIMPLICITI_STATUS_ERROR;
-  		return (0);
-    }
-    
-    // Exit when flag bit SIMPLICITI_TRIGGER_STOP is set
-    if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
-    {
-    	// Clean up SimpliciTI stack to enable restarting
-    	sInit_done = 0;
-    	return (0); 
-	}
-  }
-  simpliciti_flag = SIMPLICITI_STATUS_LINKED;
-  
-  return (1);
-}
-
-// *************************************************************************************************
-// @fn          simpliciti_main_tx_only
-// @brief       Get data through callback. Transfer data when external trigger is set.
-// @param       none
-// @return      none
-// *************************************************************************************************
-void simpliciti_main_tx_only(void)
-{
-  while(1)
-  {
-    // Get end device data from callback function 
-    simpliciti_get_ed_data_callback();
-    
-    // Send data when flag bit SIMPLICITI_TRIGGER_SEND_DATA is set
-    if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA)) 
-    {
-      // Get radio ready. Wakes up in IDLE state.
-      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
-      
-      // Acceleration / button events packets are 4 bytes long
-      SMPL_SendOpt(sLinkID1, simpliciti_data, 4, SMPL_TXOPTION_NONE);
-      
-      // Put radio back to SLEEP state
-      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
-      
-      clearFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA);
-    }
-    
-    // Exit when flag bit SIMPLICITI_TRIGGER_STOP is set
-    if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
-    {
-      	// Clean up SimpliciTI stack to enable restarting
-    	sInit_done = 0;
-	    break;
-	}
-  }
-  	SMPL_Unlink(sLinkID1);
-  	simpliciti_flag = 0x00;
-}
-
-// *************************************************************************************************
-// @fn          simpliciti_main_sync
-// @brief       Send ready-to-receive packets in regular intervals. Listen shortly for host reply.
-//				Decode received host command and trigger action. 
-// @param       none
-// @return      none
-// *************************************************************************************************
-void simpliciti_main_sync(void)
-{
-	uint8_t len, i;
-	uint8_t ed_data[2];
-	
-	while(1)
-	{
-		// Sleep 0.5sec between ready-to-receive packets
-		// SimpliciTI has no low power delay function, so we have to use ours
-		Timer0_A4_Delay(CONV_MS_TO_TICKS(500));
-		
-		// Get radio ready. Radio wakes up in IDLE state.
-      	SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
-		
-		// Send 2 byte long ready-to-receive packet to stimulate host reply
-		ed_data[0] = SYNC_ED_TYPE_R2R;
-		ed_data[1] = 0xCB;
-		SMPL_SendOpt(sLinkID1, ed_data, 2, SMPL_TXOPTION_NONE);
-		
-		// Wait shortly for host reply
-		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
-		NWK_DELAY(10);
-  	
-		// Check if a command packet was received
-		while (SMPL_Receive(sLinkID1, simpliciti_data, &len) == SMPL_SUCCESS)
-		{
- 			// Decode received data
-			if (len > 0)
-			{
-				// Use callback function in application to decode data and react
-				simpliciti_sync_decode_ap_cmd_callback();
-				
-				// Get reply data and send out reply packet burst (19 bytes each)
-				for (i=0; i<simpliciti_reply_count; i++)
-				{
-					NWK_DELAY(10);
-					simpliciti_sync_get_data_callback(i);
-					SMPL_SendOpt(sLinkID1, simpliciti_data, BM_SYNC_DATA_LENGTH, SMPL_TXOPTION_NONE);
-				}
-			}
-  		}
-
-		// Put radio back to sleep  		
-  		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
-  		
-  		// Service watchdog
-		WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
-  		
-		// Exit when flag bit SIMPLICITI_TRIGGER_STOP is set
-		if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
-		{
-			// Clean up SimpliciTI stack to enable restarting
-			sInit_done = 0;
-			break;
-		}
-	}
-	simpliciti_flag = 0x00;
-	SMPL_Unlink(sLinkID1);
-	//SMPL_Ioctl(IOCTL_OBJ_CONNOBJ,IOCTL_ACT_DELETE,&linkID). 
-}
 
 unsigned char simpliciti_link_to (void)
 {
@@ -262,9 +61,9 @@ unsigned char simpliciti_link_to (void)
   SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &pwr); 
   uint8_t aux;
   uint8_t timeout=160;
-  
-  //while (1)
-  for (aux=0;aux<=timeout;aux++)
+
+  while (1)
+  //for (aux=0;aux<=timeout;aux++)
   {
      if (SMPL_SUCCESS == SMPL_Link(&sLinkID3))
 	 {
@@ -277,27 +76,30 @@ unsigned char simpliciti_link_to (void)
 		//SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
       }
        
-      else if(aux == timeout)
+      else if(simpliciti_bike_flag == SIMPLICITI_BIKE_TRIGGER_STOP)
 	  {
-	     simpliciti_flag = SIMPLICITI_STATUS_ERROR;
+	     simpliciti_bike_flag = SIMPLICITI_BIKE_STATUS_ERROR;
 	     return (0);
 	  }
   	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
   }
   
-  simpliciti_flag = SIMPLICITI_STATUS_LINKED;
+  simpliciti_bike_flag = SIMPLICITI_BIKE_STATUS_LINKED;
   return (1);
 }
 
-void link()
+void bike_communication()
 {
   // show(3); // connected
    /* turn on RX. default is RX off. */
    /* turn on RX. default is RX off. */
+   SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
 
-	while (1)
-	   {
+   while (1)
+   {
+	  if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_SEND_DATA)) 
+	  {
 	     if (sSemaphore)
 	     {
 	       // answer to received message
@@ -305,27 +107,20 @@ void link()
 	       SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
 	       sSemaphore = 0;
 	     }
-	     
-	     if (simpliciti_data[0]== BIKE_CMD_EXIT)
-	     {
-	        break;
-	     }
-	     
-	      // Service watchdog
-	      WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
-        }
-	        /*  // Get radio ready. Wakes up in IDLE state.
-		      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
-		      
-		      // Send data to chronos just 4 bytes
-		      SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
-		      
-		      // Put radio back to SLEEP state
-		      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
-		      
-		       clearFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA);*/
-      sInit_done = 0;
-      SMPL_Unlink(sLinkID3);
+	  }
+     if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_STOP)) 
+	  {
+	    break;
+	  }
+      // Service watchdog
+	  WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;        
+   }
+	       
+       // Get radio ready. Wakes up in IDLE state.
+	      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
+	  
+	   // Put radio back to SLEEP state
+	      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
 }
 
 /* handle received frames. */
