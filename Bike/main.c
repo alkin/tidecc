@@ -106,7 +106,7 @@ int main(void)
 		
 		display_update();
 
-		//rfbike_sync(); 
+		rfbike_sync(); 
      }	
 
 }
