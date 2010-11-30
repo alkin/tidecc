@@ -96,7 +96,6 @@ typedef union
     u16 low_battery      		: 1;    // 1 = Battery is low
     u16 use_metric_units		: 1;    // 1 = Use metric units, 0 = use English units
     u16 delay_over     			: 1;    // 1 = Timer delay over
-    
   } flag;
   u16 all_flags;            // Shortcut to all display flags (for reset)
 } s_system_flags;

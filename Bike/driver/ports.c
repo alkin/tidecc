@@ -142,12 +142,13 @@ __interrupt void PORT2_ISR(void)
 	if ((int_flag & ALL_BUTTONS) != 0)
 	{ 
 		// Disable PORT2 IRQ
-		__disable_interrupt();
+		//__disable_interrupt();
 		BUTTONS_IE = 0x00; 
 		__enable_interrupt();
 
 		// Debounce delay 1
-		Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_IN));
+		u16 i = 0;
+		for(i=0; i<0x400; i++);
 
 		// Reset inactivity detection
 		//sTime.last_activity = sTime.system_time;
@@ -206,18 +207,6 @@ __interrupt void PORT2_ISR(void)
 		}
 	}
 	
-	// Generate button click when button was activated
-	if (!is_rf() && buzzer)
-	{
-		if (!sys.flag.up_down_repeat_enabled)
-		{
-			start_buzzer(1, CONV_MS_TO_TICKS(20), CONV_MS_TO_TICKS(150));
-		}
-		
-		// Debounce delay 2
-		Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
-	}
-	
 	// ---------------------------------------------------
 	// Acceleration sensor IRQ
 	if (IRQ_TRIGGERED(int_flag, AS_INT_PIN))
@@ -234,13 +223,13 @@ __interrupt void PORT2_ISR(void)
   	}
 	
 	// Reenable PORT2 IRQ
-	__disable_interrupt();
+	//__disable_interrupt();
 	BUTTONS_IFG = 0x00; 	
 	BUTTONS_IE  = int_enable; 	
-	__enable_interrupt();
+	//__enable_interrupt();
 
 	// Exit from LPM3/LPM4 on RETI
-	__bic_SR_register_on_exit(LPM4_bits);
+	//__bic_SR_register_on_exit(LPM4_bits);
 }
 
 

@@ -290,11 +290,12 @@ void Timer0_A4_Delay(u16 ticks)
 #endif
       // Check stop condition
       // disable interrupt to prevent flag's change caused by interrupt methods 
-      __disable_interrupt();
+      // __disable_interrupt();
       if (sys.flag.delay_over)
          break;
    }
-   __enable_interrupt();
+   
+   // __enable_interrupt();
 }
 
 
@@ -327,8 +328,10 @@ __interrupt void TIMER0_A0_ISR(void)
 	// Add 1 second to global time
 	clock_tick();
 	
-	// Set clock update flag
-	display.flag.update_time = 1;
+	// Critical measurements must be done in real time
+	do_speed_measurement();
+	do_distance_measurement();
+	reset_sensor();
 	
 	// -------------------------------------------------------------------
 	// Service active modules that require 1/s processing
@@ -341,7 +344,7 @@ __interrupt void TIMER0_A0_ISR(void)
 	}
 	else
 	{
-		change_menu++;
+		//change_menu++;
 	}
 	
 	// Exit from LPM3 on RETI

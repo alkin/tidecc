@@ -94,14 +94,19 @@ int main(void)
 	while(1)
 	{
 		// When idle go to LPM3
-    	idle_loop();
-
-		//rfbike_sync();
-
-		do_measurements();
+		idle_loop();
+ 
+ 		// Do altitude measurement
+		do_altitude_measurement(FILTER_ON);
+	
+		// Do distance measurement
+		//do_light_measurement();
+		// Update Light
+		//update_light();
 		
 		display_update();
- 
+
+		//rfbike_sync(); 
      }	
 }
 
@@ -297,34 +302,6 @@ void init_global_variables(void)
 	// Reset light
 	reset_light();
 }
-
-// *************************************************************************************************
-// @fn          do_measurements
-// @brief       Does all the measurements
-// @param       none
-// @return      none
-// *************************************************************************************************
-void do_measurements(void)
-{
-	// Do speed measurement
-	do_speed_measurement();
-	
-	// Do distance measurement
-	do_distance_measurement();
-	
-	// Do altitude measurement
-	do_altitude_measurement(FILTER_ON);
-	
-	// Do distance measurement
-	//do_light_measurement();
-	
-	// Reset Sensor
-	reset_sensor();
-	
-	// Update Light
-	//update_light();
-}
-
 
 // *************************************************************************************************
 // @fn          display_update
