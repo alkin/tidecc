@@ -192,7 +192,7 @@ void sx_link(void)
    
    if (simpliciti_link_to())
    {
-       link();
+       bike_communication();
    }
 
    reset_simpliciti();
@@ -248,6 +248,9 @@ void simpliciti_bike_decode_watch_callback(void)
 	      distance.value =(u16)((simpliciti_data[4] << 8) + simpliciti_data[3]);
 	      
 	      sTime.system_time = (simpliciti_data[8] << 8) +  simpliciti_data[7] ;
+	      sTime.hour = sTime.system_time/3600;
+	      sTime.minute = (sTime.system_time%3600)/60;
+	      sTime.second = (sTime.system_time%3600)%60;	      
 	      
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      break;
@@ -261,7 +264,8 @@ void simpliciti_bike_decode_watch_callback(void)
 	    case WATCH_CMD_EXIT:       
 	      //stop transmission and set sync variable to zero 
 	      simpliciti_data[0]= BIKE_CMD_EXIT;
-	    break;
+	      simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_STOP;
+	      break;
    }
 }
 
@@ -331,8 +335,7 @@ void rfbike_sync(void)
 	// connect -- send config 
 	// sleep -- send data -- sleep
 	
-	
-	if(simpliciti_bike_flag == SIMPLICITI_BIKE_NOT_CONNECTED)
+	if(simpliciti_bike_flag == SIMPLICITI_BIKE_CONNECT)
 	{
 	   // Clear LINE1
 	   clear_line(LINE1);
@@ -347,27 +350,31 @@ void rfbike_sync(void)
 	   open_radio();
 	 
 	   reset_simpliciti();
-	   
-	   // Set SimpliciTI mode
-	   sRFsmpl.mode = SIMPLICITI_SYNC;
-	   
+
+       sRFsmpl.mode = SIMPLICITI_SYNC;  
+
 	   if (simpliciti_link_to())
 	   {
-	       link();
+           display_chars(LCD_SEG_L2_5_0, (u8 *)"  PAIR", SEG_ON);
+           simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
+	 
+	   	   // Set SimpliciTI mode
+
+	       bike_communication(); 
+	       
+	       sRFsmpl.mode = SIMPLICITI_IDLE;
+	      
 	   }
-	
-	   reset_simpliciti();
-	   
-	   // Set SimpliciTI state to OFF
-	   sRFsmpl.mode = SIMPLICITI_OFF;
-	   
-	   close_radio();
-	
-	   // Clear last button events
-	   Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
-	   BUTTONS_IFG = 0x00;
-	   button.all_flags = 0;
-	
+	   else
+	   {
+	      // couldn't pair start again
+		  display_chars(LCD_SEG_L2_5_0, (u8 *)" ERROR", SEG_ON);
+		  reset_simpliciti();
+		  // Set SimpliciTI state to OFF
+	      sRFsmpl.mode = SIMPLICITI_OFF;
+	      //close_radio();
+	   }
+	  
 	   // Clear icons
 	   display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
 	   display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);
@@ -378,6 +385,6 @@ void rfbike_sync(void)
 	}
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{
-	   
+	    bike_communication(); 
 	}
 }

@@ -155,6 +155,7 @@ u16 all_flags;
 extern volatile s_config config;
 
 extern u8 bike_watch_sync_counter;
+extern u8 bike_communication_timeout;
 
 // *************************************************************************************************
 // Global Variable section

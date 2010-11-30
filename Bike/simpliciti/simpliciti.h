@@ -100,24 +100,19 @@ extern unsigned char simpliciti_data[SIMPLICITI_MAX_PAYLOAD_LENGTH];
 // Flag contains status information and triggers to send data or to exit SimpliciTI library
 // Control is done from outside SimpliciTI library
 extern unsigned char simpliciti_flag;
-#define SIMPLICITI_STATUS_LINKING		    	(BIT0) 	
-#define SIMPLICITI_STATUS_LINKED		    	(BIT1)
-#define SIMPLICITI_STATUS_ERROR		            (BIT2)
-#define SIMPLICITI_TRIGGER_SEND_DATA 	        (BIT3)
-#define SIMPLICITI_TRIGGER_RECEIVED_DATA 	    (BIT4)
-#define SIMPLICITI_TRIGGER_STOP		            (BIT5)
 
 // Flag contains status information and triggers to send data or to exit SimpliciTI library
 // Control is done from outside SimpliciTI library
 extern unsigned char simpliciti_bike_flag;
 
-#define SIMPLICITI_BIKE_NOT_CONNECTED		    	(BIT6) 	
-#define SIMPLICITI_BIKE_STATUS_LINKING		    	(BIT6) 	
-#define SIMPLICITI_BIKE_STATUS_LINKED		    	(BIT7)
-#define SIMPLICITI_BIKE_STATUS_ERROR		        (BIT8)
-#define SIMPLICITI_BIKE_TRIGGER_SEND_DATA 	        (BIT9)
-#define SIMPLICITI_BIKE_TRIGGER_RECEIVED_DATA 	    (BIT10)
-#define SIMPLICITI_BIKE_TRIGGER_STOP		        (BIT11)
+#define SIMPLICITI_BIKE_IDLE        		    	(BIT0) 
+#define SIMPLICITI_BIKE_CONNECT     		    	(BIT1) 	
+#define SIMPLICITI_BIKE_STATUS_LINKING		    	(BIT2) 	
+#define SIMPLICITI_BIKE_STATUS_LINKED		    	(BIT3)
+#define SIMPLICITI_BIKE_STATUS_ERROR		        (BIT4)
+#define SIMPLICITI_BIKE_TRIGGER_SEND_DATA 	        (BIT5)
+#define SIMPLICITI_BIKE_TRIGGER_RECEIVED_DATA 	    (BIT6)
+#define SIMPLICITI_BIKE_TRIGGER_STOP		        (BIT7)
 
 // Radio frequency offset read from calibration memory
 // Compensates crystal deviation from 26MHz nominal value
@@ -199,7 +194,7 @@ extern unsigned char simpliciti_listen_to(void);
 extern unsigned char simpliciti_link_to(void);
 
 extern void listen(void);
-extern void link(void);
+extern void bike_communication(void);
 
 extern void reset_simpliciti(void);
 

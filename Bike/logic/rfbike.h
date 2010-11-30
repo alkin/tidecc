@@ -28,8 +28,8 @@ extern void display_link(u8 line, u8 update);
 typedef enum
 {
   SIMPLICITI_OFF = 0,       // Not connected
-  SIMPLICITI_ACCELERATION,	// Transmitting acceleration data and button events
-  SIMPLICITI_BUTTONS,		// Transmitting button events
+  SIMPLICITI_IDLE,
+  SIMPLICITI_SENDING,
   SIMPLICITI_SYNC			// Syncing
 } simpliciti_mode_t;
 

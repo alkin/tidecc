@@ -492,14 +492,14 @@ void simpliciti_watch_decode_bike_callback(void)
             distance_value=275;
             
 	   		simpliciti_data[0] = WATCH_CMD_SET_CONFIG;
-	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		// Bike parameters
+	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		    // Bike parameters
       		simpliciti_data[2] = (config.all_flags >>8) & 0xFF; 	// Bike Parameters
       		simpliciti_data[3] = distance_value & 0xFF; 			// initial distance
-      		simpliciti_data[4] = (distance_value >> 8) & 0xFF; 	// initial distance
+      		simpliciti_data[4] = (distance_value >> 8) & 0xFF;    	// initial distance
       		simpliciti_data[5] = (distance_value >> 16) & 0xFF; 	// initial distance  
       		simpliciti_data[6] = (distance_value >> 24) & 0xFF; 	// initial distance      
-      		simpliciti_data[7] = sTime.system_time & 0xFF; 		// initial distance
-     		simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF; // initial distance  
+      		simpliciti_data[7] = sTime.system_time & 0xFF; 		    // initial distance
+     		simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF;   // initial distance  
      		*/
 	      break;
 	   
@@ -535,16 +535,16 @@ void simpliciti_watch_get_data_callback(void)
             config.data.speed_unit=1;
             
             distance_value=275;
-            
+            // use bike_time
 	   		simpliciti_data[0] = WATCH_CMD_SET_CONFIG;
-	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		// Bike parameters
+	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		    // Bike parameters
       		simpliciti_data[2] = (config.all_flags >>8) & 0xFF; 	// Bike Parameters
       		simpliciti_data[3] = distance_value & 0xFF; 			// initial distance
-      		simpliciti_data[4] = (distance_value >> 8) & 0xFF; 	// initial distance
+      		simpliciti_data[4] = (distance_value >> 8) & 0xFF; 	    // initial distance
       		simpliciti_data[5] = (distance_value >> 16) & 0xFF; 	// initial distance  
       		simpliciti_data[6] = (distance_value >> 24) & 0xFF; 	// initial distance      
-      		simpliciti_data[7] = sTime.system_time & 0xFF; 		// initial distance
-     		simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF; // initial distance  
+      		simpliciti_data[7] =  sTime.system_time & 0xFF; 		    // initial time
+     		simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF;   // initial time  
 	      break;
 	   
 	    case WATCH_CMD_GET_DATA:

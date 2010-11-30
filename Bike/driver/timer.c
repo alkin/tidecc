@@ -80,6 +80,7 @@ void (*fptr_Timer0_A3_function)(void);
 struct timer sTimer;
 u8 change_menu = 0;
 u8 bike_watch_sync_counter;
+u8 bike_communication_timeout;
 // *************************************************************************************************
 // Extern section
 
@@ -332,6 +333,32 @@ __interrupt void TIMER0_A0_ISR(void)
 	display.flag.update_time = 1;
 	
 	bike_watch_sync_counter++;
+	
+	if( sTime.system_time == 4)
+	{
+	   // Start pairing
+	   simpliciti_bike_flag = SIMPLICITI_BIKE_CONNECT;
+	   bike_communication_timeout = sTime.system_time +1;
+	}
+	
+	if ( sTime.system_time%10 == 0)
+	{
+	   bike_communication_timeout=sTime.system_time +2;
+	   
+	   if(sRFsmpl.mode == SIMPLICITI_IDLE)
+	   {
+	      simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
+	   }
+	   else if (sRFsmpl.mode == SIMPLICITI_OFF)
+	   {
+          simpliciti_bike_flag = SIMPLICITI_BIKE_CONNECT;
+	   }
+	}
+	
+	if(bike_communication_timeout==sTime.system_time)
+	{
+	   simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_STOP;
+	}
 	
 	// -------------------------------------------------------------------
 	// Service active modules that require 1/s processing

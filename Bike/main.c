@@ -262,8 +262,10 @@ void init_global_variables(void)
 	// Force full display update when starting up
 	display.flag.full_update = 1;
 
-    simpliciti_bike_flag = SIMPLICITI_BIKE_NOT_CONNECTED;
-
+    simpliciti_bike_flag = SIMPLICITI_BIKE_IDLE;
+    sRFsmpl.mode = SIMPLICITI_OFF;
+    bike_watch_sync_counter = 0;
+    bike_communication_timeout=0;
 #ifndef ISM_US
 	// Use metric units for display
 	sys.flag.use_metric_units = 1;
