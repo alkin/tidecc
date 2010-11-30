@@ -91,8 +91,8 @@ int main(void)
 	init_global_variables();
 	
 	// Main control loop: wait in low power mode until some event needs to be processed
-	//while(1)
-	//{
+	while(1)
+	{
 		// When idle go to LPM3
     	idle_loop();
 
@@ -102,15 +102,7 @@ int main(void)
 		
 		display_update();
  
-     // Call direct function
-     ptrMenu_L2->sx_function(LINE2);
-
-     // Set Line1 display update flag
-     display.flag.line2_full_update = 1;
-
-     // Clear button flag    
-     button.flag.down = 0;
- 	//}	
+     }	
 }
 
 
@@ -253,8 +245,8 @@ void init_global_variables(void)
 
 	// set menu pointers to default menu items
 	ptrMenu_L1 = &menu_L1_Speed;
-	//ptrMenu_L2 = &menu_L2_Time;
-	ptrMenu_L2 = &menu_L2_Bike_link;
+	ptrMenu_L2 = &menu_L2_Time;
+	//ptrMenu_L2 = &menu_L2_Bike_link;
 
 	// Assign LINE1 and LINE2 display functions
 	fptr_lcd_function_line1 = ptrMenu_L1->display_function;
@@ -327,10 +319,10 @@ void do_measurements(void)
 	//do_light_measurement();
 	
 	// Reset Sensor
-	//reset_sensor();
+	reset_sensor();
 	
 	// Update Light
-//	update_light();
+	//update_light();
 }
 
 
@@ -445,7 +437,7 @@ void reset_config(void)
 		
 	config.data.bike_size = 60;
 	config.data.sensor_count = 9;
-	config.data.speed_unit = SPEED_M_S;
+	config.data.speed_unit = SPEED_KM_H;
 	config.data.distance_unit = DISTANCE_KM;
 }
 

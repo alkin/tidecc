@@ -450,7 +450,9 @@ proc load_report_file { name } {
     set data [ split $line "," ]	
 
 	if { [lindex $data 0] == "S" } {
-		set varDate [lindex $data 1]
+		if { [string length $varDate] == 0 } { 
+			set varDate [lindex $data 1]
+		}		
 		set maxSpeed [lindex $data 2]
 		if { $maxSpeed > $startSpeed } { set startSpeed $maxSpeed }
 	}
@@ -474,6 +476,7 @@ proc load_report { } {
   global dataSpeed dataDistance dataAltitude dataTemperature
   global waveSpeed waveDistance waveAltitude waveTemperature
   global startTime startDistance startSpeed
+  global varDate
   
   # Resets values
   set dataSpeed {}
@@ -490,11 +493,41 @@ proc load_report { } {
   set startDistance 0
   set startSpeed 0
   
+  set reportfiles {}
+  set reportname [$w.note.report.frame2.combo1 get]
+
   # Check for day, week, year
-  
-  # Load selected file  
-  load_report_file [$w.note.report.frame2.combo1 get]
-  
+  if { $reportname == "––––––––––––––––––––––––" } {
+	return
+  }
+
+  set varDate ""
+  set date_year    [expr [format "%04.0f" [expr [clock format [clock seconds] -format "%Y"]]]]
+  set date_month   [expr [clock format [clock seconds] -format "%m"]]
+  set date_day    [expr [clock format [clock seconds] -format "%e"]]
+
+  if { $reportname == "All Time" } {
+	set reportfiles [get_files "*.bike"]
+	set varDate "All Time"
+  } elseif { $reportname == "This Year" } {
+	set reportfiles [get_files "*-$date_year*.bike"]
+	set varDate "This Year"
+  } elseif { $reportname == "This Month" } {
+	set reportfiles [get_files "*-$date_month-$date_year*.bike"]
+	set varDate "This Month"
+  } elseif { $reportname == "Today" } {
+	set reportfiles [get_files "$date_day-$date_month-$date_year*.bike"]
+	set varDate "Today"
+  } else {
+	lappend reportfiles "$reportname"
+  }
+
+  if { [string length $reportfiles] == 1 } { return }
+ 
+  foreach file1 $reportfiles {
+  	load_report_file "$file1.bike"
+  }
+
   # Generate
   generate_report
   
@@ -924,16 +957,24 @@ proc get_files { ext } {
   set dir [pwd]
   set files { }
 
-  foreach file0 [glob -nocomplain -directory $dir *$ext] {
-    set file1 [file tail [file rootname $file0]]$ext
+  foreach file0 [glob -nocomplain -directory $dir "$ext"] {
+    set file1 [file tail [file rootname $file0]]
     lappend files "$file1"
   }
 
   return $files
 }
 
-set all_ini_files [get_files ".bike"]
-$w.note.report.frame2.combo1 configure -values $all_ini_files
+set report_values {}
+lappend report_values "All Time"
+lappend report_values "This Year"
+lappend report_values "This Month"
+lappend report_values "Today"
+lappend report_values "––––––––––––––––––––––––"
+foreach file1 [get_files "*.bike"] {
+	lappend report_values $file1
+}
+$w.note.report.frame2.combo1 configure -values $report_values 
 
 # Generic file save dialog
 proc file_save_dialog { w } {
