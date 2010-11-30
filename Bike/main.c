@@ -261,7 +261,7 @@ void init_global_variables(void)
 	// Force full display update when starting up
 	display.flag.full_update = 1;
 
-    simpliciti_bike_flag = SIMPLICITI_BIKE_STATUS_LINKING;
+    simpliciti_bike_flag = SIMPLICITI_BIKE_NOT_CONNECTED;
 
 #ifndef ISM_US
 	// Use metric units for display
