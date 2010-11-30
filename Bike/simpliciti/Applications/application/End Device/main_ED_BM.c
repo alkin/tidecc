@@ -8,6 +8,7 @@
 #include "bsp_leds.h"
 #include "bsp_buttons.h"
 #include "simpliciti.h"
+#include "simpliciti.h"
 
 
 // *************************************************************************************************
@@ -257,17 +258,33 @@ unsigned char simpliciti_link_to (void)
   
   uint8_t pwr;
   
-//  pwr = IOCTL_LEVEL_2;
-  pwr = IOCTL_LEVEL_1;
+  pwr = IOCTL_LEVEL_2;
   SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &pwr); 
+  uint8_t aux;
+  uint8_t timeout=160;
   
-  while (SMPL_SUCCESS != SMPL_Link(&sLinkID3))
+  //while (1)
+  for (aux=0;aux<=timeout;aux++)
   {
-    SPIN_ABOUT_A_SECOND;
-    
-    // Service watchdog
-	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
+     if (SMPL_SUCCESS == SMPL_Link(&sLinkID3))
+	 {
+	    break;
+        //SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
+        //SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
+        
+	    //NWK_DELAY(250);
+	    // Service watchdog
+		//SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
+      }
+       
+      else if(aux == timeout)
+	  {
+	     simpliciti_flag = SIMPLICITI_STATUS_ERROR;
+	     return (0);
+	  }
+  	WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
   }
+  
   simpliciti_flag = SIMPLICITI_STATUS_LINKED;
   return (1);
 }
@@ -288,6 +305,12 @@ void link()
 	       SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
 	       sSemaphore = 0;
 	     }
+	     
+	     if (simpliciti_data[0]== BIKE_CMD_EXIT)
+	     {
+	        break;
+	     }
+	     
 	      // Service watchdog
 	      WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
         }

@@ -83,6 +83,7 @@ void (*fptr_Timer0_A3_function)(void);
 // Global Variable section
 struct timer sTimer;
 u8 change_menu = 0;
+u8 bike_watch_sync_counter;
 // *************************************************************************************************
 // Extern section
 
@@ -338,6 +339,8 @@ __interrupt void TIMER0_A0_ISR(void)
 	reset_sensor();
 	
 	//push_speed();
+	
+	bike_watch_sync_counter++;
 	
 	// -------------------------------------------------------------------
 	// Service active modules that require 1/s processing

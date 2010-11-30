@@ -75,7 +75,7 @@ void (*fptr_lcd_function_line2)(u8 line, u8 update);
 
 // *************************************************************************************************
 // Extern section
-
+extern void rfbike_sync (void);
 // *************************************************************************************************
 // @fn          main
 // @brief       Main routine
@@ -108,6 +108,7 @@ int main(void)
 
 		//rfbike_sync(); 
      }	
+
 }
 
 
@@ -266,6 +267,8 @@ void init_global_variables(void)
 	
 	// Force full display update when starting up
 	display.flag.full_update = 1;
+
+    simpliciti_bike_flag = SIMPLICITI_BIKE_NOT_CONNECTED;
 
 #ifndef ISM_US
 	// Use metric units for display

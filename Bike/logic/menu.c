@@ -110,7 +110,7 @@ const struct menu menu_L2_Distance =
 };
 
 const struct menu menu_L2_Bike_link = {
-   FUNCTION(sx_link),          // direct function
+   FUNCTION(dummy),             // direct function
    FUNCTION(dummy),             // sub menu function
    FUNCTION(display_link),     // display function
    FUNCTION(update_display),       // new display data

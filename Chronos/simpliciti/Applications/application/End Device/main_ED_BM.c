@@ -279,8 +279,17 @@ unsigned char simpliciti_listen_to(void)
 	RF1ARXFIFO = 0x0000;
 	RF1ATXFIFO = 0x0000;
 
+#ifdef energy
+   // wait some seconds for the bike to get enough energy
+   Timer0_A4_Delay(1000);
+   Timer0_A4_Delay(1000);
+   Timer0_A4_Delay(1000);
+   Timer0_A4_Delay(1000);
+   Timer0_A4_Delay(1000);
+#endif
+
   // Set flag	
-  simpliciti_flag = SIMPLICITI_STATUS_LINKING; 
+  simpliciti_flag = SIMPLICITI_STATUS_LINKING;
 
   SMPL_Init(Listen_Callback);
    
@@ -305,8 +314,12 @@ unsigned char simpliciti_listen_to(void)
     	sInit_done = 0;
     	return (0);
 	}
-   
   }
+  
+    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
+	// Put radio back to sleep  		
+  	SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
+  		
     simpliciti_flag = SIMPLICITI_STATUS_LINKED;
     // show connected
 
@@ -317,11 +330,11 @@ void listen()
 {
    uint8_t len;
    // Connected
-// send config - sync clock
-// sleep
-// send request, get data, datalog.
-// send request turn off - get max values
-// end
+
+// sleep here for a while, letting the bike recover some energy
+ //Timer0_A4_Delay(1000);
+ //Timer0_A4_Delay(1000);
+ //Timer0_A4_Delay(1000);
 
 // Config loop
 
@@ -339,9 +352,10 @@ void listen()
       	  // Service watchdog
 	      WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
       }
+      
+        SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
 		// Put radio back to sleep  		
   		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
-        SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
 	 
 // implement here sleep (20 seconds)
 
@@ -352,24 +366,37 @@ void listen()
     //{
 	   // Get radio ready. Radio wakes up in IDLE state.
        SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);	
-       // Wait shortly for host reply
-	   SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
-	
+     	
+       SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
        simpliciti_data[0] = WATCH_CMD_GET_DATA;
+       
       while(simpliciti_data[0] != BIKE_CMD_DATA)
       {
       	  SMPL_Send(sLinkID3, simpliciti_data,BIKE_DATA_LENGTH);
-      	  bike_try++;
+      	  
+//          NWK_REPLY_DELAY();
+          
       	  NWK_DELAY(10);
+          
+      	  //bike_try++;
+      	  //NWK_DELAY(10);
       	  // Service watchdog
 	      WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
       }
+        simpliciti_data[0]= WATCH_CMD_EXIT;
+      
+      while(simpliciti_data[0] != BIKE_CMD_DATA)
+      {
+        SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
+        NWK_DELAY(10);
+      }
+         
+        SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
+      	  
 		// Put radio back to sleep  		
   		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
-  	  
-  	    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
-	 	
-  		simpliciti_flag = SIMPLICITI_TRIGGER_STOP; 
+  	  	 	
+  		simpliciti_flag = SIMPLICITI_TRIGGER_STOP;
      
      // clearFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA);
     //}
@@ -377,7 +404,7 @@ void listen()
 	    // Service watchdog
 		WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
 
-		 // Break when flag bit SIMPLICITI_TRIGGER_STOP is set
+		// Break when flag bit SIMPLICITI_TRIGGER_STOP is set
         if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
         {
 		   break;

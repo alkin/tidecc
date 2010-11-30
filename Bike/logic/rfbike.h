@@ -18,7 +18,7 @@ extern void display_sync(u8 line, u8 update);
 extern void send_smpl_data(u16 data);
 extern u8 is_rf(void);
 
-extern void sx_link(u8 line);
+extern void sx_link(void);
 extern void display_link(u8 line, u8 update);
 
 // *************************************************************************************************

@@ -81,6 +81,9 @@ struct RFsmpl sRFsmpl;
 // flag contains status information, trigger to send data and trigger to exit SimpliciTI
 unsigned char simpliciti_flag;
 
+//flag for simpliciti control
+unsigned char simpliciti_bike_flag;
+
 // 4 data bytes to send 
 unsigned char simpliciti_data[SIMPLICITI_MAX_PAYLOAD_LENGTH];
 
@@ -168,7 +171,7 @@ u8 is_rf(void)
 	return (sRFsmpl.mode != SIMPLICITI_OFF);
 }
 
-void sx_link(u8 line)
+void sx_link(void)
 {
     // Clear LINE1
    clear_line(LINE1);
@@ -255,8 +258,9 @@ void simpliciti_bike_decode_watch_callback(void)
 	     //  simpliciti_reply_count
 	    break;
 	    
-	    case WATCH_CMD_RESTART:        // Set bike parameters
-	      //reset everything and restart datalog from bike
+	    case WATCH_CMD_EXIT:       
+	      //stop transmission and set sync variable to zero 
+	      simpliciti_data[0]= BIKE_CMD_EXIT;
 	    break;
    }
 }
@@ -321,3 +325,59 @@ void simpliciti_bike_get_data_callback(void)
    }
 }	  
 
+
+void rfbike_sync(void)
+{
+	// connect -- send config 
+	// sleep -- send data -- sleep
+	
+	
+	if(simpliciti_bike_flag == SIMPLICITI_BIKE_NOT_CONNECTED)
+	{
+	   // Clear LINE1
+	   clear_line(LINE1);
+	   fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
+	
+	   // Turn on beeper icon to show activity
+	   display_symbol(LCD_ICON_BEEPER1, SEG_ON_BLINK_ON);
+	   display_symbol(LCD_ICON_BEEPER2, SEG_ON_BLINK_ON);
+	   display_symbol(LCD_ICON_BEEPER3, SEG_ON_BLINK_ON);
+	
+	   // Prepare radio for RF communication
+	   open_radio();
+	 
+	   reset_simpliciti();
+	   
+	   // Set SimpliciTI mode
+	   sRFsmpl.mode = SIMPLICITI_SYNC;
+	   
+	   if (simpliciti_link_to())
+	   {
+	       link();
+	   }
+	
+	   reset_simpliciti();
+	   
+	   // Set SimpliciTI state to OFF
+	   sRFsmpl.mode = SIMPLICITI_OFF;
+	   
+	   close_radio();
+	
+	   // Clear last button events
+	   Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
+	   BUTTONS_IFG = 0x00;
+	   button.all_flags = 0;
+	
+	   // Clear icons
+	   display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
+	   display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);
+	   display_symbol(LCD_ICON_BEEPER3, SEG_OFF_BLINK_OFF);
+	
+	   // Force full display update
+	   display.flag.full_update = 1;
+	}
+	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
+	{
+	   
+	}
+}

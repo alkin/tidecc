@@ -153,8 +153,7 @@ u16 all_flags;
 } s_config;
 extern volatile s_config config;
 
-//extern u8 time_over;
-
+extern u8 bike_watch_sync_counter;
 
 // *************************************************************************************************
 // Global Variable section
