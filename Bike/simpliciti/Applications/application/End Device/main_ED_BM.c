@@ -106,6 +106,7 @@ void bike_communication()
 	       simpliciti_bike_get_data_callback();
 	       SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
 	       sSemaphore = 0;
+           //break;
 	     }
 	  }
      if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_STOP)) 

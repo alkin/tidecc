@@ -359,10 +359,12 @@ void listen()
 	 
         SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);	
         SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
-   
-       show(2);
+       
+       Timer0_A4_Delay(1000);
+       Timer0_A4_Delay(1000);
+       Timer0_A4_Delay(1000);
 // Get data loop
-  /* while (1)
+   while (1)
    {
   //	if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA)) 
     //{
@@ -370,24 +372,27 @@ void listen()
 
 
       simpliciti_data[0] = WATCH_CMD_GET_DATA;      
-      while(simpliciti_data[0] != BIKE_CMD_DATA)
-      {
+     // while(simpliciti_data[0] != BIKE_CMD_DATA)
+      //{
       	  SMPL_Send(sLinkID3, simpliciti_data,BIKE_DATA_LENGTH);      	  
 //          NWK_REPLY_DELAY();
       	  NWK_DELAY(10);
       	  //bike_try++;
       	  //NWK_DELAY(10);
       	  // Service watchdog
-	      WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
+	   //   WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
+      //}
+     if (simpliciti_data[0] != BIKE_CMD_DATA)
+      {
+         show(2);
       }
-      
-      simpliciti_data[0]= WATCH_CMD_EXIT;
-      while(simpliciti_data[0] != BIKE_CMD_DATA)
+    /*   simpliciti_data[0]= WATCH_CMD_EXIT;
+     while(simpliciti_data[0] != BIKE_CMD_DATA)
       {
         SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
         NWK_DELAY(10);
       }
-         
+      */   
         //SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
      	// Put radio back to sleep  		
   		//SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
@@ -406,7 +411,7 @@ void listen()
    }
   
   sInit_done = 0;  
-  SMPL_Unlink(sLinkID3);*/
+  SMPL_Unlink(sLinkID3);
 }
 
 /* handle received messages */
