@@ -302,6 +302,8 @@ void do_altitude_measurement(u8 filter)
 {
 	volatile u32 pressure;
 
+	if(sAlt.on == 0) start_altitude_measurement();
+
 	// If sensor is not ready, skip data read	
 	if ((PS_INT_IN & PS_INT_PIN) == 0) return;
 		
