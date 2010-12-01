@@ -61,6 +61,19 @@ extern struct RFsmpl sRFsmpl;
 
 extern unsigned char simpliciti_flag;
 
+typedef struct
+{
+	u16 system_time;
+	u16 speed;
+	u32 distance;
+	u16 altitude;
+	u16 temperature;
+	u16 speed_max;	
+} s_measurement;
+
+extern s_measurement measurement[12];
+extern u8 measurement_count;
+
 // *************************************************************************************************
 // Extern section
 

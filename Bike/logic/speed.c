@@ -67,6 +67,7 @@ u8 b_speed_count;
 void reset_speed(void)
 {
 	speed.value = 0;
+	speed.max = 0;
 	b_speed_count = 0;
 }
 
@@ -102,8 +103,10 @@ u16 get_speed_average(void)
 	}
 	average = sum/b_speed_count;
 	b_speed_count = 0;
+	
 	return average; 
 }
+
 
 
 // *************************************************************************************************
@@ -150,6 +153,9 @@ void do_speed_measurement(void)
 {
 	speed.value = sensor_get_distance();
 	
+	if(speed.value > speed.max)
+		speed.max = speed.value;
+	
 	//speed.value = sensor.value * 10;
 	
 	/*
@@ -157,6 +163,8 @@ void do_speed_measurement(void)
 		voltage = (voltage * 2 * 2) / 41 * 10;	
 		speed.value = voltage;
 	*/
+	
+	push_speed();
 }
 
 // *************************************************************************************************

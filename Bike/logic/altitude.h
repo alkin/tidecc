@@ -82,8 +82,6 @@ extern struct alt sAlt;
 
 extern u16 b_altitude[60];
 extern u8 b_altitude_count;
-extern u16 b_temperature[60];
-extern u8 b_temperature_count;
 
 // *************************************************************************************************
 // Extern section

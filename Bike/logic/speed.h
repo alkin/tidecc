@@ -61,6 +61,7 @@ extern void display_speed(u8 line, u8 update);
 typedef struct
 {
     u16 value;
+    u16 max;
 } s_speed;
 
 
