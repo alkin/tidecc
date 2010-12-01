@@ -292,6 +292,8 @@ void do_altitude_measurement(u8 filter)
 	
 	// Convert pressure (Pa) and temperature (°K) to altitude (m)
 	sAlt.altitude = conv_pa_to_meter(sAlt.pressure, sAlt.temperature_K);
+	
+	push_altitude();
 }
 
 

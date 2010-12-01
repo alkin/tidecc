@@ -48,6 +48,9 @@ extern void reset_temp_measurement(void);
 extern u8 is_temp_measurement(void);
 extern void temperature_measurement(u8 filter);
 
+extern void push_temperature(void);
+extern u16 get_temperature_average(void);
+
 // *************************************************************************************************
 // Defines section
 

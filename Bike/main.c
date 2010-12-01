@@ -98,6 +98,7 @@ int main(void)
  
  		// Do altitude measurement
 		do_altitude_measurement(FILTER_ON);
+		temperature_measurement(FILTER_ON);
 	
 		// Do distance measurement
 		do_light_measurement();

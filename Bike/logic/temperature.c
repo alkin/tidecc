@@ -124,6 +124,8 @@ void temperature_measurement(u8 filter)
 		// Override filter 
 		sTemp.degrees = (s16)temperature;
 	}
+	
+	push_temperature();
 }
 
 
