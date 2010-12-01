@@ -28,7 +28,8 @@ extern void display_link(u8 line, u8 update);
 typedef enum
 {
   SIMPLICITI_OFF = 0,       // Not connected
-  SIMPLICITI_IDLE,
+  SIMPLICITI_CONNECTING1,
+  SIMPLICITI_IDLE,			// connected idle state
   SIMPLICITI_SENDING,
   SIMPLICITI_SYNC			// Syncing
 } simpliciti_mode_t;

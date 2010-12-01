@@ -83,8 +83,10 @@ void (*fptr_Timer0_A3_function)(void);
 // Global Variable section
 struct timer sTimer;
 u8 change_menu = 0;
-u8 bike_watch_sync_counter;
-u8 bike_communication_timeout;
+u8 bike_sync_attempt;
+u32 bike_communication_timeout;
+u32 bike_try_to_connect;
+
 // *************************************************************************************************
 // Extern section
 
@@ -341,18 +343,47 @@ __interrupt void TIMER0_A0_ISR(void)
 	
 	//push_speed();
 	
-	bike_watch_sync_counter++;
+	if(sRFsmpl.mode == SIMPLICITI_OFF)
+	{
+		// if it is time to connect
+		if ( sTime.system_time == bike_try_to_connect)
+		{
+		   simpliciti_bike_flag = SIMPLICITI_BIKE_CONNECT;
+		   bike_communication_timeout = sTime.system_time + 1;
+	       bike_sync_attempt++;
+	       
+	       // Increases the time between two attempts. We try to fit inside the listen from the watch
+			if(	bike_sync_attempt==1)
+			{
+       		   bike_try_to_connect = sTime.system_time + 5;
+			}
+			else if(bike_sync_attempt==2)
+			{
+			   bike_try_to_connect = sTime.system_time + 6;
+			}
+			else if(bike_sync_attempt==3)
+			{
+			   bike_try_to_connect = sTime.system_time + 7;
+			}
+			else if(bike_sync_attempt==4)
+			{
+               bike_sync_attempt = 0; 
+			   bike_try_to_connect = sTime.system_time + 5;
+			}
+		}
+	}
 	
-	if( sTime.system_time == 4)
+	/*if( sTime.system_time == 4)
 	{
 	   // Start pairing
 	   simpliciti_bike_flag = SIMPLICITI_BIKE_CONNECT;
 	   bike_communication_timeout = sTime.system_time +1;
 	}
+	*/
 	
 	if ( sTime.system_time%10 == 0)
 	{
-	   bike_communication_timeout=sTime.system_time +1;
+	   bike_communication_timeout = sTime.system_time +1;
 	   
 	   if(sRFsmpl.mode == SIMPLICITI_IDLE)
 	   {
@@ -360,7 +391,7 @@ __interrupt void TIMER0_A0_ISR(void)
 	   }
 	   else if (sRFsmpl.mode == SIMPLICITI_OFF)
 	   {
-          simpliciti_bike_flag = SIMPLICITI_BIKE_CONNECT;
+           bike_try_to_connect = sTime.system_time + 1; 
 	   }
 	}
 	

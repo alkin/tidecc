@@ -270,8 +270,9 @@ void init_global_variables(void)
 
     simpliciti_bike_flag = SIMPLICITI_BIKE_IDLE;
     sRFsmpl.mode = SIMPLICITI_OFF;
-    bike_watch_sync_counter = 0;
+    bike_sync_attempt = 0;
     bike_communication_timeout=0;
+    bike_try_to_connect=5; // first attempt to connect - 5 seconds
 #ifndef ISM_US
 	// Use metric units for display
 	sys.flag.use_metric_units = 1;
