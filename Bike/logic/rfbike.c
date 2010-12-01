@@ -247,17 +247,24 @@ void simpliciti_bike_decode_watch_callback(void)
 		  // config, distance, system_time	      
 	      config.all_flags =(u16) ((simpliciti_data[2]<<8) + simpliciti_data[1])  ;
 	      
-	      distance_aux = distance.value;
-	      distance.value =(u16)((simpliciti_data[6] << 8) + (simpliciti_data[5]));
-	      distance.value = (distance.value << 16);
-	      distance.value =(u16)((simpliciti_data[4] << 8) + simpliciti_data[3]);
-	      distance.value+=distance_aux;
+	      distance_aux = (u16)((simpliciti_data[6] << 8) + (simpliciti_data[5]));
+	      distance_aux = (distance.value << 16);
+	      distance_aux = (u16)((simpliciti_data[4] << 8) + simpliciti_data[3]);
 	      
-	      sTime.system_time += (simpliciti_data[8] << 8) +  simpliciti_data[7] ;
-	      sTime.hour = sTime.system_time/3600;
-	      sTime.minute = (sTime.system_time%3600)/60;
-	      sTime.second = (sTime.system_time%3600)%60;	      
-	      
+	      // Ignore data if distance from bike is bigger than the value received from the watch
+	      if(distance_aux > distance.value)
+	      {
+	         distance.value = distance_aux;
+	      }
+	     
+	      // Ignore data if system_time from bike is bigger than the value received from the watch
+	      if(sTime.system_time > ((simpliciti_data[8] << 8) +  simpliciti_data[7]))
+	      {
+	         sTime.system_time = ((simpliciti_data[8] << 8) +  simpliciti_data[7]);
+	         sTime.hour = sTime.system_time/3600;
+	         sTime.minute = (sTime.system_time%3600)/60;
+	         sTime.second = (sTime.system_time%3600)%60;	      
+	      }
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      break;
 

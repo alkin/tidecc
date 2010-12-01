@@ -99,7 +99,7 @@ volatile s_message_flags message;
 u32 distance_value;
 u16 speed_value;
 u16 max_speed;
-
+u16 bike_time;
 volatile s_config config;
 // Global radio frequency offset taken from calibration memory
 // Compensates crystal deviation from 26MHz nominal value
@@ -294,8 +294,9 @@ void init_global_variables(void)
    display.all_flags = 0;
    message.all_flags = 0;
 
+   max_speed = 0;
+   bike_time = 0;
    distance_value = 0;
-   speed_value = 0;
 
    // Force full display update when starting up
    display.flag.full_update = 1;

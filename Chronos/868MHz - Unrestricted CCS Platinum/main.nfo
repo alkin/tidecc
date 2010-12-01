@@ -36,7 +36,7 @@ extern void init_application() is called from 1 sites in this file.
 	_disable_interrupts() (1 times)
 
 extern void init_global_variables() is called from 1 sites in this file.
-    It appears to be inlineable (size = 59 units)
+    It appears to be inlineable (size = 62 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	reset_datalog() (1 times)
@@ -173,7 +173,7 @@ extern void init_application() is called from 1 sites in this file.
 ==============================================================================
 
 extern void init_global_variables() is called from 1 sites in this file.
-    It appears to be inlineable (size = 59 units)
+    It appears to be inlineable (size = 62 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	read_calibration_values() (1 times)

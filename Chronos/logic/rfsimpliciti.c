@@ -506,9 +506,16 @@ void simpliciti_watch_decode_bike_callback(void)
 	    case BIKE_CMD_DATA:
 		      // do data log from received data
 	          // Set datalogger icon
-		      //max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
-		      max_speed++;
-		      //do_bike_datalog(DATALOG_BIKE_NORMAL);    
+		      max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
+		 
+              bike_time = ((simpliciti_data[2] << 8) +  simpliciti_data[1]);
+		      
+              distance_value = (u16)((simpliciti_data[8] << 8) + (simpliciti_data[7]));
+              distance_value = (distance_value << 16);
+              distance_value += (u16)((simpliciti_data[6] << 8) + simpliciti_data[5]);
+
+		     // max_speed++;
+		      do_bike_datalog(DATALOG_BIKE_NORMAL);
 		       
 	    break;
 	    
@@ -531,7 +538,7 @@ void simpliciti_watch_get_data_callback(void)
 	   case WATCH_CMD_SET_CONFIG:
             // initial config
             config.all_flags=0xA67C;
-            distance_value=12000;
+
             // use bike_time
 	   		simpliciti_data[0] = WATCH_CMD_SET_CONFIG;
 	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		    // Bike parameters
@@ -540,8 +547,11 @@ void simpliciti_watch_get_data_callback(void)
       		simpliciti_data[4] = (distance_value >> 8) & 0xFF; 	    // initial distance
       		simpliciti_data[5] = (distance_value >> 16) & 0xFF; 	// initial distance  
       		simpliciti_data[6] = (distance_value >> 24) & 0xFF; 	// initial distance      
-      		simpliciti_data[7] =  sTime.system_time & 0xFF; 		    // initial time
-     		simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF;   // initial time  
+            simpliciti_data[7] =  bike_time & 0xFF; 		        // initial time
+     		simpliciti_data[8] = (bike_time >> 8) & 0xFF;           // initial time  
+ 
+     		//simpliciti_data[7] =  sTime.system_time & 0xFF; 		// initial time
+     		//simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF;   // initial time  
 	      break;
 	   
 	    case WATCH_CMD_GET_DATA:

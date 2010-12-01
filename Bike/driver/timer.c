@@ -389,7 +389,7 @@ __interrupt void TIMER0_A0_ISR(void)
 	   {
 	      simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
 	   }
-	   else if (sRFsmpl.mode == SIMPLICITI_OFF)
+	   else if ((sRFsmpl.mode == SIMPLICITI_OFF) && (bike_sync_attempt==0))
 	   {
            bike_try_to_connect = sTime.system_time + 1; 
 	   }

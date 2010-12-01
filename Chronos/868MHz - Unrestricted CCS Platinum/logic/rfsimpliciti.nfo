@@ -42,13 +42,13 @@ extern void simpliciti_sync_get_data_callback() is called from 0 sites in this f
 	<NONE>
 
 extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 21 units)
+    It appears to be inlineable (size = 83 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
-	<NONE>
+	do_bike_datalog() (1 times)
 
 extern void simpliciti_watch_get_data_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 64 units)
+    It appears to be inlineable (size = 63 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
@@ -95,6 +95,7 @@ These functions may be recursive:
 	display_rfbike()
 	display_sync()
 	simpliciti_sync_decode_ap_cmd_callback()
+	simpliciti_watch_decode_bike_callback()
 	sx_bike_chronos()
 	sx_sync()
 	start_simpliciti_sync()
@@ -105,7 +106,6 @@ These external functions are called but not defined here:
 	reset_simpliciti()
 	simpliciti_listen_to()
 	listen()
-	do_bike_datalog()
 	clear_line()
 	 ? ()
 	stop_datalog()
@@ -115,6 +115,7 @@ These external functions are called but not defined here:
 	simpliciti_main_sync()
 	close_radio()
 	Timer0_A4_Delay()
+	do_bike_datalog()
 	flash_erase_page()
 	update_pressure_table()
 	display_chars()
@@ -150,7 +151,7 @@ extern void sx_bike_chronos() is called from 0 sites in this file.
 ==============================================================================
 
 extern void simpliciti_watch_get_data_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 64 units)
+    It appears to be inlineable (size = 63 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
@@ -158,7 +159,7 @@ extern void simpliciti_watch_get_data_callback() is called from 0 sites in this 
 ==============================================================================
 
 extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 21 units)
+    It appears to be inlineable (size = 83 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>

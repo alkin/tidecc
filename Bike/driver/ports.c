@@ -96,7 +96,7 @@ void init_buttons(void)
 
 	// Enable internal pull-downs
 	BUTTONS_OUT &= ~ALL_BUTTONS; 
-	BUTTONS_REN |= ALL_BUTTONS; 
+	BUTTONS_REN &= ~ALL_BUTTONS; 
 
 	// IRQ triggers on rising edge
 	BUTTONS_IES &= ~ALL_BUTTONS;   
