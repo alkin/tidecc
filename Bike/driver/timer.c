@@ -352,7 +352,7 @@ __interrupt void TIMER0_A0_ISR(void)
 	
 	if ( sTime.system_time%10 == 0)
 	{
-	   bike_communication_timeout=sTime.system_time +2;
+	   bike_communication_timeout=sTime.system_time +1;
 	   
 	   if(sRFsmpl.mode == SIMPLICITI_IDLE)
 	   {

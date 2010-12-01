@@ -5,18 +5,18 @@ Build Number 1KGCQ-KDADEMDK-RTARQ-TAV-ZACIF_T_T_R
 
 
 static unsigned char Listen_Callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 22 units)
+    It appears to be inlineable (size = 36 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
+	show() (1 times)
 	simpliciti_watch_decode_bike_callback() (1 times)
 	SMPL_Receive() (1 times)
 
 extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 99 units)
+    It appears to be inlineable (size = 87 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	SMPL_Unlink() (1 times)
-	show() (1 times)
 	Timer0_A4_Delay() (3 times)
 	MRFI_DelayMs() (3 times)
 	SMPL_Send() (2 times)
@@ -86,12 +86,7 @@ These functions may be recursive:
 	simpliciti_main_tx_only()
 
 Function show() will be specialized on these parameters:
-	[1] mode == 2u;
-
-Results of interprocedural value propagation:
-
-   static void show() has these parameter attributes:
-      unsigned char mode :  mode == 2u;
+	[1] mode == toggle_msg;
 
 These external functions are called but not defined here:
 	simpliciti_get_ed_data_callback()
@@ -157,6 +152,14 @@ extern void reset_simpliciti() is called from 0 sites in this file.
 
 ==============================================================================
 
+extern void listen() is called from 0 sites in this file.
+    It appears to be inlineable (size = 87 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
 static void show() is called from 1 sites in this file.
     It appears to be inlineable (size = 153 units)
     It has 3 non-trivial scope blocks nested 3 deep.
@@ -165,19 +168,11 @@ static void show() is called from 1 sites in this file.
 
 ==============================================================================
 
-extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 99 units)
+static unsigned char Listen_Callback() is called from 0 sites in this file.
+    It appears to be inlineable (size = 36 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	show() (1 times)
-
-==============================================================================
-
-static unsigned char Listen_Callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 22 units)
-    It has 3 non-trivial scope blocks nested 3 deep.
-    It calls these functions:
-	<NONE>
 <<NULL MIX DOMAIN>>
 
 == END OF INFO OUTPUT==
