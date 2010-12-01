@@ -67,6 +67,9 @@ s16 convert_F_to_C(s16 value);
 // Global Variable section
 struct temp sTemp;
 
+u16 b_temperature[60];
+u8 b_temperature_count;
+
 
 // *************************************************************************************************
 // Extern section
@@ -80,6 +83,7 @@ struct temp sTemp;
 // *************************************************************************************************
 void reset_temp_measurement(void)
 {
+	b_temperature_count			= 0;
 	// Perform one temperature measurements with disabled filter
 	temperature_measurement(FILTER_OFF);
 }
@@ -155,3 +159,40 @@ s16 convert_F_to_C(s16 value)
     
 	return (DegC);
 }
+
+
+// *************************************************************************************************
+// @fn          push_speed
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+void push_temperature(void)
+{
+	if(b_temperature_count == 60) return;
+	
+	b_temperature[b_temperature_count++] = sTemp.degrees;
+}
+
+// *************************************************************************************************
+// @fn          get_speed_average
+// @brief       Resets speed value.
+// @param       none
+// @return      none
+// *************************************************************************************************
+u16 get_temperature_average(void)
+{
+	u8 i;
+	u32 sum=0, average;
+	
+	if(b_temperature_count == 0) return 0;
+	
+	for(i=0; i<b_temperature_count; i++)
+	{
+		sum += b_temperature[i];
+	}
+	average = sum/b_temperature_count;
+	b_temperature_count = 0;
+	return average; 
+}
+

@@ -65,6 +65,8 @@ struct temp
 };
 extern struct temp sTemp;
 
+extern u16 b_temperature[60];
+extern u8 b_temperature_count;
 
 // *************************************************************************************************
 // Extern section

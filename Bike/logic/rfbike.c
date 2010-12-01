@@ -112,6 +112,9 @@ u8		burst_packet_index;
 u8 		*flash_ptr; 
 
 
+s_measurement measurement[12];
+u8 measurement_count;
+
 // *************************************************************************************************
 // Extern section
 extern void (*fptr_lcd_function_line1)(u8 line, u8 update);
@@ -127,6 +130,30 @@ void reset_rf(void)
 {
 	// No connection
 	sRFsmpl.mode = SIMPLICITI_OFF;
+	
+	measurement_count = 0;
+}
+
+// *************************************************************************************************
+// @fn          reset_rf
+// @brief       Reset SimpliciTI data. 
+// @param       none
+// @return      none
+// *************************************************************************************************
+void rfbike_measurement(void)
+{
+	s_measurement temp;
+	
+	if(sTime.system_time%10 != 0) return;
+	
+	temp.system_time = sTime.system_time;
+	temp.speed = get_speed_average();
+	temp.distance = distance.value;
+	temp.altitude = get_altitude_average();
+	temp.temperature = get_temperature_average();
+	temp.speed_max = speed.max;
+	
+	measurement[measurement_count++] = temp;
 }
 
 
