@@ -85,6 +85,7 @@ unsigned char simpliciti_link_to (void)
   }
   
   simpliciti_bike_flag = SIMPLICITI_BIKE_STATUS_LINKED;
+  SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
   return (1);
 }
 
@@ -93,9 +94,11 @@ void bike_communication()
   // show(3); // connected
    /* turn on RX. default is RX off. */
    /* turn on RX. default is RX off. */
+   
+   simpliciti_data_in_buffer=1;
+   
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
-
    while (1)
    {
 	  if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_SEND_DATA)) 
@@ -105,8 +108,12 @@ void bike_communication()
 	       // answer to received message
 	       simpliciti_bike_get_data_callback();
 	       SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
-	       sSemaphore = 0;
-           //break;
+	       simpliciti_data_in_buffer--;
+	       if(simpliciti_data_in_buffer==0)
+	       {
+	          sSemaphore = 0;
+	          break;
+	       }
 	     }
 	  }
      if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_STOP)) 

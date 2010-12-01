@@ -98,6 +98,8 @@ extern unsigned char simpliciti_ed_address[4];
 extern unsigned char simpliciti_data[SIMPLICITI_MAX_PAYLOAD_LENGTH];
 
 // Flag contains status information and triggers to send data or to exit SimpliciTI library
+extern unsigned char simpliciti_data_in_buffer;
+
 // Control is done from outside SimpliciTI library
 extern unsigned char simpliciti_flag;
 

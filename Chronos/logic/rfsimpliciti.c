@@ -506,9 +506,9 @@ void simpliciti_watch_decode_bike_callback(void)
 	    case BIKE_CMD_DATA:
 		      // do data log from received data
 	          // Set datalogger icon
-		      max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
-		      
-		      do_bike_datalog(DATALOG_BIKE_NORMAL);    
+		      //max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
+		      max_speed++;
+		      //do_bike_datalog(DATALOG_BIKE_NORMAL);    
 		       
 	    break;
 	    

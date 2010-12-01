@@ -17,7 +17,8 @@
 #define CONV_MS_TO_TICKS(msec)         			(((msec) * 32768) / 1000) 
 
 #define SPIN_ABOUT_A_SECOND  NWK_DELAY(1000)
-
+   uint8_t toggle_msg=0;
+   
 // U16
 typedef unsigned short u16;
 
@@ -363,7 +364,9 @@ void listen()
        Timer0_A4_Delay(1000);
        Timer0_A4_Delay(1000);
        Timer0_A4_Delay(1000);
-// Get data loop
+   // Get data loop
+
+   
    while (1)
    {
   //	if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA)) 
@@ -371,20 +374,25 @@ void listen()
 	   // Get radio ready. Radio wakes up in IDLE state.
 
       NWK_DELAY(800);
-      simpliciti_data[0] = WATCH_CMD_GET_DATA;      
+      simpliciti_data[0] = WATCH_CMD_GET_DATA;
      // while(simpliciti_data[0] != BIKE_CMD_DATA)
       //{
-      	  SMPL_Send(sLinkID3, simpliciti_data,BIKE_DATA_LENGTH);      	  
+      	  SMPL_Send(sLinkID3, simpliciti_data,BIKE_DATA_LENGTH);
 //          NWK_REPLY_DELAY();
-      	  NWK_DELAY(10);
+      	  NWK_DELAY(15);
       	  //bike_try++;
       	  //NWK_DELAY(10);
       	  // Service watchdog
 	   //   WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
       //}
-     if (simpliciti_data[0] != BIKE_CMD_DATA)
+    /* if (simpliciti_data[0] == BIKE_CMD_DATA)
       {
-         show(2);
+      	if(toggle_msg==3)
+      	{
+      	   toggle_msg=0;
+      	}
+      	 toggle_msg++;
+         show(toggle_msg);
       }
     /*   simpliciti_data[0]= WATCH_CMD_EXIT;
      while(simpliciti_data[0] != BIKE_CMD_DATA)
@@ -404,7 +412,7 @@ void listen()
 		WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
 
 		// Break when flag bit SIMPLICITI_TRIGGER_STOP is set
-        if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
+        if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP))
         {
 		   break;
 	    }
@@ -424,8 +432,15 @@ static uint8_t Listen_Callback(linkID_t port)
   /* yes. go get the frame. we know this call will succeed. */
      if ((SMPL_SUCCESS == SMPL_Receive(sLinkID3, simpliciti_data, &len)) && len)
      {
-	      simpliciti_watch_decode_bike_callback();    
-	      return 1;
+	    simpliciti_watch_decode_bike_callback();
+	    
+		if(toggle_msg==3)
+      	{
+      	   toggle_msg=0;
+      	}
+      	 toggle_msg++;
+         show(toggle_msg);
+         return 1;
      }
   }
   /* keep frame for later handling */

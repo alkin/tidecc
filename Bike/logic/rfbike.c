@@ -1,4 +1,4 @@
-// *************************************************************************************************
+		// *************************************************************************************************
 //
 //	Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/ 
 //	 
@@ -83,6 +83,8 @@ unsigned char simpliciti_flag;
 
 //flag for simpliciti control
 unsigned char simpliciti_bike_flag;
+
+unsigned char simpliciti_data_in_buffer;
 
 // 4 data bytes to send 
 unsigned char simpliciti_data[SIMPLICITI_MAX_PAYLOAD_LENGTH];
@@ -230,6 +232,7 @@ void simpliciti_bike_decode_watch_callback(void)
 
    switch (simpliciti_data[0])
    {
+   	   u32 distance_aux;
 	   case WATCH_CMD_NOP:
 	      break;
 	
@@ -243,11 +246,14 @@ void simpliciti_bike_decode_watch_callback(void)
 	      // Set parameters from the bike here
 		  // config, distance, system_time	      
 	      config.all_flags =(u16) ((simpliciti_data[2]<<8) + simpliciti_data[1])  ;
+	      
+	      distance_aux = distance.value;
 	      distance.value =(u16)((simpliciti_data[6] << 8) + (simpliciti_data[5]));
 	      distance.value = (distance.value << 16);
 	      distance.value =(u16)((simpliciti_data[4] << 8) + simpliciti_data[3]);
+	      distance.value+=distance_aux;
 	      
-	      sTime.system_time = (simpliciti_data[8] << 8) +  simpliciti_data[7] ;
+	      sTime.system_time += (simpliciti_data[8] << 8) +  simpliciti_data[7] ;
 	      sTime.hour = sTime.system_time/3600;
 	      sTime.minute = (sTime.system_time%3600)/60;
 	      sTime.second = (sTime.system_time%3600)%60;	      
@@ -277,6 +283,8 @@ void simpliciti_bike_get_data_callback(void)
    {
       case BIKE_CMD_DATA:	 
       	// Temperature, Altitude, time, distance, speed
+     	
+     	//simpliciti_data_in_buffer--;
      	
      	simpliciti_data[0] = BIKE_CMD_DATA;  
 		simpliciti_data[1] = sTime.system_time & 0xFF;
