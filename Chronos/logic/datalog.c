@@ -517,7 +517,7 @@ void do_bike_datalog(u8 mode)
 		   // max_speed
 		   // max_speed >>8
 		   
-	     /*  temp[0] = simpliciti_data[1];
+	       temp[0] = simpliciti_data[1];
 		   temp[1] = simpliciti_data[2];
 		   temp[2] = simpliciti_data[3];
 	       temp[3] = simpliciti_data[4];
@@ -528,9 +528,9 @@ void do_bike_datalog(u8 mode)
 	       temp[8] = simpliciti_data[9];
 	       temp[9] = simpliciti_data[10];
 		   temp[10] = simpliciti_data[11];
-	       */
+	       temp[11] = 00;
 	      
-	       temp[0] = 0;
+	      /* temp[0] = 0;
 		   temp[1] = 1;
 		   temp[2] = 2;
 		   temp[3] = 3;
@@ -542,8 +542,9 @@ void do_bike_datalog(u8 mode)
 		   temp[9] = 9;
 		   temp[10] = 10;
            temp[11] = 11;
+	      */
 	      
-	      count = 12;
+	      count = 11;
 	      
 	      // Add data to recording buffer         
 	      datalog_sm((u8 *) & temp, count, DATALOG_CMD_ADD_DATA);

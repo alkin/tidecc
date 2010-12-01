@@ -370,7 +370,7 @@ void listen()
     //{
 	   // Get radio ready. Radio wakes up in IDLE state.
 
-
+      NWK_DELAY(800);
       simpliciti_data[0] = WATCH_CMD_GET_DATA;      
      // while(simpliciti_data[0] != BIKE_CMD_DATA)
       //{
@@ -406,7 +406,7 @@ void listen()
 		// Break when flag bit SIMPLICITI_TRIGGER_STOP is set
         if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP)) 
         {
-	//	   break;
+		   break;
 	    }
    }
   
