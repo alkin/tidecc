@@ -32,7 +32,7 @@ extern void display_datalog() is called from 0 sites in this file.
 	display_chars() (1 times)
 
 extern void do_bike_datalog() is called from 0 sites in this file.
-    It appears to be inlineable (size = 95 units)
+    It appears to be inlineable (size = 128 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	datalog_sm() (4 times)
@@ -223,7 +223,7 @@ extern void do_datalog() is called from 0 sites in this file.
 ==============================================================================
 
 extern void do_bike_datalog() is called from 0 sites in this file.
-    It appears to be inlineable (size = 95 units)
+    It appears to be inlineable (size = 128 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	datalog_sm() (4 times)

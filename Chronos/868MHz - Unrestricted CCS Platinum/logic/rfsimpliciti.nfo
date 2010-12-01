@@ -48,7 +48,7 @@ extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in th
 	do_bike_datalog() (1 times)
 
 extern void simpliciti_watch_get_data_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 76 units)
+    It appears to be inlineable (size = 64 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
@@ -151,7 +151,7 @@ extern void sx_bike_chronos() is called from 0 sites in this file.
 ==============================================================================
 
 extern void simpliciti_watch_get_data_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 76 units)
+    It appears to be inlineable (size = 64 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>

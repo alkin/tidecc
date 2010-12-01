@@ -271,26 +271,27 @@ void simpliciti_bike_decode_watch_callback(void)
 
 void simpliciti_bike_get_data_callback(void)
 {  
-
+     	u16 max_speed = 100;
    // simpliciti_data[0] contains data type and needs to be returned to AP
    switch (simpliciti_data[0])
    {
       case BIKE_CMD_DATA:	 
       	// Temperature, Altitude, time, distance, speed
-//     	simpliciti_data[0] = BIKE_CMD_DATA;  
-//		simpliciti_data[1] = system.time & 0xFF;
-//		simpliciti_data[2] = (system.time >> 8) & 0xFF; 
-//		simpliciti_data[3] = speed.value & 0xFF;
-//		simpliciti_data[4] = (speed.value >> 8) & 0xFF; 
-//		simpliciti_data[5] = distance.value & 0xFF;
-//		simpliciti_data[6] = (distance.value >> 8) & 0xFF;
-//		simpliciti_data[7] = (distance.value >> 16) & 0xFF;
-//		simpliciti_data[8] = (distance.value >> 24) & 0xFF;
-//		simpliciti_data[9] = (sAlt.temperature_C >> 4) & 0xFF;
-//		simpliciti_data[10] = ((sAlt.temperature_C << 4) & 0xF0) | ((sAlt.altitude >> 8) & 0x0F);
-//		simpliciti_data[11] = sAlt.altitude & 0xFF;
-//		simpliciti_data[12] = max_speed & 0xFF;
-//		simpliciti_data[13] = (max_speed >>8 ) & 0xFF;
+     	
+     	simpliciti_data[0] = BIKE_CMD_DATA;  
+		simpliciti_data[1] = sTime.system_time & 0xFF;
+		simpliciti_data[2] = (sTime.system_time >> 8) & 0xFF; 
+		simpliciti_data[3] = speed.value & 0xFF;
+		simpliciti_data[4] = (speed.value >> 8) & 0xFF; 
+		simpliciti_data[5] = distance.value & 0xFF;
+		simpliciti_data[6] = (distance.value >> 8) & 0xFF;
+		simpliciti_data[7] = (distance.value >> 16) & 0xFF;
+		simpliciti_data[8] = (distance.value >> 24) & 0xFF;
+		simpliciti_data[9] = (sAlt.temperature_C >> 4) & 0xFF;
+	    simpliciti_data[10] = ((sAlt.temperature_C << 4) & 0xF0) | ((sAlt.altitude >> 8) & 0x0F);
+		simpliciti_data[11] = sAlt.altitude & 0xFF;
+		simpliciti_data[12] = max_speed & 0xFF;
+		simpliciti_data[13] = (max_speed >>8 ) & 0xFF;
 
 
 		  // Assemble payload
@@ -298,7 +299,7 @@ void simpliciti_bike_get_data_callback(void)
 	     // for (i = 1; i < BM_SYNC_DATA_LENGTH; i++)
 	     // simpliciti_data[i] = *flash_ptr++;
 	     
-		simpliciti_data[0] = BIKE_CMD_DATA;
+		/*simpliciti_data[0] = BIKE_CMD_DATA;
 		simpliciti_data[1] = 1;
 		simpliciti_data[2] = 2;
 		simpliciti_data[3] = 3;
@@ -312,7 +313,7 @@ void simpliciti_bike_get_data_callback(void)
 		simpliciti_data[11] = 11;
 		simpliciti_data[12] = 10; // speed
 		simpliciti_data[13] = 11;
-		
+		*/
       break;
     
       case BIKE_CMD_CONFIG:

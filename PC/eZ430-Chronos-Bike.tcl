@@ -55,7 +55,7 @@ package require Tk
 package require Ttk
 
 set exit_prog 0
-catch { load [file [join [pwd]/eZ430_Chronos_CC.dll]] } result
+catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
 if { [string first "couldn't" $result] != -1 } {
   tk_dialog .dialog1 "DLL not found" {Press OK to close application.} info 0 OK
   set exit_prog 1
@@ -1456,6 +1456,7 @@ proc sync_decode_data {} {
   #set wp [open "Teste.bike" w]
   set data_bike ""
   set end_packet 0
+  set max_speed 0
   # Write raw data and create a hex array
   set decode 1
   set hex_arr_len 0
@@ -1571,11 +1572,11 @@ proc sync_decode_data {} {
 		  # // max_speed >>8
 			
 		 # Decode data
-		  set system_time [format %d [expr [format %d [expr (($byte0<<8) | (($byte1)))]]]]
-		  set speed_log   [format %d [expr [format %d [expr (($byte2<<8) | (($byte3)))]]]]
-		  set distance    [format %d [expr [format %d [expr (($byte4<<8) | (($byte5)))]]]]
-		  set rec_temp    [format %d [expr [format %d [expr (($byte8<<4) | (($byte9>>4)&0x0F))]]]]
-		  set rec_alt     [format %d [expr (($byte9&0x0F)<<8) | $byte10]]
+		  set system_time [format %d [expr [format %d [expr (($byte1<<8) | (($byte0)))]]]]
+		  set speed_log   [format %d [expr [format %d [expr (($byte3<<8) | (($byte2)))]]]]
+		  set distance    [format %d [expr [format %d [expr (($byte5<<8) | (($byte4)))]]]]
+		  set rec_temp    [format %d [expr [format %d [expr (($byte9<<4) | (($byte10>>4)&0x0F))]]]]
+		  set rec_alt     [format %d [expr (($byte10&0x0F)<<8) | $byte9]]
 					 
 		  # Write data set to file
 		  # time,speed,distance,altitude,temperature
@@ -1584,7 +1585,7 @@ proc sync_decode_data {} {
 		  append data_bike "D,$system_time,$speed_log,$distance,$rec_alt,$rec_temp\n"
        }
   		  # Move to next data set        
-          set i [expr $i+12-1]
+          set i [expr $i+11-1]
 	}
   }
 
@@ -1627,6 +1628,28 @@ proc sync_erase {} {
 
 
 
+# Connection check
+proc check_rx_serial {} {
+  global no_answer_from_dongle com_available
+
+  # No com port?  
+  if { $com_available == 0} { return }
+
+  # Alive check - read product ID
+  catch { BM_GetID } res
+  
+  # Close COM if no valid RX serial (empty string "" or "0") was returned
+  if { [string length $res] == 0 || $res == 0 } {
+    incr no_answer_from_dongle
+    if { $no_answer_from_dongle > 4 } {    
+      set RS232Connected 0
+      tk_dialog .dialog1 "Communication Error" {USB dongle was removed. Press OK to close application.} info 0 OK
+      exitpgm
+    } 
+  } else {
+      set no_answer_from_dongle 0
+  }
+}
 # Execute function once at startup
 openCOM
 
@@ -1638,5 +1661,5 @@ if { $exit_prog == 1 } { exitpgm }
 # ----------------------------------------------------------------------------------------
 # Periodic functions  --------------------------------------------------------------------
 proc every {ms body} {eval $body; after $ms [info level 0]}
-
+every 600  { check_rx_serial }
 

@@ -529,12 +529,9 @@ void simpliciti_watch_get_data_callback(void)
 	      break;
 	
 	   case WATCH_CMD_SET_CONFIG:
-            config.all_flags=0;
-            config.data.bike_size=10;
-            config.data.sensor_count=7;
-            config.data.speed_unit=1;
-            
-            distance_value=275;
+            // initial config
+            config.all_flags=0xA67C;
+            distance_value=12000;
             // use bike_time
 	   		simpliciti_data[0] = WATCH_CMD_SET_CONFIG;
 	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		    // Bike parameters
