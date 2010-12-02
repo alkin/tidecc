@@ -127,7 +127,6 @@ void init_buttons(void)
 __interrupt void PORT2_ISR(void)
 {
 	u8 int_flag, int_enable;
-	u8 buzzer = 0;
 
 	// Clear button flags
 	button.all_flags = 0;

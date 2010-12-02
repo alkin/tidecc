@@ -9,7 +9,6 @@
 #include "bsp_buttons.h"
 #include "simpliciti.h"
 
-
 // *************************************************************************************************
 // Defines section
 #define TIMEOUT					(10u)
@@ -59,8 +58,6 @@ unsigned char simpliciti_link_to (void)
   
   pwr = IOCTL_LEVEL_2;
   SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SETPWR, &pwr); 
-  uint8_t aux;
-  uint8_t timeout=160;
 
   while (1)
   //for (aux=0;aux<=timeout;aux++)
@@ -85,7 +82,7 @@ unsigned char simpliciti_link_to (void)
   }
   
   simpliciti_bike_flag = SIMPLICITI_BIKE_STATUS_LINKED;
-  SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
+ // SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
   return (1);
 }
 
@@ -93,37 +90,49 @@ void bike_communication()
 {
   // show(3); // connected
    /* turn on RX. default is RX off. */
-   /* turn on RX. default is RX off. */
-   
-   simpliciti_data_in_buffer=1;
    
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
    while (1)
    {
-	  if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_SEND_DATA)) 
+   	  // if it received request from watch
+	  if (sSemaphore)
 	  {
-	     if (sSemaphore)
-	     {
-	       // answer to received message
-	       simpliciti_bike_get_data_callback();
-	       SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
-	       simpliciti_data_in_buffer--;
-	       if(simpliciti_data_in_buffer==0)
-	       {
+	      // answer to received message
+	      simpliciti_bike_get_data_callback();
+	      
+	      if(simpliciti_data[0] == BIKE_CMD_DATA)
+	      {
+     		// send twice since we don't receive ACK as confirmation 
+     	    SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
+	        NWK_DELAY(10);
+	        SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
+	      }
+	      // if it is the message is a config ACK the message size is one
+	      else if(simpliciti_data[0] == BIKE_CMD_CONFIG)
+	      {
+	      	 // send twice since we don't receive ACK as confirmation 
+	         SMPL_Send(sLinkID3, simpliciti_data, 1);
+	         NWK_DELAY(10);
+	         SMPL_Send(sLinkID3, simpliciti_data, 1);
+	      }
+	      
+	      else if(simpliciti_data[0] == BIKE_CMD_EXIT)
+	      {
 	          sSemaphore = 0;
 	          break;
-	       }
-	     }
+	      }
 	  }
+	 // if the timer decides it is time to stop
      if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_STOP)) 
 	  {
+	  	sSemaphore = 0;
 	    break;
 	  }
       // Service watchdog
 	  WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;        
    }
-	       
+   	         
        // Get radio ready. Wakes up in IDLE state.
 	      SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
 	  

@@ -76,6 +76,8 @@ void (*fptr_lcd_function_line2)(u8 line, u8 update);
 // *************************************************************************************************
 // Extern section
 extern void rfbike_sync (void);
+extern void rfbike_measurement (void); 
+extern void temperature_measurement(u8 filter);
 // *************************************************************************************************
 // @fn          main
 // @brief       Main routine

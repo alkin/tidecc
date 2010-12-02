@@ -84,7 +84,7 @@ unsigned char simpliciti_flag;
 //flag for simpliciti control
 unsigned char simpliciti_bike_flag;
 
-unsigned char simpliciti_data_in_buffer;
+unsigned char last_send_index;
 
 // 4 data bytes to send 
 unsigned char simpliciti_data[SIMPLICITI_MAX_PAYLOAD_LENGTH];
@@ -114,11 +114,12 @@ u8 		*flash_ptr;
 
 s_measurement measurement[12];
 u8 measurement_count;
-
+u8 message_id;
 // *************************************************************************************************
 // Extern section
 extern void (*fptr_lcd_function_line1)(u8 line, u8 update);
-
+extern u16 get_altitude_average(void);
+extern u16 get_temperature_average(void);
 
 // *************************************************************************************************
 // @fn          reset_rf
@@ -132,6 +133,8 @@ void reset_rf(void)
 	sRFsmpl.mode = SIMPLICITI_OFF;
 	
 	measurement_count = 0;
+	
+	message_id = 0;
 }
 
 // *************************************************************************************************
@@ -266,7 +269,6 @@ void simpliciti_bike_decode_watch_callback(void)
 	   case WATCH_CMD_GET_CONFIG:        // Send bike parameters to watch
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      // Send single reply packet
-	      simpliciti_reply_count = 1;
 	      break;
 	
 	   case WATCH_CMD_SET_CONFIG:        // Set bike parameters
@@ -277,21 +279,28 @@ void simpliciti_bike_decode_watch_callback(void)
 	      distance_aux = (u16)((simpliciti_data[6] << 8) + (simpliciti_data[5]));
 	      distance_aux = (distance.value << 16);
 	      distance_aux = (u16)((simpliciti_data[4] << 8) + simpliciti_data[3]);
-	      
-	      // Ignore data if distance from bike is bigger than the value received from the watch
-	      if(distance_aux > distance.value)
-	      {
-	         distance.value = distance_aux;
-	      }
-	     
+	    
 	      // Ignore data if system_time from bike is bigger than the value received from the watch
 	      if(sTime.system_time < ((simpliciti_data[8] << 8) +  simpliciti_data[7]))
 	      {
+             distance.value = distance_aux;
 	         sTime.system_time = ((simpliciti_data[8] << 8) +  simpliciti_data[7]);
 	         sTime.hour = sTime.system_time/3600;
 	         sTime.minute = (sTime.system_time%3600)/60;
 	         sTime.second = (sTime.system_time%3600)%60;	      
 	      }
+	 
+	      
+	 	  // Sync timers from bike and watch     
+	 	  // Stop Timer0	 
+	      TA0CTL &= ~MC_2;
+
+          // Set Timer0 count register to 0x0000
+          TA0R = (u16)((simpliciti_data[10] << 8) + simpliciti_data[9]);   
+
+	      // Release Timer	 
+	      TA0CTL |= MC_2;
+	        
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      break;
 
@@ -310,18 +319,38 @@ void simpliciti_bike_decode_watch_callback(void)
 }
 
 void simpliciti_bike_get_data_callback(void)
-{  
-     	u16 max_speed = 100;
+{      
+    if(message_id > measurement_count)
+    {
+       simpliciti_data[0] = BIKE_CMD_EXIT;
+    }
+    
    // simpliciti_data[0] contains data type and needs to be returned to AP
    switch (simpliciti_data[0])
    {
       case BIKE_CMD_DATA:	 
       	// Temperature, Altitude, time, distance, speed
      	
-     	//simpliciti_data_in_buffer--;
+     	//last_send_index--;
+      	simpliciti_data[0] = BIKE_CMD_DATA; 
      	
-     	simpliciti_data[0] = BIKE_CMD_DATA;  
-		simpliciti_data[1] = sTime.system_time & 0xFF;
+		simpliciti_data[1] = measurement[message_id].system_time & 0xFF;
+		simpliciti_data[2] = (measurement[message_id].system_time >> 8) & 0xFF; 
+		simpliciti_data[3] = measurement[message_id].speed & 0xFF;
+		simpliciti_data[4] = (measurement[message_id].speed >> 8) & 0xFF; 
+		simpliciti_data[5] = measurement[message_id].distance & 0xFF;
+		simpliciti_data[6] = (measurement[message_id].distance >> 8) & 0xFF;
+		simpliciti_data[7] = (measurement[message_id].distance >> 16) & 0xFF;
+		simpliciti_data[8] = (measurement[message_id].distance >> 24) & 0xFF;
+		simpliciti_data[9] = (measurement[message_id].temperature >> 4) & 0xFF;
+	    simpliciti_data[10] = ((measurement[message_id].temperature << 4) & 0xF0) | ((measurement[message_id].altitude >> 8) & 0x0F);
+		simpliciti_data[11] = measurement[message_id].altitude & 0xFF;
+		simpliciti_data[12] = measurement[message_id].speed_max & 0xFF;
+		simpliciti_data[13] = (measurement[message_id].speed_max >>8 ) & 0xFF;
+
+     	message_id++;
+
+		/*simpliciti_data[1] = sTime.system_time & 0xFF;
 		simpliciti_data[2] = (sTime.system_time >> 8) & 0xFF; 
 		simpliciti_data[3] = speed.value & 0xFF;
 		simpliciti_data[4] = (speed.value >> 8) & 0xFF; 
@@ -334,28 +363,7 @@ void simpliciti_bike_get_data_callback(void)
 		simpliciti_data[11] = sAlt.altitude & 0xFF;
 		simpliciti_data[12] = max_speed & 0xFF;
 		simpliciti_data[13] = (max_speed >>8 ) & 0xFF;
-
-
-		  // Assemble payload
-	     // flash_ptr = (u8 *) (DATALOG_MEMORY_START);
-	     // for (i = 1; i < BM_SYNC_DATA_LENGTH; i++)
-	     // simpliciti_data[i] = *flash_ptr++;
-	     
-		/*simpliciti_data[0] = BIKE_CMD_DATA;
-		simpliciti_data[1] = 1;
-		simpliciti_data[2] = 2;
-		simpliciti_data[3] = 3;
-		simpliciti_data[4] = 4;
-		simpliciti_data[5] = 5;
-		simpliciti_data[6] = 6;
-		simpliciti_data[7] = 7;
-		simpliciti_data[8] = 8;
-		simpliciti_data[9] = 9;
-		simpliciti_data[10] = 10;
-		simpliciti_data[11] = 11;
-		simpliciti_data[12] = 10; // speed
-		simpliciti_data[13] = 11;
-		*/
+*/ 	
       break;
     
       case BIKE_CMD_CONFIG:
@@ -375,9 +383,6 @@ void simpliciti_bike_get_data_callback(void)
 
 void rfbike_sync(void)
 {
-	// connect -- send config 
-	// sleep -- send data -- sleep
-	
 	if(simpliciti_bike_flag == SIMPLICITI_BIKE_CONNECT)
 	{
 	   // Clear LINE1
@@ -402,15 +407,15 @@ void rfbike_sync(void)
            simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
 	 
 	   	   // Set SimpliciTI mode
-
-	       bike_communication(); 
-	       
+           message_id = 0;
+	       bike_communication();
+           check_transmission(message_id);
+	       // connected. Change to low power mode - idle
 	       sRFsmpl.mode = SIMPLICITI_IDLE;
-	      
 	   }
 	   else
 	   {
-	      // couldn't pair start again
+	      // if couldn't pair
 		  display_chars(LCD_SEG_L2_5_0, (u8 *)" ERROR", SEG_ON);
 		  reset_simpliciti();
 		  // Set SimpliciTI state to OFF
@@ -428,6 +433,24 @@ void rfbike_sync(void)
 	}
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{
+        message_id = 0;
 	    bike_communication(); 
+	    check_transmission(message_id);
+	    // takes the last sent message and reorganizes the buffer
+	    reorganize_buffer(message_id);
 	}
+}
+
+void reorganize_buffer(u8 index)
+{
+   
+}
+
+void check_transmission(u8 last_sent_message_index)
+{
+   // if it didn't send anything in the transmission
+   if(last_sent_message_index==0)
+   {
+      last_sent_message_index++;
+   }
 }

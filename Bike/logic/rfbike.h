@@ -17,6 +17,8 @@ extern void display_ppt(u8 line, u8 update);
 extern void display_sync(u8 line, u8 update);
 extern void send_smpl_data(u16 data);
 extern u8 is_rf(void);
+extern void reorganize_buffer(u8 index);
+extern void check_transmission(u8 last_sent_message_index);
 
 extern void sx_link(void);
 extern void display_link(u8 line, u8 update);
@@ -71,9 +73,9 @@ typedef struct
 	u16 speed_max;	
 } s_measurement;
 
-extern s_measurement measurement[12];
-extern u8 measurement_count;
-
+extern s_measurement measurement[12];	
+extern u8 measurement_count;			
+extern u8 message_id;					// the actual message to be sent
 // *************************************************************************************************
 // Extern section
 
