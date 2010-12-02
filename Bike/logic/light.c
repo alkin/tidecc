@@ -166,7 +166,7 @@ void set_light(u8 light_unit, u8 status)
 	if(status == LIGHT_ON)
 	{
 		BUTTONS_OUT &= ~(light_unit & (LIGHT_FRONT | LIGHT_BACK));
-		BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
+		//BUTTONS_OUT |=  (light_unit & (LIGHT_BACKLIGHT));
 	}
 	else
 	{

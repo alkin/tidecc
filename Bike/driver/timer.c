@@ -364,11 +364,7 @@ __interrupt void TIMER0_A0_ISR(void)
 			else if(bike_sync_attempt==3)
 			{
 			   bike_try_to_connect = sTime.system_time + 7;
-			}
-			else if(bike_sync_attempt==4)
-			{
-               bike_sync_attempt = 0; 
-			   bike_try_to_connect = sTime.system_time + 5;
+			    bike_sync_attempt = 0; 
 			}
 		}
 	}

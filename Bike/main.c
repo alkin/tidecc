@@ -382,7 +382,7 @@ void display_update(void)
 void to_lpm(void)
 {
 	// Go to LPM3
-	_BIS_SR(LPM3_bits + GIE); 
+	_BIS_SR(LPM3_bits + GIE);
 	__no_operation();
 }
 

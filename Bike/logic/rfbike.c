@@ -285,7 +285,7 @@ void simpliciti_bike_decode_watch_callback(void)
 	      }
 	     
 	      // Ignore data if system_time from bike is bigger than the value received from the watch
-	      if(sTime.system_time > ((simpliciti_data[8] << 8) +  simpliciti_data[7]))
+	      if(sTime.system_time < ((simpliciti_data[8] << 8) +  simpliciti_data[7]))
 	      {
 	         sTime.system_time = ((simpliciti_data[8] << 8) +  simpliciti_data[7]);
 	         sTime.hour = sTime.system_time/3600;
