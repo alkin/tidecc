@@ -66,7 +66,6 @@ extern void toggle_light_back(void);
 typedef struct
 {
     u16 value			: 9;
-    u16 enable			: 1;
     u16 back_enable		: 1;
     u16 front_enable	: 1;
     u16 front_blink		: 6;

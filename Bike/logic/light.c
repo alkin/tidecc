@@ -50,7 +50,6 @@
 // logic
 #include "light.h"
 
-
 // *************************************************************************************************
 // Prototypes section
 
@@ -75,9 +74,6 @@ volatile s_light light;
 // *************************************************************************************************
 void reset_light(void)
 {
-	// Enable light system
-	light.enable = TRUE;
-	
 	// Initialize light values
 	light.value = 0;
 	light.back_enable = FALSE;
@@ -121,7 +117,7 @@ void do_light_measurement(void)
 // *************************************************************************************************
 void update_light(void)
 {
-	if(light.value >= LIGHT_LEVEL)
+	if(!sys.flag.low_battery && light.value >= LIGHT_LEVEL)
 	{
 		// Config front light duty cicle and blink rate
 		light.front_blink = 6;
@@ -183,7 +179,7 @@ void set_light(u8 light_unit, u8 status)
 // *************************************************************************************************
 void toggle_light_front(void)
 {
-	if(light.enable && light.front_enable == FALSE)
+	if(!sys.flag.low_battery && light.front_enable == FALSE)
 	{
 		set_light(LIGHT_FRONT, LIGHT_ON);
 		
@@ -210,7 +206,7 @@ void toggle_light_front(void)
 // *************************************************************************************************
 void toggle_light_back(void)
 {
-	if(light.enable && light.back_enable == FALSE)
+	if(!sys.flag.low_battery && light.back_enable == FALSE)
 	{
 		set_light(LIGHT_BACK, LIGHT_ON);
 		
