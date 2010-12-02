@@ -320,7 +320,7 @@ void simpliciti_bike_decode_watch_callback(void)
 
 void simpliciti_bike_get_data_callback(void)
 {      
-    if(message_id > measurement_count)
+    if(message_id >= measurement_count)
     {
        simpliciti_data[0] = BIKE_CMD_EXIT;
     }
@@ -443,7 +443,12 @@ void rfbike_sync(void)
 
 void reorganize_buffer(u8 index)
 {
+   u8 i;
    
+   for(i=index+1; i<measurement_count; i++)
+   {
+   		measurement[i-index-1] = measurement[i];   	
+   }   
 }
 
 void check_transmission(u8 last_sent_message_index)

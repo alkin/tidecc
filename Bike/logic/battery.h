@@ -56,7 +56,7 @@ extern void battery_measurement(void);
 #define BATTERY_HIGH_THRESHOLD			(360u)
 
 // Battery end of life voltage threshold -> disable radio, show "lobatt" message
-#define BATTERY_LOW_THRESHOLD			(220u)
+#define BATTERY_LOW_THRESHOLD			(330u)
 
 // Show "lobatt" message every n seconds
 #define BATTERY_LOW_MESSAGE_CYCLE		(15u)

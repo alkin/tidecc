@@ -98,7 +98,9 @@ int main(void)
 		// When idle go to LPM3
 		idle_loop();
  
- 		// Do altitude measurement
+		battery_measurement();
+		
+		// Do altitude measurement
 		do_altitude_measurement(FILTER_ON);
 		temperature_measurement(FILTER_ON);
 	
@@ -206,16 +208,16 @@ void init_application(void)
 	__enable_interrupt();
 	
 	// ---------------------------------------------------------------------
-	// Wait until 3V in DVcc is settled
- 	/*
- 	 * Timer0_Init();
+	// Wait until 3.3V in DVcc is settled
+ 	
+ 	Timer0_Init();
  	TA0CCTL0 &= ~CCIE;
  	do
  	{
  		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000));
 	 	battery_measurement();
  	} while (sys.flag.low_battery);
-		*/
+	
 	// ---------------------------------------------------------------------
 	// Configure ports
 
