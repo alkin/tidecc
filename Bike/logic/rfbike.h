@@ -76,6 +76,7 @@ typedef struct
 extern s_measurement measurement[12];	
 extern u8 measurement_count;			
 extern u8 message_id;					// the actual message to be sent
+extern u8 last_sent_message_index;
 // *************************************************************************************************
 // Extern section
 

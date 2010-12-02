@@ -196,7 +196,7 @@ extern unsigned char simpliciti_listen_to(void);
 extern unsigned char simpliciti_link_to(void);
 
 extern void listen(void);
-extern void bike_communication(void);
+extern void simpliciti_bike_communication(void);
 
 extern void reset_simpliciti(void);
 

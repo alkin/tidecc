@@ -86,7 +86,7 @@ unsigned char simpliciti_link_to (void)
   return (1);
 }
 
-void bike_communication()
+void simpliciti_bike_communication()
 {
   // show(3); // connected
    /* turn on RX. default is RX off. */

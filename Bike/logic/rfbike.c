@@ -115,6 +115,7 @@ u8 		*flash_ptr;
 s_measurement measurement[12];
 u8 measurement_count;
 u8 message_id;
+u8 last_sent_message_index;
 // *************************************************************************************************
 // Extern section
 extern void (*fptr_lcd_function_line1)(u8 line, u8 update);
@@ -224,7 +225,7 @@ void sx_link(void)
    
    if (simpliciti_link_to())
    {
-       bike_communication();
+       simpliciti_bike_communication();
    }
 
    reset_simpliciti();
@@ -408,7 +409,8 @@ void rfbike_sync(void)
 	 
 	   	   // Set SimpliciTI mode
            message_id = 0;
-	       bike_communication();
+	       simpliciti_bike_communication();
+	       // check if the bike received a request
            check_transmission(message_id);
 	       // connected. Change to low power mode - idle
 	       sRFsmpl.mode = SIMPLICITI_IDLE;
@@ -434,7 +436,9 @@ void rfbike_sync(void)
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{
         message_id = 0;
-	    bike_communication(); 
+        // 
+	    simpliciti_bike_communication(); 
+	    // check if it received the data
 	    check_transmission(message_id);
 	    // takes the last sent message and reorganizes the buffer
 	    reorganize_buffer(message_id);
@@ -446,10 +450,10 @@ void reorganize_buffer(u8 index)
    
 }
 
-void check_transmission(u8 last_sent_message_index)
+void check_transmission(u8 message_index)
 {
    // if it didn't send anything in the transmission
-   if(last_sent_message_index==0)
+   if(message_index==0)
    {
       last_sent_message_index++;
    }
