@@ -48,7 +48,7 @@ typedef enum
 #define SIMPLICITI_MOUSE_EVENTS			(0x01)
 #define SIMPLICITI_KEY_EVENTS			(0x02)
 
-
+#define SIMPLICITI_BIKE_SEND_INTERVAL   (10u)
 // *************************************************************************************************
 // Global Variable section
 struct RFsmpl
@@ -76,6 +76,7 @@ typedef struct
 extern s_measurement measurement[12];	
 extern u8 measurement_count;			
 extern u8 message_id;					// the actual message to be sent
+extern u8 last_sent_message_index;
 // *************************************************************************************************
 // Extern section
 

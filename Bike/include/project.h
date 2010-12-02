@@ -156,6 +156,7 @@ extern volatile s_config config;
 extern u8 bike_sync_attempt;
 extern u32 bike_communication_timeout;
 extern u32 bike_try_to_connect;
+extern u32 bike_send_data;
 // *************************************************************************************************
 // Global Variable section
 

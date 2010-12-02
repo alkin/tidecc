@@ -86,7 +86,7 @@ u8 change_menu = 0;
 u8 bike_sync_attempt;
 u32 bike_communication_timeout;
 u32 bike_try_to_connect;
-
+u32 bike_send_data;
 // *************************************************************************************************
 // Extern section
 
@@ -367,23 +367,25 @@ __interrupt void TIMER0_A0_ISR(void)
 			    bike_sync_attempt = 0; 
 			}
 		}
-	}
+	}	
 	
-	/*if( sTime.system_time == 4)
+	if(last_sent_message_index==2)
 	{
-	   // Start pairing
-	   simpliciti_bike_flag = SIMPLICITI_BIKE_CONNECT;
-	   bike_communication_timeout = sTime.system_time +1;
+	   // the bike didn't receive any message in 20 seconds -> reconnect
+	   sRFsmpl.mode = SIMPLICITI_OFF;
+	   
+	   // tries to reconnect in 5 seconds
+	   bike_try_to_connect = sTime.system_time+5;
 	}
-	*/
 	
-	if ( sTime.system_time%10 == 0)
+	if ( sTime.system_time == bike_send_data)
 	{
 	   bike_communication_timeout = sTime.system_time +1;
 	   
 	   if(sRFsmpl.mode == SIMPLICITI_IDLE)
 	   {
 	      simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
+	      bike_send_data = sTime.system_time + SIMPLICITI_BIKE_SEND_INTERVAL;
 	   }
 	   else if ((sRFsmpl.mode == SIMPLICITI_OFF) && (bike_sync_attempt==0))
 	   {
