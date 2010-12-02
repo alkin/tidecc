@@ -48,7 +48,7 @@ typedef enum
 #define SIMPLICITI_MOUSE_EVENTS			(0x01)
 #define SIMPLICITI_KEY_EVENTS			(0x02)
 
-
+#define SIMPLICITI_BIKE_SEND_INTERVAL   (10u)
 // *************************************************************************************************
 // Global Variable section
 struct RFsmpl

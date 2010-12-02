@@ -414,6 +414,7 @@ void rfbike_sync(void)
            check_transmission(message_id);
 	       // connected. Change to low power mode - idle
 	       sRFsmpl.mode = SIMPLICITI_IDLE;
+	       bike_send_data = sTime.system_time + SIMPLICITI_BIKE_SEND_INTERVAL;
 	   }
 	   else
 	   {

@@ -278,6 +278,7 @@ void init_global_variables(void)
     bike_communication_timeout=0;
     bike_try_to_connect=5; // first attempt to connect - 5 seconds
     last_sent_message_index=0;
+    bike_send_data=0;
     
 #ifndef ISM_US
 	// Use metric units for display
