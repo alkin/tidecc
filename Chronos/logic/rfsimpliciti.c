@@ -112,6 +112,7 @@ u8 burst_packet_index;
 u8 *flash_ptr;
 
 u16 last_received_message;
+u16 teste=0;
 // *************************************************************************************************
 // Extern section
 extern void (*fptr_lcd_function_line1) (u8 line, u8 update);
@@ -415,17 +416,7 @@ void sx_bike_chronos(u8 line)
    display_symbol(LCD_ICON_BEEPER3, SEG_ON_BLINK_ON);
    
    toggle_bike_datalog();
-   
-/*	u8 aux;
-	for (aux=0;aux<10;aux++)
-	{
-       do_bike_datalog(DATALOG_BIKE_NORMAL);  
-	}  
-    do_bike_datalog(DATALOG_BIKE_END_SESSION);  
-   
-    toggle_bike_datalog();
-   
-       */ 
+
    // Prepare radio for RF communication
    open_radio();
    
@@ -438,27 +429,21 @@ void sx_bike_chronos(u8 line)
    {
        listen();
    }
-      
-   reset_simpliciti();
-     
-   // Set SimpliciTI state to OFF
+         // Set SimpliciTI state to OFF
    sRFsmpl.mode = SIMPLICITI_OFF;
-   
-   // resets down counter
-   rfbike_delay_transmission=SIMPLICITI_BIKE_TRANSMISSION_TIMEOUT;
 
    // Powerdown radio
    close_radio();
 
    // Clear last button events
-
-   do_bike_datalog(DATALOG_BIKE_END_SESSION);
-   toggle_bike_datalog();
-   
    Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
    BUTTONS_IFG = 0x00;
    button.all_flags = 0;
 
+   // Clear last button events
+   do_bike_datalog(DATALOG_BIKE_END_SESSION);
+   toggle_bike_datalog();
+   
    // Clear icons
    display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
    display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);
@@ -482,47 +467,31 @@ void simpliciti_watch_decode_bike_callback(void)
 	
 	   case BIKE_CMD_CONFIG:
 	        // Received config data from bike
-	   /*
-            config.all_flags=0;
-            config.data.bike_size=10;
-            config.data.sensor_count=7;
-            config.data.speed_unit=1;
-            
-            distance_value=275;
-            
-	   		simpliciti_data[0] = WATCH_CMD_SET_CONFIG;
-	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		    // Bike parameters
-      		simpliciti_data[2] = (config.all_flags >>8) & 0xFF; 	// Bike Parameters
-      		simpliciti_data[3] = distance_value & 0xFF; 			// initial distance
-      		simpliciti_data[4] = (distance_value >> 8) & 0xFF;    	// initial distance
-      		simpliciti_data[5] = (distance_value >> 16) & 0xFF; 	// initial distance  
-      		simpliciti_data[6] = (distance_value >> 24) & 0xFF; 	// initial distance      
-      		simpliciti_data[7] = sTime.system_time & 0xFF; 		    // initial distance
-     		simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF;   // initial distance  
-     		*/
+
 	      break;
 	   
 	    case BIKE_CMD_DATA:
 		      // do data log from received data
-		     // if it receives two identical messages 
-		     if(last_received_message != ((simpliciti_data[2] << 8) +  simpliciti_data[1]))
-		     {
-			      max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
-			      
-	              distance_value = (u16)((simpliciti_data[8] << 8) + (simpliciti_data[7]));
-	              distance_value = (distance_value << 16);
-	              distance_value += (u16)((simpliciti_data[6] << 8) + simpliciti_data[5]);
-	
-			      do_bike_datalog(DATALOG_BIKE_NORMAL);
-		     }
-		     last_received_message = ((simpliciti_data[2] << 8) +  simpliciti_data[1]);
+		      // if it receives two identical messages 
+                  if(last_received_message!=((u16)((simpliciti_data[2]<<8) + (simpliciti_data[1]))))
+                  {
+				      max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
+				      
+		              distance_value = (u16)((simpliciti_data[8] << 8) + (simpliciti_data[7]));
+		              distance_value = (distance_value << 16);
+		              distance_value += (u16)((simpliciti_data[6] << 8) + simpliciti_data[5]);
+		
+				      do_bike_datalog(DATALOG_BIKE_NORMAL);
+	              }
+		          last_received_message = (u16)((simpliciti_data[2] << 8) +  simpliciti_data[1]);
 		      
 	    break;
 	    
 	  case BIKE_CMD_EXIT:
 	  // bike says bye!
 	  // end connection
-	 //   simpliciti_flag |= SIMPLICITI_TRIGGER_STOP;
+	    // sleep INTERVAL seconds 
+	    //simpliciti_flag |= SIMPLICITI_TRIGGER_STOP;
 	    break;  
    }
 }
@@ -530,6 +499,7 @@ void simpliciti_watch_decode_bike_callback(void)
 
 void simpliciti_watch_get_data_callback(void)
 { 
+	u16 actual_timer_value=0;
    switch (simpliciti_data[0])
    {
 	   case WATCH_CMD_NOP:
@@ -539,6 +509,10 @@ void simpliciti_watch_get_data_callback(void)
             // initial config
             config.all_flags=0xA67C;
 
+            while (actual_timer_value != TA0R)
+               actual_timer_value = TA0R;
+    
+            teste = actual_timer_value;
 	   		simpliciti_data[0] = WATCH_CMD_SET_CONFIG;
 	    	simpliciti_data[1] = config.all_flags & 0xFF ; 		    // Bike parameters
       		simpliciti_data[2] = (config.all_flags >>8) & 0xFF; 	// Bike Parameters
@@ -546,11 +520,11 @@ void simpliciti_watch_get_data_callback(void)
       		simpliciti_data[4] = (distance_value >> 8) & 0xFF; 	    // initial distance
       		simpliciti_data[5] = (distance_value >> 16) & 0xFF; 	// initial distance  
       		simpliciti_data[6] = (distance_value >> 24) & 0xFF; 	// initial distance      
-            simpliciti_data[7] =  last_received_message & 0xFF; 		        // initial time
-     		simpliciti_data[8] = (last_received_message >> 8) & 0xFF;           // initial time  
- 
-     		//simpliciti_data[7] =  sTime.system_time & 0xFF; 		// initial time
-     		//simpliciti_data[8] = (sTime.system_time >> 8) & 0xFF;   // initial time  
+            simpliciti_data[7] =  last_received_message & 0xFF;       // initial time
+     		simpliciti_data[8] = (last_received_message >> 8) & 0xFF;  // initial time  
+            simpliciti_data[9] =  actual_timer_value & 0xFF; 		    // sync timers
+     		simpliciti_data[10] = (actual_timer_value >> 8) & 0xFF;     // sync timers  
+
 	      break;
 	   
 	    case WATCH_CMD_GET_DATA:

@@ -103,7 +103,7 @@ extern u16 segundos;
 extern u8 rfbike_delay_transmission; // decreased each second. Send request data when this variable reaches 0
 extern u8 bike_try;
 extern unsigned char simpliciti_flag;
-
+extern u16 teste;
 // *************************************************************************************************
 // Extern section
 

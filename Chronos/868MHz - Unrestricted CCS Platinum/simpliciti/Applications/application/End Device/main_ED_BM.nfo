@@ -13,12 +13,12 @@ static unsigned char Listen_Callback() is called from 0 sites in this file.
 	SMPL_Receive() (1 times)
 
 extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 87 units)
+    It appears to be inlineable (size = 85 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	SMPL_Unlink() (1 times)
 	Timer0_A4_Delay() (3 times)
-	MRFI_DelayMs() (3 times)
+	MRFI_DelayMs() (2 times)
 	SMPL_Send() (2 times)
 	simpliciti_watch_get_data_callback() (1 times)
 	SMPL_Ioctl() (6 times)
@@ -153,7 +153,7 @@ extern void reset_simpliciti() is called from 0 sites in this file.
 ==============================================================================
 
 extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 87 units)
+    It appears to be inlineable (size = 85 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
