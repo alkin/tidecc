@@ -112,9 +112,9 @@ void simpliciti_bike_communication()
 	      else if(simpliciti_data[0] == BIKE_CMD_CONFIG)
 	      {
 	      	 // send twice since we don't receive ACK as confirmation 
-	         SMPL_Send(sLinkID3, simpliciti_data, 1);
+	         SMPL_Send(sLinkID3, simpliciti_data, 4);
 	         NWK_DELAY(10);
-	         SMPL_Send(sLinkID3, simpliciti_data, 1);
+	         SMPL_Send(sLinkID3, simpliciti_data, 4);
 	      }
 	      
 	      else if(simpliciti_data[0] == BIKE_CMD_EXIT)

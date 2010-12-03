@@ -143,6 +143,7 @@ extern volatile s_config config;
 extern u32 distance_value;
 extern u16 bike_time;
 extern u16 max_speed;
+extern u16 last_received_message;
 // *************************************************************************************************
 // Global Variable section
 

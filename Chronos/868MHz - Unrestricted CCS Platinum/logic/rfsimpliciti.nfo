@@ -42,7 +42,7 @@ extern void simpliciti_sync_get_data_callback() is called from 0 sites in this f
 	<NONE>
 
 extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 83 units)
+    It appears to be inlineable (size = 93 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	do_bike_datalog() (1 times)
@@ -159,7 +159,7 @@ extern void simpliciti_watch_get_data_callback() is called from 0 sites in this 
 ==============================================================================
 
 extern void simpliciti_watch_decode_bike_callback() is called from 0 sites in this file.
-    It appears to be inlineable (size = 83 units)
+    It appears to be inlineable (size = 93 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
@@ -173,8 +173,8 @@ extern void simpliciti_sync_get_data_callback() is called from 0 sites in this f
 	<NONE>
 
 ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
-	in the 'for' loop at lines 400-401
-	for the statement simpliciti_data[i] = **&flash_ptr; at line 401
+	in the 'for' loop at lines 399-400
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 400
 
 	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
 	to assert that lvalues **&flash_ptr;
@@ -182,9 +182,9 @@ ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti
 	do not access the same object in memory.
 
 ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
-	in the 'for' loop at lines 400-401
-	for the statement simpliciti_data[i] = **&flash_ptr; at line 401
-	and the statement ++(*&flash_ptr); at line 401
+	in the 'for' loop at lines 399-400
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 400
+	and the statement ++(*&flash_ptr); at line 400
 
 	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
 	to assert that lvalues **&flash_ptr;
@@ -192,8 +192,8 @@ ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti
 	do not access the same object in memory.
 
 ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
-	in the 'for' loop at lines 390-391
-	for the statement simpliciti_data[i] = **&flash_ptr; at line 391
+	in the 'for' loop at lines 389-390
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 390
 
 	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
 	to assert that lvalues **&flash_ptr;
@@ -201,9 +201,9 @@ ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti
 	do not access the same object in memory.
 
 ADVICE: In function simpliciti_sync_get_data_callback() in ../logic/rfsimpliciti.c
-	in the 'for' loop at lines 390-391
-	for the statement simpliciti_data[i] = **&flash_ptr; at line 391
-	and the statement ++(*&flash_ptr); at line 391
+	in the 'for' loop at lines 389-390
+	for the statement simpliciti_data[i] = **&flash_ptr; at line 390
+	and the statement ++(*&flash_ptr); at line 390
 
 	Consider declaring 'flash_ptr' as extern unsigned char * restrict flash_ptr
 	to assert that lvalues **&flash_ptr;
