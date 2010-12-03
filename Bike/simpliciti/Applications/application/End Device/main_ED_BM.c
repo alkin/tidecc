@@ -120,8 +120,8 @@ void simpliciti_bike_communication()
 	      
 	      else if(simpliciti_data[0] == BIKE_CMD_EXIT)
 	      {
-	          sSemaphore = 0;
-	          break;
+	        //  sSemaphore = 0;
+	        //  break;
 	      }
 	  }
 	 // if the timer decides it is time to stop

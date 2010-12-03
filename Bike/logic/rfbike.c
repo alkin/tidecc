@@ -290,7 +290,6 @@ void simpliciti_bike_decode_watch_callback(void)
 	         sTime.minute = (sTime.system_time%3600)/60;
 	         sTime.second = (sTime.system_time%3600)%60;	      
 	      }
-	 
 	      
 	 	  // Sync timers from bike and watch     
 	 	  // Stop Timer0	 
@@ -397,7 +396,7 @@ void rfbike_sync(void)
            last_sent_message_index=0;
 	       simpliciti_bike_communication();
 	       // check if the bike received a request
-           check_transmission(message_id);
+           //check_transmission(message_id);
 	       // connected. Change to low power mode - idle
 	       sRFsmpl.mode = SIMPLICITI_IDLE;
 	       bike_send_data = sTime.system_time + SIMPLICITI_BIKE_SEND_INTERVAL;
@@ -409,7 +408,8 @@ void rfbike_sync(void)
 		  reset_simpliciti();
 		  // Set SimpliciTI state to OFF
 	      sRFsmpl.mode = SIMPLICITI_OFF;
-	      //close_radio();
+	      reset_simpliciti();
+          close_radio();
 	   }
 	  
 	   // Clear icons
@@ -437,9 +437,9 @@ void reorganize_buffer(u8 index)
    if(index>0)
    {
       // if it received a message
-      for(i=index+1; i<=measurement_count; i++)
+      for(i=index; i<=measurement_count; i++)
       {
-   	    measurement[i-index-1] = measurement[i];
+   	    measurement[i-index] = measurement[i];
       }
    }      
    measurement_count -= index;
