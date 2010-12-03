@@ -342,12 +342,16 @@ void rfbike_sync(void)
 	}
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{
-        message_id = 0;
-	    simpliciti_bike_communication();
-	    // check if it received the data
-	    check_transmission(message_id);
-	    // takes the last sent message and reorganizes the buffer
-	    reorganize_buffer(message_id);
+	   // just send data if bike is in movement 
+       if(speed.value!=0)
+       {
+	        message_id = 0;
+		    simpliciti_bike_communication();
+		    // check if it received the data
+		    check_transmission(message_id);
+		    // takes the last sent message and reorganizes the buffer
+		    reorganize_buffer(message_id);
+	   }
 	}
 }
 
