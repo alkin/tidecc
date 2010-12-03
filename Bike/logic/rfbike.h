@@ -10,18 +10,11 @@
 // Prototypes section
 extern void reset_rf(void);
 extern void sx_rf(u8 line);
-extern void sx_ppt(u8 line);
-extern void sx_sync(u8 line);
 extern void display_rf(u8 line, u8 update);
-extern void display_ppt(u8 line, u8 update);
-extern void display_sync(u8 line, u8 update);
 extern void send_smpl_data(u16 data);
 extern u8 is_rf(void);
 extern void reorganize_buffer(u8 index);
 extern void check_transmission(u8 last_sent_message_index);
-
-extern void sx_link(void);
-extern void display_link(u8 line, u8 update);
 
 // *************************************************************************************************
 // Defines section

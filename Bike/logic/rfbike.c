@@ -157,41 +157,11 @@ void rfbike_measurement(void)
 	temp.temperature = get_temperature_average();
 	temp.speed_max = speed.max;
 	
-	measurement[measurement_count++] = temp;
-}
-
-
-// *************************************************************************************************
-// @fn          sx_sync
-// @brief       Start SimpliciTI. Button DOWN connects/disconnects to access point.
-// @param       u8 line		LINE2
-// @return      none
-// *************************************************************************************************
-void sx_sync(u8 line)
-{
-	// Exit if battery voltage is too low for radio operation
-	if (sys.flag.low_battery) return;
-  	
-  	// Start SimpliciTI in sync mode
-	start_simpliciti_sync();
-}
-
-
-// *************************************************************************************************
-// @fn          display_sync
-// @brief       SimpliciTI display routine. 
-// @param       u8 line			LINE2
-//				u8 update		DISPLAY_LINE_UPDATE_FULL
-// @return      none
-// *************************************************************************************************
-void display_sync(u8 line, u8 update)
-{
-	if (update == DISPLAY_LINE_UPDATE_FULL)	
+	if(measurement_count<=12)
 	{
-		display_chars(LCD_SEG_L2_5_0, (u8 *)"  SYNC", SEG_ON);
+	   measurement[measurement_count++] = temp;
 	}
 }
-
 
 // *************************************************************************************************
 // @fn          is_rf
@@ -202,56 +172,6 @@ void display_sync(u8 line, u8 update)
 u8 is_rf(void)
 {
 	return (sRFsmpl.mode != SIMPLICITI_OFF);
-}
-
-void sx_link(void)
-{
-    // Clear LINE1
-   clear_line(LINE1);
-   fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
-
-   // Turn on beeper icon to show activity
-   display_symbol(LCD_ICON_BEEPER1, SEG_ON_BLINK_ON);
-   display_symbol(LCD_ICON_BEEPER2, SEG_ON_BLINK_ON);
-   display_symbol(LCD_ICON_BEEPER3, SEG_ON_BLINK_ON);
-
-   // Prepare radio for RF communication
-   open_radio();
- 
-   reset_simpliciti();
-   
-   // Set SimpliciTI mode
-   sRFsmpl.mode = SIMPLICITI_SYNC;
-   
-   if (simpliciti_link_to())
-   {
-       simpliciti_bike_communication();
-   }
-
-   reset_simpliciti();
-   
-   // Set SimpliciTI state to OFF
-   sRFsmpl.mode = SIMPLICITI_OFF;
-   
-   close_radio();
-
-   // Clear last button events
-   Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
-   BUTTONS_IFG = 0x00;
-   button.all_flags = 0;
-
-   // Clear icons
-   display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
-   display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);
-   display_symbol(LCD_ICON_BEEPER3, SEG_OFF_BLINK_OFF);
-
-   // Force full display update
-   display.flag.full_update = 1;
-}
-
-void display_link(u8 line, u8 update)
-{
-      display_chars(LCD_SEG_L2_5_0, (u8 *) "  LIN", SEG_ON);
 }
 
 void simpliciti_bike_decode_watch_callback(void)
@@ -399,7 +319,7 @@ void rfbike_sync(void)
            //check_transmission(message_id);
 	       // connected. Change to low power mode - idle
 	       sRFsmpl.mode = SIMPLICITI_IDLE;
-	       bike_send_data = sTime.system_time + SIMPLICITI_BIKE_SEND_INTERVAL;
+	       //bike_send_data = sTime.system_time + SIMPLICITI_BIKE_SEND_INTERVAL;
 	   }
 	   else
 	   {

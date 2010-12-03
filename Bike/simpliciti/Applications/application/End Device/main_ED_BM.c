@@ -88,8 +88,7 @@ unsigned char simpliciti_link_to (void)
 
 void simpliciti_bike_communication()
 {
-  // show(3); // connected
-   /* turn on RX. default is RX off. */
+  // turn on RX. default is RX off.
    
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);
    SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
@@ -105,23 +104,37 @@ void simpliciti_bike_communication()
 	      {
      		// send twice since we don't receive ACK as confirmation 
      	    SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
-	        NWK_DELAY(10);
-	        //SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
-	      }
+	        NWK_DELAY(15);
+	       
+	        SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
+	        NWK_DELAY(15);  
+           }
 	      // if it is the message is a config ACK the message size is one
 	      else if(simpliciti_data[0] == BIKE_CMD_CONFIG)
 	      {
+	      	 sSemaphore=0;
 	      	 // send twice since we don't receive ACK as confirmation 
 	         SMPL_Send(sLinkID3, simpliciti_data, 4);
 	         NWK_DELAY(10);
-	         //SMPL_Send(sLinkID3, simpliciti_data, 4);
-	         break;
+	         
+	         SMPL_Send(sLinkID3, simpliciti_data, 4);
+	         NWK_DELAY(10);
+             
+             break;
 	      }
 	      
 	      else if(simpliciti_data[0] == BIKE_CMD_EXIT)
 	      {
-	        //  sSemaphore = 0;
-	        //  break;
+	      	  // if it send everything, send message to watch to disconnect
+	      	
+	      	 SMPL_Send(sLinkID3, simpliciti_data, 4);
+	         NWK_DELAY(10);
+	         
+	         SMPL_Send(sLinkID3, simpliciti_data, 4);
+	         NWK_DELAY(10);
+            
+	          sSemaphore = 0;
+	          break;
 	      }
 	  }
 	 // if the timer decides it is time to stop

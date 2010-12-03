@@ -106,86 +106,9 @@ const struct menu menu_L2_Distance =
 	FUNCTION(dummy),				// sub menu function
 	FUNCTION(display_distance),		// display function
 	FUNCTION(update_display),			// new display data
-	&menu_L2_Bike_link,
+	&menu_L2_Time,
 };
 
-const struct menu menu_L2_Bike_link = {
-   FUNCTION(dummy),             // direct function
-   FUNCTION(dummy),             // sub menu function
-   FUNCTION(display_link),     // display function
-   FUNCTION(update_display),       // new display data
-   &menu_L2_Time,
-};
-
-
-/*
-// Line1 - Time
-const struct menu menu_L1_Time =
-{
-	FUNCTION(sx_time),			// direct function
-	FUNCTION(dummy),			// sub menu function
-	FUNCTION(display_time),		// display function
-	FUNCTION(update_time),		// new display data
-	&menu_L1_Temperature,
-};
-// Line1 - Temperature
-
-const struct menu menu_L1_Temperature =
-{
-	FUNCTION(dummy),					// direct function
-	FUNCTION(dummy),					// sub menu function
-	FUNCTION(display_temperature),		// display function
-	FUNCTION(update_time),				// new display data
-	&menu_L1_Altitude,
-};
-// Line1 - Altitude
-const struct menu menu_L1_Altitude =
-{
-	FUNCTION(dummy),					// direct function
-	FUNCTION(dummy),					// sub menu function
-	FUNCTION(display_altitude),			// display function
-	FUNCTION(update_time),				// new display data
-#ifdef INCLUDE_BLUEROBIN_SUPPORT
-	&menu_L1_Heartrate,
-};
-
-// Line2 - Date
-const struct menu menu_L2_Date =
-{
-	FUNCTION(sx_date),			// direct function
-	FUNCTION(dummy),			// sub menu function
-	FUNCTION(display_date),		// display function
-	FUNCTION(update_date),		// new display data
-	&menu_L2_DataLog,
-};
-// Line2 - DataLog (data recording on/off)
-const struct menu menu_L2_DataLog =
-{
-	FUNCTION(sx_datalog),			// direct function
-	FUNCTION(dummy),				// sub menu function
-	FUNCTION(display_datalog),		// display function
-	FUNCTION(update_time),			// new display data
-	&menu_L2_Sync,
-};
-// Line2 - SYNC (synchronization/data download via SimpliciTI)
-const struct menu menu_L2_Sync =
-{
-	FUNCTION(sx_sync),				// direct function
-	FUNCTION(dummy),				// sub menu function
-	FUNCTION(display_sync),			// display function
-	FUNCTION(update_time),			// new display data
-	&menu_L2_RFBSL,
-};
-// Line2 - RFBSL
-const struct menu menu_L2_RFBSL =
-{
-	FUNCTION(sx_rfbsl),				// direct function
-	FUNCTION(dummy),				// sub menu function
-	FUNCTION(display_rfbsl),		// display function
-	FUNCTION(update_time),			// new display data
-	&menu_L2_Date,
-};
-*/
 
 void dummy(u8 line)
 {

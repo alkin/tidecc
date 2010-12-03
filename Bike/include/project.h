@@ -53,7 +53,7 @@
 //#define USE_LCD_CHARGE_PUMP
 
 // Uncomment this define to build the application without watchdog support
-//#define USE_WATCHDOG
+#define USE_WATCHDOG
 
 // Use/not use filter when measuring physical values
 #define FILTER_OFF						(0u)
