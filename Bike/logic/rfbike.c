@@ -275,7 +275,7 @@ void simpliciti_bike_decode_watch_callback(void)
 	   case WATCH_CMD_SET_CONFIG:        // Set bike parameters
 	      // Set parameters from the bike here
 		  // config, distance, system_time	      
-	      config.all_flags =(u16) ((simpliciti_data[2]<<8) + simpliciti_data[1])  ;
+	      config.all_flags =(u16) ((simpliciti_data[2]<<8) + simpliciti_data[1]);
 	      
 	      distance_aux = (u16)((simpliciti_data[6] << 8) + (simpliciti_data[5]));
 	      distance_aux = (distance.value << 16);
@@ -296,7 +296,7 @@ void simpliciti_bike_decode_watch_callback(void)
 	 	  // Stop Timer0	 
 	      TA0CTL &= ~MC_2;
 
-          // Set Timer0 count register to 0x0000
+          // Set Timer0 
           TA0R = (u16)((simpliciti_data[10] << 8) + simpliciti_data[9]);   
 
 	      // Release Timer	 
@@ -326,13 +326,11 @@ void simpliciti_bike_get_data_callback(void)
        simpliciti_data[0] = BIKE_CMD_EXIT;
     }
     
-   // simpliciti_data[0] contains data type and needs to be returned to AP
+   // simpliciti_data[0] contains data type and needs to be returned to watch
    switch (simpliciti_data[0])
    {
       case BIKE_CMD_DATA:	 
       	// Temperature, Altitude, time, distance, speed
-     	
-     	//last_send_index--;
       	simpliciti_data[0] = BIKE_CMD_DATA; 
      	
 		simpliciti_data[1] = measurement[message_id].system_time & 0xFF;
@@ -347,28 +345,14 @@ void simpliciti_bike_get_data_callback(void)
 	    simpliciti_data[10] = ((measurement[message_id].temperature << 4) & 0xF0) | ((measurement[message_id].altitude >> 8) & 0x0F);
 		simpliciti_data[11] = measurement[message_id].altitude & 0xFF;
 		simpliciti_data[12] = measurement[message_id].speed_max & 0xFF;
-		simpliciti_data[13] = (measurement[message_id].speed_max >>8 ) & 0xFF;
-
+		simpliciti_data[13] = (measurement[message_id].speed_max >>8 ) & 0xFF;	
+		
      	message_id++;
-
-		/*simpliciti_data[1] = sTime.system_time & 0xFF;
-		simpliciti_data[2] = (sTime.system_time >> 8) & 0xFF; 
-		simpliciti_data[3] = speed.value & 0xFF;
-		simpliciti_data[4] = (speed.value >> 8) & 0xFF; 
-		simpliciti_data[5] = distance.value & 0xFF;
-		simpliciti_data[6] = (distance.value >> 8) & 0xFF;
-		simpliciti_data[7] = (distance.value >> 16) & 0xFF;
-		simpliciti_data[8] = (distance.value >> 24) & 0xFF;
-		simpliciti_data[9] = (sAlt.temperature_C >> 4) & 0xFF;
-	    simpliciti_data[10] = ((sAlt.temperature_C << 4) & 0xF0) | ((sAlt.altitude >> 8) & 0x0F);
-		simpliciti_data[11] = sAlt.altitude & 0xFF;
-		simpliciti_data[12] = max_speed & 0xFF;
-		simpliciti_data[13] = (max_speed >>8 ) & 0xFF;
-*/ 	
       break;
     
       case BIKE_CMD_CONFIG:
          // send ack data to watch
+         message_id=1;
          simpliciti_data[0] = BIKE_CMD_CONFIG;
       break;
       
@@ -377,6 +361,7 @@ void simpliciti_bike_get_data_callback(void)
       
       case BIKE_CMD_EXIT:
       // exit method
+         simpliciti_bike_flag |= SIMPLICITI_BIKE_TRIGGER_STOP;
       break;
    }
 }	  
@@ -409,6 +394,7 @@ void rfbike_sync(void)
 	 
 	   	   // Set SimpliciTI mode
            message_id = 0;
+           last_sent_message_index=0;
 	       simpliciti_bike_communication();
 	       // check if the bike received a request
            check_transmission(message_id);
@@ -437,8 +423,7 @@ void rfbike_sync(void)
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{
         message_id = 0;
-        // 
-	    simpliciti_bike_communication(); 
+	    simpliciti_bike_communication();
 	    // check if it received the data
 	    check_transmission(message_id);
 	    // takes the last sent message and reorganizes the buffer
@@ -449,11 +434,15 @@ void rfbike_sync(void)
 void reorganize_buffer(u8 index)
 {
    u8 i;
-   
-   for(i=index+1; i<measurement_count; i++)
+   if(index>0)
    {
-   		measurement[i-index-1] = measurement[i];   	
-   }   
+      // if it received a message
+      for(i=index+1; i<=measurement_count; i++)
+      {
+   	    measurement[i-index-1] = measurement[i];
+      }
+   }      
+   measurement_count -= index;
 }
 
 void check_transmission(u8 message_index)
@@ -462,5 +451,9 @@ void check_transmission(u8 message_index)
    if(message_index==0)
    {
       last_sent_message_index++;
+   }
+   else
+   {
+      last_sent_message_index=0;
    }
 }

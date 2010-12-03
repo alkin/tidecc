@@ -369,15 +369,17 @@ __interrupt void TIMER0_A0_ISR(void)
 		}
 	}	
 	
-/*	if(last_sent_message_index==2)
+	if(last_sent_message_index==2)
 	{
+	   last_sent_message_index=0;
+	   
 	   // the bike didn't receive any message in 20 seconds -> reconnect
 	   sRFsmpl.mode = SIMPLICITI_OFF;
-	   
+
 	   // tries to reconnect in 5 seconds
 	   bike_try_to_connect = sTime.system_time+5;
 	}
-	*/
+
 	/*
 	if ( sTime.system_time == bike_send_data)
 	{

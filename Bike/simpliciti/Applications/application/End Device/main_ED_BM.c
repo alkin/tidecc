@@ -106,7 +106,7 @@ void simpliciti_bike_communication()
      		// send twice since we don't receive ACK as confirmation 
      	    SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
 	        NWK_DELAY(10);
-	        SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
+	        //SMPL_Send(sLinkID3, simpliciti_data, BIKE_DATA_LENGTH);
 	      }
 	      // if it is the message is a config ACK the message size is one
 	      else if(simpliciti_data[0] == BIKE_CMD_CONFIG)
@@ -114,7 +114,8 @@ void simpliciti_bike_communication()
 	      	 // send twice since we don't receive ACK as confirmation 
 	         SMPL_Send(sLinkID3, simpliciti_data, 4);
 	         NWK_DELAY(10);
-	         SMPL_Send(sLinkID3, simpliciti_data, 4);
+	         //SMPL_Send(sLinkID3, simpliciti_data, 4);
+	         break;
 	      }
 	      
 	      else if(simpliciti_data[0] == BIKE_CMD_EXIT)
@@ -151,6 +152,7 @@ static uint8_t Link_Callback(linkID_t port)
     /* yes. go get the frame. we know this call will succeed. */
      if ((SMPL_SUCCESS == SMPL_Receive(sLinkID3, simpliciti_data, &len)) && len)
      {   
+       	
        simpliciti_bike_decode_watch_callback();
        sSemaphore = 1;
        return 1;
