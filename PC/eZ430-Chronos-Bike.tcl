@@ -1289,6 +1289,7 @@ proc fileDialog {w ent operation} {
   }
 }
 
+
 # Download packets, first in a burst, then missed packets packet-by-packet
 proc sync_download {} {
   global w simpliciti_on
@@ -1448,9 +1449,7 @@ proc sync_decode_data {} {
   global sync_use_metric_units
   
   updateStatusSYNC "Writing data to file."
-  #set wp [open $sync_file w]
-  #ez430_chronos.bike
-  #set wp [open "Teste.bike" w]
+  set wp [open "received.txt" w]
   set data_bike ""
   set end_packet 0
   set max_speed 0
@@ -1461,7 +1460,7 @@ proc sync_decode_data {} {
   for { set i 0 } { $i < $packets_expected } {incr i } {
 
   # Uncomment the next line to write raw data to the file
-   set wp [open "received" w]
+  # set wp [open "received" w]
    puts $wp "$i $packet($i)"
 
     if { $packet($i) != "m" } { 
