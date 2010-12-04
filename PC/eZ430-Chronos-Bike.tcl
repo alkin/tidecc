@@ -949,8 +949,6 @@ proc get_spl_data {} {
   }
 }
 
-
-
 # Grab all files in current directory and return list of files with right extension
 proc get_files { ext } {
 
@@ -1220,7 +1218,6 @@ proc open_file {} {
 	
 }
 
-
 # ----------------------------------------------------------------------------------------
 # Status output functions ----------------------------------------------------------------
 proc updateStatusSYNC { msg } {
@@ -1464,7 +1461,8 @@ proc sync_decode_data {} {
   for { set i 0 } { $i < $packets_expected } {incr i } {
 
   # Uncomment the next line to write raw data to the file
-  # puts $wp "$i $packet($i)"
+   set wp [open "received" w]
+   puts $wp "$i $packet($i)"
 
     if { $packet($i) != "m" } { 
       for { set j 6 } { $j < 37 } { set j [expr $j+2] } {
@@ -1592,7 +1590,7 @@ proc sync_decode_data {} {
   # Save initial time, date and max speed
    #puts $wp "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
    append data_bike "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
-   #close $wp
+   close $wp
   
    set report_file [open "[clock format $start_time -format {%d-%m-%Y}] [clock format $start_time -format {%H-%M-%S}].bike" w]
    puts $report_file $data_bike
