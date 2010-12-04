@@ -43,6 +43,7 @@
 #include "project.h"
 
 // driver
+#include "altitude.h"
 #include "temperature.h"
 #include "ports.h"
 #include "display.h"
@@ -97,6 +98,7 @@ void reset_temp_measurement(void)
 // *************************************************************************************************
 void temperature_measurement(u8 filter)
 {
+	/*
 	u16 adc_result;
 	volatile s32 temperature;
 	
@@ -124,6 +126,8 @@ void temperature_measurement(u8 filter)
 		// Override filter 
 		sTemp.degrees = (s16)temperature;
 	}
+	*/
+	sTemp.degrees = sAlt.temperature_C;
 	
 	push_temperature();
 }
