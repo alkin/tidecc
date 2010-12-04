@@ -1572,7 +1572,7 @@ proc sync_decode_data {} {
 		  set system_time [format %d [expr [format %d [expr (($byte1<<8) | (($byte0)))]]]]
 		  set speed_log   [format %d [expr [format %d [expr (($byte3<<8) | (($byte2)))]]]]
 		  set distance    [format %d [expr [format %d [expr (($byte5<<8) | (($byte4)))]]]]
-		  set rec_temp    [format %d [expr [format %d [expr (($byte10<<4) | (($byte9>>4)&0x0F))]]]]
+		  set rec_temp    [format %d [expr [format %d [expr (($byte9)<<4 | (($byte10&0xF0)>>4))]]]]
 		  set rec_alt     [format %d [expr (($byte9&0x0F)<<8) | $byte10]]
 					 
 		  # Write data set to file
