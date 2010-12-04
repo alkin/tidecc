@@ -353,21 +353,10 @@ __interrupt void TIMER0_A0_ISR(void)
 	       bike_sync_attempt++;
 	       
 	       // Increases the time between two attempts. We try to fit inside the listen from the watch
-			if(	bike_sync_attempt==1)
-			{
-       		   bike_try_to_connect = sTime.system_time + 5;
-			}
-			else if(bike_sync_attempt==2)
-			{
-			   bike_try_to_connect = sTime.system_time + 6;
-			}
-			else if(bike_sync_attempt==3)
-			{
-			   bike_try_to_connect = sTime.system_time + 7;
-			    bike_sync_attempt = 0; 
-			}
+       	   bike_try_to_connect = sTime.system_time + 4 + bike_sync_attempt;
+		   bike_sync_attempt = bike_sync_attempt%3; 
 		}
-	}	
+	}
 	
 	if(last_sent_message_index==2)
 	{
@@ -380,35 +369,30 @@ __interrupt void TIMER0_A0_ISR(void)
 	   bike_try_to_connect = sTime.system_time+5;
 	}
 
-	/*
-	if ( sTime.system_time == bike_send_data)
+	   
+	if(sRFsmpl.mode == SIMPLICITI_IDLE)
+	{
+	   // if we are ready to send
+	   if ( (sTime.system_time - rf_send_time)%SIMPLICITI_BIKE_SEND_INTERVAL == 0)
+		{
+		   bike_communication_timeout = sTime.system_time +1;
+		   simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
+	    }
+     }
+	
+	/*if ( sTime.system_time%10 == 0)
 	{
 	   bike_communication_timeout = sTime.system_time +1;
 	   
 	   if(sRFsmpl.mode == SIMPLICITI_IDLE)
 	   {
 	      simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
-	      bike_send_data = sTime.system_time + SIMPLICITI_BIKE_SEND_INTERVAL;
 	   }
 	   else if ((sRFsmpl.mode == SIMPLICITI_OFF) && (bike_sync_attempt==0))
 	   {
            bike_try_to_connect = sTime.system_time + 1; 
 	   }
 	}*/
-	
-	if ( sTime.system_time%10 == 0)
-	{
-	   bike_communication_timeout = sTime.system_time +1;
-	   
-	   if(sRFsmpl.mode == SIMPLICITI_IDLE)
-	   {
-	      simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
-	   }
-	   else if ((sRFsmpl.mode == SIMPLICITI_OFF) && (bike_sync_attempt==0))
-	   {
-           bike_try_to_connect = sTime.system_time + 1; 
-	   }
-	}
 	
 	if(bike_communication_timeout==sTime.system_time)
 	{

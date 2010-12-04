@@ -116,6 +116,7 @@ s_measurement measurement[12];
 u8 measurement_count;
 u8 message_id;
 u8 last_sent_message_index;
+u8 rf_send_time;
 // *************************************************************************************************
 // Extern section
 extern void (*fptr_lcd_function_line1)(u8 line, u8 update);
@@ -208,8 +209,10 @@ void simpliciti_bike_decode_watch_callback(void)
 	         sTime.system_time = ((simpliciti_data[8] << 8) +  simpliciti_data[7]);
 	         sTime.hour = sTime.system_time/3600;
 	         sTime.minute = (sTime.system_time%3600)/60;
-	         sTime.second = (sTime.system_time%3600)%60;	      
+	         sTime.second = (sTime.system_time%3600)%60;	         
 	      }
+	      
+	      rf_send_time = sTime.system_time%SIMPLICITI_BIKE_SEND_INTERVAL;
 	      
 	 	  // Sync timers from bike and watch     
 	 	  // Stop Timer0	 
@@ -220,6 +223,8 @@ void simpliciti_bike_decode_watch_callback(void)
 
 	      // Release Timer	 
 	      TA0CTL |= MC_2;
+	      
+	      
 	        
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      break;
@@ -343,15 +348,15 @@ void rfbike_sync(void)
 	else if(simpliciti_bike_flag==SIMPLICITI_BIKE_TRIGGER_SEND_DATA)
 	{
 	   // just send data if bike is in movement 
-       if(speed.value!=0)
-       {
+       //if(speed.value!=0)
+      // {
 	        message_id = 0;
 		    simpliciti_bike_communication();
 		    // check if it received the data
 		    check_transmission(message_id);
 		    // takes the last sent message and reorganizes the buffer
 		    reorganize_buffer(message_id);
-	   }
+	  // }
 	}
 }
 
