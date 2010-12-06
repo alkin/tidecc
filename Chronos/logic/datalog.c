@@ -504,7 +504,7 @@ void do_bike_datalog(u8 mode)
 	if (mode==DATALOG_BIKE_NORMAL)
 	{	   
  
-	      /* temp[0] = simpliciti_data[1];
+	       temp[0] = simpliciti_data[1];
 		   temp[1] = simpliciti_data[2];
 		   temp[2] = simpliciti_data[3];
 	       temp[3] = simpliciti_data[4];
@@ -515,9 +515,9 @@ void do_bike_datalog(u8 mode)
 	       temp[8] = simpliciti_data[9];
 	       temp[9] = simpliciti_data[10];
 		   temp[10] = simpliciti_data[11];
-	       temp[11] = 00;
-	      */
+	       temp[11] = 88;
 	      
+	/*      
 	       temp[0] = 0;
 		   temp[1] = 0;
 		   temp[2] = 0;
@@ -530,6 +530,8 @@ void do_bike_datalog(u8 mode)
 	       temp[9] = 0x10;
 		   temp[10] = 0x22;
 	       temp[11] = 00;
+	     */  
+	       
 	       count = 11;
 	      
 	      // Add data to recording buffer         

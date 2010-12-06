@@ -84,6 +84,8 @@ u8 b_temperature_count;
 // *************************************************************************************************
 void reset_temp_measurement(void)
 {
+	sTemp.degrees = 0;
+	
 	b_temperature_count			= 0;
 	// Perform one temperature measurements with disabled filter
 	temperature_measurement(FILTER_OFF);
@@ -127,9 +129,10 @@ void temperature_measurement(u8 filter)
 		sTemp.degrees = (s16)temperature;
 	}
 	*/
-	
-	sTemp.degrees = (s16)sAlt.temperature_C;
-	
+	if( sAlt.temperature_C < 500 && sAlt.temperature_C > -200 )
+	{
+	     sTemp.degrees = (s16)sAlt.temperature_C;
+	}	
 	push_temperature();
 }
 
