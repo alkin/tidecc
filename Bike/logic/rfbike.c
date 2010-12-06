@@ -316,7 +316,6 @@ void rfbike_sync(void)
 	   if (simpliciti_link_to())
 	   {
            display_chars(LCD_SEG_L2_5_0, (u8 *)"  PAIR", SEG_ON);
-           simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
 	 
 	   	   // Set SimpliciTI mode
            message_id = 0;
