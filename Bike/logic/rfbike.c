@@ -58,6 +58,7 @@
 #include "altitude.h"
 #include "distance.h"
 #include "speed.h"
+#include "sensor.h"
 
 
 
