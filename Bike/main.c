@@ -92,11 +92,6 @@ int main(void)
 	// Assign initial value to global variables
 	init_global_variables();
 	
-	// Do the first measurement
-	do_altitude_measurement(FILTER_ON);
-	temperature_measurement(FILTER_ON);
-	rfbike_measurement();
-	
 	// Main control loop: wait in low power mode until some event needs to be processed
 	while(1)
 	{

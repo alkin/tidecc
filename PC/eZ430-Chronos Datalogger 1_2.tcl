@@ -223,7 +223,7 @@ switch $tcl_platform(platform) "unix" {
 # Define basic window geometry
 wm title . "Texas Instruments eZ430-Chronos Datalogger $revision"
 wm geometry . 600x460
-wm resizable . 1 1
+wm resizable . 0 0
 wm iconname . "ttknote"
 ttk::frame .f
 pack .f -fill both -expand 1
@@ -975,7 +975,7 @@ proc sync_decode_data {} {
   for { set i 0 } { $i < $packets_expected } {incr i } {
 
   # Uncomment the next line to write raw data to the file
-  puts $wp "$i $packet($i)"
+  #puts $wp "$i $packet($i)"
 
     if { $packet($i) != "m" } { 
       for { set j 6 } { $j < 37 } { set j [expr $j+2] } {

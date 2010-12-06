@@ -949,6 +949,8 @@ proc get_spl_data {} {
   }
 }
 
+
+
 # Grab all files in current directory and return list of files with right extension
 proc get_files { ext } {
 
@@ -1218,6 +1220,7 @@ proc open_file {} {
 	
 }
 
+
 # ----------------------------------------------------------------------------------------
 # Status output functions ----------------------------------------------------------------
 proc updateStatusSYNC { msg } {
@@ -1288,7 +1291,6 @@ proc fileDialog {w ent operation} {
   	$ent xview end
   }
 }
-
 
 # Download packets, first in a burst, then missed packets packet-by-packet
 proc sync_download {} {
@@ -1449,7 +1451,9 @@ proc sync_decode_data {} {
   global sync_use_metric_units
   
   updateStatusSYNC "Writing data to file."
-  set wp [open "received.txt" w]
+  #set wp [open $sync_file w]
+  #ez430_chronos.bike
+  #set wp [open "Teste.bike" w]
   set data_bike ""
   set end_packet 0
   set max_speed 0
@@ -1460,8 +1464,7 @@ proc sync_decode_data {} {
   for { set i 0 } { $i < $packets_expected } {incr i } {
 
   # Uncomment the next line to write raw data to the file
-  # set wp [open "received" w]
-   puts $wp "$i $packet($i)"
+  # puts $wp "$i $packet($i)"
 
     if { $packet($i) != "m" } { 
       for { set j 6 } { $j < 37 } { set j [expr $j+2] } {
@@ -1572,7 +1575,7 @@ proc sync_decode_data {} {
 		  set system_time [format %d [expr [format %d [expr (($byte1<<8) | (($byte0)))]]]]
 		  set speed_log   [format %d [expr [format %d [expr (($byte3<<8) | (($byte2)))]]]]
 		  set distance    [format %d [expr [format %d [expr (($byte5<<8) | (($byte4)))]]]]
-		  set rec_temp    [format %d [expr [format %d [expr (($byte9)<<4 | (($byte10&0xF0)>>4))]]]]
+		  set rec_temp    [format %d [expr [format %d [expr (($byte10<<4) | (($byte9>>4)&0x0F))]]]]
 		  set rec_alt     [format %d [expr (($byte9&0x0F)<<8) | $byte10]]
 					 
 		  # Write data set to file
@@ -1589,7 +1592,7 @@ proc sync_decode_data {} {
   # Save initial time, date and max speed
    #puts $wp "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
    append data_bike "S,[clock format $start_time -format {%d.%m.%Y}] [clock format $start_time -format {%H:%M:%S}],$max_speed"
-   close $wp
+   #close $wp
   
    set report_file [open "[clock format $start_time -format {%d-%m-%Y}] [clock format $start_time -format {%H-%M-%S}].bike" w]
    puts $report_file $data_bike

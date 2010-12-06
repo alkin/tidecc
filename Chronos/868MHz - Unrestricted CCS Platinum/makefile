@@ -156,7 +156,7 @@ all: ez430_chronos_datalogger_868MHz.out
 ez430_chronos_datalogger_868MHz.out: $(GEN_CMDS) $(CMD_SRCS) $(OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Linker'
-	$(shell echo --cmd_file="C:\Users\Patrick\Chronos\Chronos\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="C:\Users\Patrick\Chronos\Chronos\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "ccsLinker.opt")
+	$(shell echo --cmd_file="C:\Users\Patrick\Chronos\tidecc\Chronos\simpliciti\Applications\configuration\smpl_nwk_config.dat" --cmd_file="C:\Users\Patrick\Chronos\tidecc\Chronos\simpliciti\Applications\configuration\End Device\smpl_config.dat" > "ccsLinker.opt")
 	$(shell echo -vmspx >> "ccsLinker.opt")
 	$(shell echo -g >> "ccsLinker.opt")
 	$(shell echo -O4 >> "ccsLinker.opt")
