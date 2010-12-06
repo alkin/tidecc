@@ -32,20 +32,11 @@
 #	  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # *************************************************************************************************
-# ez430-Chronos Control Center TCL/Tk script
-# *************************************************************************************************
-#
-# Rev 1.2
-# - Use of combobox
-# - Bug fix windows 7
-#
-# Rev 1.1  
-# - added ini file load/save dialog to load/save key settings to "Key Config" pane
-# - added 12H / 24H format switch for "Sync" pane
-# - added "RF BSL" pane and related functions 
-# 
-# Rev 1.0
-# - initial version released to manufacturing
+# ChronosBike - GUI
+# FREISING CHRONOS CHALLENGE 2010
+# Authors:
+#             Patrick de Cesar Francisco
+#             Ricardo Casagrande Faust
 # *************************************************************************************************
 
 # ----------------------------------------------------------------------------------------
@@ -607,6 +598,19 @@ $w.note add $w.note.report -text "Report Charts" -underline 0 -padding 2
 grid columnconfigure $w.note.report {0 1} -weight 1 -uniform 1
 
 ttk::frame $w.note.report.frame2 -style custom.TFrame
+ttk::frame $w.note.report.frame1 -style custom.TFrame
+# Start Access Point
+ttk::button $w.note.report.frame1.btn_start_ap -text "Start Access Point" -command { start_simpliciti_ap } -width 16
+ttk::button $w.note.report.frame1.btn1 -text "Download" -command { sync_download } -width 16
+ttk::label $w.note.report.frame1.l1 -text "Bytes logged" -width 20 -font "Helvetica 10 bold"
+entry $w.note.report.frame1.sb1 -textvariable sync_data_log_bytes -justify right -width 5 -state readonly
+grid $w.note.report.frame1 -row 0 -column 0 -pady 10 -padx 8 -sticky ew -columnspan 2
+pack $w.note.report.frame1.btn_start_ap -side left -fill x  -padx 8
+pack $w.note.report.frame1.btn1 -side left -fill x -padx 8
+pack $w.note.report.frame1.l1  -side left -fill x
+pack $w.note.report.frame1.sb1 -side left -fill x -padx 5
+
+
 canvas $w.note.report.frame2.canvas -width 600 -height 440 -background "White" -borderwidth 0
 ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
 ttk::combobox $w.note.report.frame2.combo1 -state readonly -values $all_ini_files -width 90
@@ -630,7 +634,7 @@ ttk::label $w.note.report.frame2.lblAvgTemperature -text "Average Temperature:" 
 ttk::label $w.note.report.frame2.lblAvgTemperature2 -textvariable varTemperature -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblDiferenceAltitude -text "Diference Altitude:" -justify left -font "Helvetica 10 bold"
 ttk::label $w.note.report.frame2.lblDiferenceAltitude2 -textvariable varAltitude -justify left -font "Helvetica 9"
-grid $w.note.report.frame2 -row 1 -column 0 -pady 5 -padx 10 -sticky ew -columnspan 2 -rowspan 1
+grid $w.note.report.frame2 -row 3 -column 0 -pady 0 -padx 10 -sticky ew -columnspan 2 -rowspan 1
 pack $w.note.report.frame2.canvas -side left -fill x
 pack $w.note.report.frame2.lblReport -side top -fill x -padx 10
 pack $w.note.report.frame2.combo1 -side top -fill x -padx 10 -pady 5
@@ -656,50 +660,13 @@ pack $w.note.report.frame2.lblDiferenceAltitude -side top -fill x -padx 10
 pack $w.note.report.frame2.lblDiferenceAltitude2 -side top -fill x -padx 20
 update_report
 
-# ----------------------------------------------------------------------------------------
-# Sync pane ------------------------------------------------------------------------------
-ttk::frame $w.note.sync -style custom.TFrame 
-$w.note add $w.note.sync -text "SimpliciTI\u2122 Datalogger" -underline 0 -padding 2 
-grid columnconfigure $w.note.sync {0 1} -weight 1 -uniform 1
-
-# Buttons
-ttk::labelframe $w.note.sync.f0 -borderwidth 0
-ttk::button $w.note.sync.f0.btn_start_ap -text "Start Access Point" -command { start_simpliciti_ap } -width 16
-ttk::button $w.note.sync.f0.btn_get_watch_settings -text "Read Watch" -command { sync_read_watch }  -width 16
-ttk::button $w.note.sync.f0.btn_get_time_and_date -text "Copy System Time" -command { sync_get_time_and_date }  -width 15
-ttk::button $w.note.sync.f0.btn_erase_mem -text "Erase memory" -command { sync_erase }  -width 16
-grid $w.note.sync.f0 -row 0 -column 0 -pady 5 -padx 8 -sticky ew -columnspan 2
-pack $w.note.sync.f0.btn_start_ap -side left -fill x  -padx 8
-pack $w.note.sync.f0.btn_erase_mem -side right -fill x  -padx 8
-pack $w.note.sync.f0.btn_get_watch_settings -side right -fill x  -padx 8
-
-# Download data
-ttk::labelframe $w.note.sync.fdl -borderwidth 0
-ttk::button $w.note.sync.fdl.btn1 -text "Download" -command { sync_download } -width 16
-ttk::label $w.note.sync.fdl.lbl -text "Save data to:" -anchor e -font "Helvetica 9"
-entry $w.note.sync.fdl.entry -textvariable sync_file -width 40
-ttk::button $w.note.sync.fdl.btn2 -text "Browse" -command "fileDialog $w $w.note.sync.fdl.entry save" -width 10
-grid $w.note.sync.fdl -row 1 -column 0 -pady 5 -padx 8 -sticky ew -columnspan 2
-pack $w.note.sync.fdl.btn1 -side left -fill x -padx 8
-pack $w.note.sync.fdl.lbl -side left -fill x -padx 8
-pack $w.note.sync.fdl.entry -side left -fill x -padx 8
-pack $w.note.sync.fdl.btn2 -side left -fill x -padx 8
-
-# Data log bytes
-ttk::labelframe $w.note.sync.f8 -borderwidth 0
-ttk::label $w.note.sync.f8.l1 -text "Bytes logged" -width 20 -font "Helvetica 10 bold"
-entry $w.note.sync.f8.sb1 -textvariable sync_data_log_bytes -justify right -width 5 -state readonly
-grid $w.note.sync.f8 -row 9 -column 0 -columnspan 1 -pady 0 -padx 10 -sticky ew
-pack $w.note.sync.f8.l1  -side left -fill x
-pack $w.note.sync.f8.sb1 -side left -fill x -padx 5
-
 # Status
-labelframe $w.note.sync.status -borderwidth 1 -background "Yellow"
-ttk::label $w.note.sync.status.l1 -text "Status:" -font "Helvetica 10 bold" -background "Yellow"
-ttk::label $w.note.sync.status.l2 -text "Access Point is off." -font "Helvetica 10" -background "Yellow"
-grid $w.note.sync.status -row 10 -column 0 -pady 20 -padx 10 -sticky ew -columnspan 2
-pack $w.note.sync.status.l1 -side left -fill x 
-pack $w.note.sync.status.l2 -side left -fill x 
+labelframe $w.note.report.status -borderwidth 1 -background "Yellow"
+ttk::label $w.note.report.status.l1 -text "Status:" -font "Helvetica 10 bold" -background "Yellow"
+ttk::label $w.note.report.status.l2 -text "Access Point is off." -font "Helvetica 10" -background "Yellow"
+grid $w.note.report.status -row 10 -column 0 -pady 20 -padx 10 -sticky ew -columnspan 2
+pack $w.note.report.status.l1 -side left -fill x 
+pack $w.note.report.status.l2 -side left -fill x 
 
 # ----------------------------------------------------------------------------------------
 # About pane -----------------------------------------------------------------------------
@@ -779,7 +746,7 @@ proc start_simpliciti_ap { } {
   set simpliciti_ap_started 0
   
   # Reconfig buttons
-  $w.note.sync.f0.btn_start_ap configure -text "Stop Access Point" -command { stop_simpliciti_ap }
+  $w.note.report.frame1.btn_start_ap configure -text "Stop Access Point" -command { stop_simpliciti_ap }
 
   updateStatusSYNC "Access point started. Now start watch in sync mode."
 }
@@ -814,7 +781,7 @@ proc stop_simpliciti_ap {} {
   update
   
   # Reconfig button
-  $w.note.sync.f0.btn_start_ap configure -text "Start Access Point" -command { start_simpliciti_ap }
+  $w.note.report.frame1.btn_start_ap configure -text "Start Access Point" -command { start_simpliciti_ap }
 }
 
 # Read received SimpliciTI data from RF access point
@@ -1225,7 +1192,7 @@ proc open_file {} {
 # Status output functions ----------------------------------------------------------------
 proc updateStatusSYNC { msg } {
   global w
-  $w.note.sync.status.l2 configure -text $msg
+  $w.note.report.status.l2 configure -text $msg
   update
 }
 
