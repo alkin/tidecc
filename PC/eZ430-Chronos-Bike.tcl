@@ -54,8 +54,10 @@
 package require Tk
 package require Ttk
 
+set path [pwd]
 set exit_prog 0
-catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
+#catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
+catch { load [file "$path/eZ430_Chronos_CC.dll"] } result
 if { [string first "couldn't" $result] != -1 } {
   tk_dialog .dialog1 "DLL not found" {Press OK to close application.} info 0 OK
   set exit_prog 1
@@ -461,7 +463,12 @@ proc load_report_file { name } {
 		lappend dataSpeed [expr ($offsetTime + [lindex $data 1])] [lindex $data 2]
 		lappend dataDistance [expr ($offsetTime + [lindex $data 1])] [expr ($offsetDistance + [lindex $data 3])]
 		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [ lindex $data 4 ]
-		lappend dataTemperature [expr ($offsetTime + [lindex $data 1])] [ lindex $data 5 ]
+		
+		set TemperatureTemp [ lindex $data 5 ]
+		if { $TemperatureTemp > 0x7FF } {
+			set TemperatureTemp [format "%d" [expr $TemperatureTemp + 0xFFFFF000]]
+		}
+		lappend dataTemperature [expr ($offsetTime + [lindex $data 1])] $TemperatureTemp
 		
 		set startTime [expr ($offsetTime + [lindex $data 1])]
 		set startDistance [expr ($offsetDistance + [ lindex $data 3 ])]
