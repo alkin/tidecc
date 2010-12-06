@@ -54,8 +54,9 @@
 package require Tk
 package require Ttk
 
+set path [pwd]
 set exit_prog 0
-catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
+catch { load [file "$path/eZ430_Chronos_CC.dll"] } result
 if { [string first "couldn't" $result] != -1 } {
   tk_dialog .dialog1 "DLL not found" {Press OK to close application.} info 0 OK
   set exit_prog 1
@@ -1575,7 +1576,7 @@ proc sync_decode_data {} {
 		  set system_time [format %d [expr [format %d [expr (($byte1<<8) | (($byte0)))]]]]
 		  set speed_log   [format %d [expr [format %d [expr (($byte3<<8) | (($byte2)))]]]]
 		  set distance    [format %d [expr [format %d [expr (($byte5<<8) | (($byte4)))]]]]
-		  set rec_temp    [format %d [expr [format %d [expr (($byte9<<4) | (($byte10>>4)&0x0F))]]]]
+		  set rec_temp    [format %d [expr [format %d [expr (($byte10<<4) | (($byte9>>4)&0x0F))]]]]
 		  set rec_alt     [format %d [expr (($byte9&0x0F)<<8) | $byte10]]
 					 
 		  # Write data set to file
