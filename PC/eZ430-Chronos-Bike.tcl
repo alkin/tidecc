@@ -583,7 +583,7 @@ font configure TkDefaultFont -family "tahoma" -size 8
 
 # Define basic window geometry
 wm title . "Chronos Challenge - cBike Control Center v$revision"
-wm geometry . 800x490
+wm geometry . 800x530
 wm resizable . 1 1
 wm iconname . "ttknote"
 ttk::frame .f
@@ -605,18 +605,13 @@ $w.note add $w.note.report -text "Report Charts" -underline 0 -padding 2
 grid columnconfigure $w.note.report {0 1} -weight 1 -uniform 1
 
 ttk::frame $w.note.report.frame2 -style custom.TFrame
-ttk::frame $w.note.report.frame1 -style custom.TFrame
+#ttk::frame $w.note.report.frame1 -style custom.TFrame
 # Start Access Point
-ttk::button $w.note.report.frame1.btn_start_ap -text "Start Access Point" -command { start_simpliciti_ap } -width 16
-ttk::button $w.note.report.frame1.btn1 -text "Download" -command { sync_download } -width 16
-ttk::label $w.note.report.frame1.l1 -text "Bytes logged" -width 20 -font "Helvetica 10 bold"
-entry $w.note.report.frame1.sb1 -textvariable sync_data_log_bytes -justify right -width 5 -state readonly
-grid $w.note.report.frame1 -row 0 -column 0 -pady 10 -padx 8 -sticky ew -columnspan 2
-pack $w.note.report.frame1.btn_start_ap -side left -fill x  -padx 8
-pack $w.note.report.frame1.btn1 -side left -fill x -padx 8
-pack $w.note.report.frame1.l1  -side left -fill x
-pack $w.note.report.frame1.sb1 -side left -fill x -padx 5
-
+#ttk::button $w.note.report.frame1.btn_start_ap -text "Start Access Point" -command { start_simpliciti_ap } -width 16
+#ttk::button $w.note.report.frame1.btn1 -text "Download" -command { sync_download } -width 16
+#grid $w.note.report.frame1 -row 0 -column 0 -pady 10 -padx 8 -sticky ew -columnspan 2
+#pack $w.note.report.frame1.btn_start_ap -side left -fill x  -padx 8
+#pack $w.note.report.frame1.btn1 -side left -fill x -padx 8
 
 canvas $w.note.report.frame2.canvas -width 600 -height 440 -background "White" -borderwidth 0
 ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
@@ -641,7 +636,7 @@ ttk::label $w.note.report.frame2.lblAvgTemperature -text "Average Temperature:" 
 ttk::label $w.note.report.frame2.lblAvgTemperature2 -textvariable varTemperature -justify left -font "Helvetica 9"
 ttk::label $w.note.report.frame2.lblDiferenceAltitude -text "Diference Altitude:" -justify left -font "Helvetica 10 bold"
 ttk::label $w.note.report.frame2.lblDiferenceAltitude2 -textvariable varAltitude -justify left -font "Helvetica 9"
-grid $w.note.report.frame2 -row 3 -column 0 -pady 0 -padx 10 -sticky ew -columnspan 2 -rowspan 1
+grid $w.note.report.frame2 -row 0 -column 0 -pady 10 -padx 10 -sticky ew -columnspan 2 -rowspan 1
 pack $w.note.report.frame2.canvas -side left -fill x
 pack $w.note.report.frame2.lblReport -side top -fill x -padx 10
 pack $w.note.report.frame2.combo1 -side top -fill x -padx 10 -pady 5
@@ -671,7 +666,7 @@ update_report
 labelframe $w.note.report.status -borderwidth 1 -background "Yellow"
 ttk::label $w.note.report.status.l1 -text "Status:" -font "Helvetica 10 bold" -background "Yellow"
 ttk::label $w.note.report.status.l2 -text "Access Point is off." -font "Helvetica 10" -background "Yellow"
-grid $w.note.report.status -row 10 -column 0 -pady 20 -padx 10 -sticky ew -columnspan 2
+grid $w.note.report.status -row 10 -column 0 -pady 0 -padx 10 -sticky ew -columnspan 2
 pack $w.note.report.status.l1 -side left -fill x 
 pack $w.note.report.status.l2 -side left -fill x 
 
@@ -753,7 +748,7 @@ proc start_simpliciti_ap { } {
   set simpliciti_ap_started 0
   
   # Reconfig buttons
-  $w.note.report.frame1.btn_start_ap configure -text "Stop Access Point" -command { stop_simpliciti_ap }
+#  $w.note.report.frame1.btn_start_ap configure -text "Stop Access Point" -command { stop_simpliciti_ap }
 
   updateStatusSYNC "Access point started. Now start watch in sync mode."
 }
@@ -1279,7 +1274,7 @@ proc sync_download {} {
   sync_read_watch 
   if { $sync_data_log_bytes == 0 } { return }
 
-  updateStatusSYNC "Requesting watch data."
+  #updateStatusSYNC "Requesting watch data."
   
   # Dummy read to clean buffer
   catch { BM_SYNC_ReadBuffer } bin
@@ -1632,8 +1627,16 @@ openCOM
 # Exit program
 if { $exit_prog == 1 } { exitpgm }
 
+start_simpliciti_ap
+
+
 # ----------------------------------------------------------------------------------------
 # Periodic functions  --------------------------------------------------------------------
 proc every {ms body} {eval $body; after $ms [info level 0]}
 every 600  { check_rx_serial }
+every 500  { sync_download }
+
+
+
+
 
