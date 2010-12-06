@@ -583,7 +583,7 @@ font configure TkDefaultFont -family "tahoma" -size 8
 
 # Define basic window geometry
 wm title . "Chronos Challenge - cBike Control Center v$revision"
-wm geometry . 800x530
+wm geometry . 800x550
 wm resizable . 1 1
 wm iconname . "ttknote"
 ttk::frame .f
@@ -608,10 +608,10 @@ ttk::frame $w.note.report.frame2 -style custom.TFrame
 #ttk::frame $w.note.report.frame1 -style custom.TFrame
 # Start Access Point
 #ttk::button $w.note.report.frame1.btn_start_ap -text "Start Access Point" -command { start_simpliciti_ap } -width 16
-#ttk::button $w.note.report.frame1.btn1 -text "Download" -command { sync_download } -width 16
+
 #grid $w.note.report.frame1 -row 0 -column 0 -pady 10 -padx 8 -sticky ew -columnspan 2
 #pack $w.note.report.frame1.btn_start_ap -side left -fill x  -padx 8
-#pack $w.note.report.frame1.btn1 -side left -fill x -padx 8
+
 
 canvas $w.note.report.frame2.canvas -width 600 -height 440 -background "White" -borderwidth 0
 ttk::label $w.note.report.frame2.lblReport -text "Report:" -justify left -font "Helvetica 10 bold"
@@ -666,9 +666,11 @@ update_report
 labelframe $w.note.report.status -borderwidth 1 -background "Yellow"
 ttk::label $w.note.report.status.l1 -text "Status:" -font "Helvetica 10 bold" -background "Yellow"
 ttk::label $w.note.report.status.l2 -text "Access Point is off." -font "Helvetica 10" -background "Yellow"
+ttk::button $w.note.report.status.btn1 -text "Download" -command { sync_download } -width 23
 grid $w.note.report.status -row 10 -column 0 -pady 0 -padx 10 -sticky ew -columnspan 2
 pack $w.note.report.status.l1 -side left -fill x 
 pack $w.note.report.status.l2 -side left -fill x 
+pack $w.note.report.status.btn1 -side right -fill x -padx 8 -pady 5 
 
 # ----------------------------------------------------------------------------------------
 # About pane -----------------------------------------------------------------------------
@@ -1274,7 +1276,7 @@ proc sync_download {} {
   sync_read_watch 
   if { $sync_data_log_bytes == 0 } { return }
 
-  #updateStatusSYNC "Requesting watch data."
+  updateStatusSYNC "Requesting watch data."
   
   # Dummy read to clean buffer
   catch { BM_SYNC_ReadBuffer } bin
@@ -1636,9 +1638,3 @@ start_simpliciti_ap
 # Periodic functions  --------------------------------------------------------------------
 proc every {ms body} {eval $body; after $ms [info level 0]}
 every 600  { check_rx_serial }
-every 500  { sync_download }
-
-
-
-
-
