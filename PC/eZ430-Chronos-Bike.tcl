@@ -47,8 +47,8 @@ package require Ttk
 
 set path [pwd]
 set exit_prog 0
-#catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
-catch { load [file "$path/eZ430_Chronos_CC.dll"] } result
+catch { load [file join [pwd] "eZ430_Chronos_CC.dll"] } result
+#catch { load [file "$path/eZ430_Chronos_CC.dll"] } result
 if { [string first "couldn't" $result] != -1 } {
   tk_dialog .dialog1 "DLL not found" {Press OK to close application.} info 0 OK
   set exit_prog 1
@@ -1328,6 +1328,8 @@ proc sync_download {} {
           after 2
       }
     }
+	stop_simpliciti_ap
+	start_simpliciti_ap
   }
 
   # Clear buffer
