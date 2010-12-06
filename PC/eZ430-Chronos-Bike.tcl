@@ -936,9 +936,8 @@ proc get_files { ext } {
   return $files
 }
 
-proc start_report {}
-{
-	global $w
+proc start_report {} {
+	global w
 	set report_values {}
 	lappend report_values "All Time"
 	lappend report_values "This Year"
