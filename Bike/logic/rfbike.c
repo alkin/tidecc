@@ -302,9 +302,9 @@ void rfbike_sync(void)
 	   fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
 	
 	   // Turn on beeper icon to show activity
-	   display_symbol(LCD_ICON_BEEPER1, SEG_ON_BLINK_ON);
-	   display_symbol(LCD_ICON_BEEPER2, SEG_ON_BLINK_ON);
-	   display_symbol(LCD_ICON_BEEPER3, SEG_ON_BLINK_ON);
+	   display_symbol(LCD_ICON_BEEPER1, SEG_ON);
+	   display_symbol(LCD_ICON_BEEPER2, SEG_ON);
+	   display_symbol(LCD_ICON_BEEPER3, SEG_ON);
 	
 	   // Prepare radio for RF communication
 	   open_radio();
@@ -336,13 +336,13 @@ void rfbike_sync(void)
 	      sRFsmpl.mode = SIMPLICITI_OFF;
 	      reset_simpliciti();
           close_radio();
+       
+       	  // Clear icons   
+          display_symbol(LCD_ICON_BEEPER1, SEG_OFF);
+	      display_symbol(LCD_ICON_BEEPER2, SEG_OFF);
+	      display_symbol(LCD_ICON_BEEPER3, SEG_OFF);
 	   }
-	  
-	   // Clear icons
-	   display_symbol(LCD_ICON_BEEPER1, SEG_OFF_BLINK_OFF);
-	   display_symbol(LCD_ICON_BEEPER2, SEG_OFF_BLINK_OFF);
-	   display_symbol(LCD_ICON_BEEPER3, SEG_OFF_BLINK_OFF);
-	
+
 	   // Force full display update
 	   display.flag.full_update = 1;
 	}
@@ -351,12 +351,22 @@ void rfbike_sync(void)
 	   // just send data if bike is in movement 
        //if(speed.value!=0)
       // {
+      
+      	    display_symbol(LCD_ICON_BEEPER1, SEG_ON);
+	        display_symbol(LCD_ICON_BEEPER2, SEG_ON);
+	   		display_symbol(LCD_ICON_BEEPER3, SEG_ON);
+      
 	        message_id = 0;
 		    simpliciti_bike_communication();
 		    // check if it received the data
 		    check_transmission(message_id);
 		    // takes the last sent message and reorganizes the buffer
 		    reorganize_buffer(message_id);
+		    
+		    display_symbol(LCD_ICON_BEEPER1, SEG_OFF);
+	        display_symbol(LCD_ICON_BEEPER2, SEG_OFF);
+	        display_symbol(LCD_ICON_BEEPER3, SEG_OFF);
+		    
 	  // }
 	}
 }
