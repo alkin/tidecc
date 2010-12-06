@@ -220,11 +220,13 @@ void simpliciti_bike_decode_watch_callback(void)
 
           // Set Timer0 
           TA0R = (u16)((simpliciti_data[10] << 8) + simpliciti_data[9]);   
+          TA0CCR0 = (TA0R<0x7FFF)?(0x7FFF):(0xFFFF);
 
 	      // Release Timer	 
 	      TA0CTL |= MC_2;
 	      
-	      
+	      // Reset
+	      reset_sensor();
 	        
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      break;
