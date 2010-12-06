@@ -107,7 +107,7 @@ void simpliciti_bike_communication()
              break;
 	      }
 	      
-	      else if(simpliciti_data[0] == BIKE_CMD_EXIT)
+	    /*  else if(simpliciti_data[0] == BIKE_CMD_EXIT)
 	      {
 	      	  // if it send everything, send message to watch to disconnect
 	      	
@@ -119,7 +119,7 @@ void simpliciti_bike_communication()
             
 	          sSemaphore = 0;
 	          break;
-	      }
+	      }*/
 	  }
 	 // if the timer decides it is time to stop
      if (getFlag(simpliciti_bike_flag, SIMPLICITI_BIKE_TRIGGER_STOP)) 

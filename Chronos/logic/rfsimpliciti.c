@@ -472,7 +472,7 @@ void simpliciti_watch_decode_bike_callback(void)
 	   
 	    case BIKE_CMD_DATA:
 		      // do data log from received data
-		      // if it receives two identical messages 
+		      // filter received message. The bike sends always  the data twice 
                   if(last_received_message!=((u16)((simpliciti_data[2]<<8) + (simpliciti_data[1]))))
                   {
 				      max_speed = (u16)((simpliciti_data[13]<<8) + (simpliciti_data[12])); 
@@ -488,9 +488,8 @@ void simpliciti_watch_decode_bike_callback(void)
 	    break;
 	    
 	  case BIKE_CMD_EXIT:
-	  // bike says bye!
-	  // end connection
-	    // sleep INTERVAL seconds 
+	    // bike says bye!
+	    // end connection
 	    //simpliciti_flag |= SIMPLICITI_TRIGGER_STOP;
 	    break;  
    }

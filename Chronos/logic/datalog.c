@@ -503,20 +503,7 @@ void do_bike_datalog(u8 mode)
 
 	if (mode==DATALOG_BIKE_NORMAL)
 	{	   
-		   // system time & 0xff 
-		   // system time
-		   // speed
-		   // speed >>8
-		   // distance
-		   // distance >>8
-		   // distance >>16
-		   // distance >>24
-		   // temp >>4 
-		   // temp<<4 and altitude >>8
-		   // altitude &0xff
-		   // max_speed
-		   // max_speed >>8
-		   
+ 
 	       temp[0] = simpliciti_data[1];
 		   temp[1] = simpliciti_data[2];
 		   temp[2] = simpliciti_data[3];
@@ -530,21 +517,7 @@ void do_bike_datalog(u8 mode)
 		   temp[10] = simpliciti_data[11];
 	       temp[11] = 00;
 	      
-	      /* temp[0] = 0;
-		   temp[1] = 1;
-		   temp[2] = 2;
-		   temp[3] = 3;
-		   temp[4] = 4;
-		   temp[5] = 5;
-		   temp[6] = 6;
-		   temp[7] = 7;
-		   temp[8] = 8;
-		   temp[9] = 9;
-		   temp[10] = 10;
-           temp[11] = 11;
-	      */
-	      
-	      count = 11;
+	       count = 11;
 	      
 	      // Add data to recording buffer         
 	      datalog_sm((u8 *) & temp, count, DATALOG_CMD_ADD_DATA);
@@ -554,15 +527,12 @@ void do_bike_datalog(u8 mode)
 	}
 	else if (mode==DATALOG_BIKE_END_SESSION)
 	{
-		   //temp[2] = (max_speed >> 8) & 0xFF;
-		   //temp[3] = (max_speed) & 0xFF;
-	    
 		   
 		   temp[0] = 0xFC;
 		   temp[1] = 0xFF;
-		   temp[2] = 0x01;
-		   temp[3] = 0x23;
-		  	  
+		   temp[2] = (max_speed >> 8) & 0xFF;
+		   temp[3] = (max_speed) & 0xFF;
+	    
 	      count = 4;
 	      
 	      // Add data to recording buffer         
