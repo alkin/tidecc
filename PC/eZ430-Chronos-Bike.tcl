@@ -785,7 +785,7 @@ proc stop_simpliciti_ap {} {
   update
   
   # Reconfig button
-  $w.note.report.frame1.btn_start_ap configure -text "Start Access Point" -command { start_simpliciti_ap }
+  #$w.note.report.frame1.btn_start_ap configure -text "Start Access Point" -command { start_simpliciti_ap }
 }
 
 # Read received SimpliciTI data from RF access point
@@ -936,16 +936,21 @@ proc get_files { ext } {
   return $files
 }
 
-set report_values {}
-lappend report_values "All Time"
-lappend report_values "This Year"
-lappend report_values "This Month"
-lappend report_values "Today"
-lappend report_values "––––––––––––––––––––––––"
-foreach file1 [get_files "*.bike"] {
-	lappend report_values $file1
+proc start_report {}
+{
+	global $w
+	set report_values {}
+	lappend report_values "All Time"
+	lappend report_values "This Year"
+	lappend report_values "This Month"
+	lappend report_values "Today"
+	lappend report_values "––––––––––––––––––––––––"
+	foreach file1 [get_files "*.bike"] {
+		lappend report_values $file1
+	}
+	$w.note.report.frame2.combo1 configure -values $report_values 
 }
-$w.note.report.frame2.combo1 configure -values $report_values 
+start_report
 
 # Generic file save dialog
 proc file_save_dialog { w } {
@@ -1405,6 +1410,7 @@ proc sync_download {} {
   # Output received data  
   if { $packets_received >= $packets_expected } { 
     sync_decode_data 
+	start_report
   } else {
     updateStatusSYNC "Error: Did not receive all logged data."
   }
