@@ -418,28 +418,31 @@ void sx_bike_chronos(u8 line)
    toggle_bike_datalog();
 
    // Prepare radio for RF communication
-   open_radio();
+   //open_radio();
    
-   reset_simpliciti();
+   //reset_simpliciti();
  
-   // Set SimpliciTI mode
-   sRFsmpl.mode = SIMPLICITI_BIKE;
+   do_bike_datalog(DATALOG_BIKE_NORMAL);
    
+   // Set SimpliciTI mode
+   //sRFsmpl.mode = SIMPLICITI_BIKE;
+   /*
    if (simpliciti_listen_to())
    {
        listen();
    }
+   */
          // Set SimpliciTI state to OFF
-   sRFsmpl.mode = SIMPLICITI_OFF;
+  // sRFsmpl.mode = SIMPLICITI_OFF;
 
    // Powerdown radio
-   close_radio();
+  // close_radio();
 
    // Clear last button events
-   Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
+/*   Timer0_A4_Delay(CONV_MS_TO_TICKS(BUTTONS_DEBOUNCE_TIME_OUT));
    BUTTONS_IFG = 0x00;
    button.all_flags = 0;
-
+*/
    // Clear last button events
    do_bike_datalog(DATALOG_BIKE_END_SESSION);
    toggle_bike_datalog();
