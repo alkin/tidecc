@@ -220,11 +220,13 @@ void simpliciti_bike_decode_watch_callback(void)
 
           // Set Timer0 
           TA0R = (u16)((simpliciti_data[10] << 8) + simpliciti_data[9]);   
+          TA0CCR0 = (TA0R<0x7FFF)?(0x7FFF):(0xFFFF);
 
 	      // Release Timer	 
 	      TA0CTL |= MC_2;
 	      
-	      
+	      // Reset
+	      reset_sensor();
 	        
 	      simpliciti_data[0] = BIKE_CMD_CONFIG;
 	      break;
@@ -314,7 +316,6 @@ void rfbike_sync(void)
 	   if (simpliciti_link_to())
 	   {
            display_chars(LCD_SEG_L2_5_0, (u8 *)"  PAIR", SEG_ON);
-           simpliciti_bike_flag = SIMPLICITI_BIKE_TRIGGER_SEND_DATA;
 	 
 	   	   // Set SimpliciTI mode
            message_id = 0;
