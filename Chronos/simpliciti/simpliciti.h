@@ -186,3 +186,5 @@ extern void listen(void);
 
 extern void reset_simpliciti(void);
 
+extern void bike_get_data(void);
+

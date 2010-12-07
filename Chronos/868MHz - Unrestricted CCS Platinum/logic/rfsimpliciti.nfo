@@ -68,18 +68,19 @@ extern void start_simpliciti_sync() is called from 1 sites in this file.
 	clear_line() (1 times)
 
 extern void sx_bike_chronos() is called from 0 sites in this file.
-    It appears to be inlineable (size = 55 units)
+    It appears to be inlineable (size = 104 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	do_bike_datalog() (1 times)
 	Timer0_A4_Delay() (1 times)
 	close_radio() (1 times)
+	bike_get_data() (1 times)
 	listen() (1 times)
 	simpliciti_listen_to() (1 times)
-	reset_simpliciti() (1 times)
+	reset_simpliciti() (2 times)
 	open_radio() (1 times)
 	toggle_bike_datalog() (2 times)
-	display_symbol() (6 times)
+	display_symbol() (12 times)
 	 ? () (1 times)
 	clear_line() (1 times)
 
@@ -106,6 +107,7 @@ These external functions are called but not defined here:
 	reset_simpliciti()
 	simpliciti_listen_to()
 	listen()
+	bike_get_data()
 	clear_line()
 	 ? ()
 	stop_datalog()
@@ -143,7 +145,7 @@ extern void sx_sync() is called from 0 sites in this file.
 ==============================================================================
 
 extern void sx_bike_chronos() is called from 0 sites in this file.
-    It appears to be inlineable (size = 55 units)
+    It appears to be inlineable (size = 104 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>

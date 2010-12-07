@@ -406,6 +406,8 @@ void simpliciti_sync_get_data_callback(unsigned int index)
 
 void sx_bike_chronos(u8 line)
 {
+	u8 simpliciti_getdata = 0;
+	u8 i;
    // Clear LINE1
    clear_line(LINE1);
    fptr_lcd_function_line1(LINE1, DISPLAY_LINE_CLEAR);
@@ -430,9 +432,49 @@ void sx_bike_chronos(u8 line)
    if (simpliciti_listen_to())
    {
        listen();
+       
+       while (1)
+       { 
+       		if(simpliciti_getdata == 0)
+       		{
+       			display_symbol(LCD_ICON_BEEPER1, SEG_ON);
+	        display_symbol(LCD_ICON_BEEPER2, SEG_ON);
+	   		display_symbol(LCD_ICON_BEEPER3, SEG_ON);
+	   		
+     	  	for(i=0; i<10; i++)	
+     	  	{
+     	  		WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;	
+       		  		bike_get_data();
+     	  	} 		
+          		display_symbol(LCD_ICON_BEEPER1, SEG_OFF);
+	        display_symbol(LCD_ICON_BEEPER2, SEG_OFF);
+	   		display_symbol(LCD_ICON_BEEPER3, SEG_OFF);
+       		}       
+       
+       
+       	  	//_BIS_SR(LPM3_bits + GIE);
+          	//__no_operation();
+          
+			         
+          
+          	simpliciti_getdata++;
+          	simpliciti_getdata %= 10;
+          	
+          
+	      if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP))
+		  {
+		  	
+		     break;
+		  }
+		  
+		  
+		}
+  
+  		
+  		//SMPL_Unlink(sLinkID3);
    }
    
-   
+   reset_simpliciti();
          // Set SimpliciTI state to OFF
    sRFsmpl.mode = SIMPLICITI_OFF;
 

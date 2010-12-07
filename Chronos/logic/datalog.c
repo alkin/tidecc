@@ -532,7 +532,7 @@ void do_bike_datalog(u8 mode)
 	       temp[11] = 00;
 	     */  
 	       
-	       count = 11;
+	       count = 12;
 	      
 	      // Add data to recording buffer         
 	      datalog_sm((u8 *) & temp, count, DATALOG_CMD_ADD_DATA);

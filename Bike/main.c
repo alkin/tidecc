@@ -209,7 +209,7 @@ void init_application(void)
 	
 	// ---------------------------------------------------------------------
 	// Wait until 3.3V in DVcc is settled
-/*
+
  	Timer0_Init();
  	TA0CCTL0 &= ~CCIE;
  	do
@@ -217,7 +217,7 @@ void init_application(void)
  		Timer0_A4_Delay(CONV_MS_TO_TICKS(1000));
 	 	battery_measurement();
  	} while (sys.flag.low_battery);
-*/
+
 	// ---------------------------------------------------------------------
 	// Configure ports
 

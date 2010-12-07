@@ -451,6 +451,8 @@ proc load_report_file { name } {
 	}
 	
 	if { [lindex $data 0] == "D" } {
+	
+	if { [expr [lindex $data 1]]  < 200 } {
 		lappend dataSpeed [expr ($offsetTime + [lindex $data 1])] [lindex $data 2]
 		lappend dataDistance [expr ($offsetTime + [lindex $data 1])] [expr ($offsetDistance + [lindex $data 3])]
 		lappend dataAltitude [expr ($offsetTime + [lindex $data 1])] [ lindex $data 4 ]
@@ -463,6 +465,7 @@ proc load_report_file { name } {
 		
 		set startTime [expr ($offsetTime + [lindex $data 1])]
 		set startDistance [expr ($offsetDistance + [ lindex $data 3 ])]
+		}
 	}
     
   }
@@ -1563,7 +1566,7 @@ proc sync_decode_data {} {
 		  append data_bike "D,$system_time,$speed_log,$distance,$rec_alt,$rec_temp\n"
        }
   		  # Move to next data set        
-          set i [expr $i+11-1]
+          set i [expr $i+12-1]
 	}
   }
 

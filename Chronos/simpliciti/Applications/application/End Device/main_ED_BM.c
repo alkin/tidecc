@@ -279,15 +279,6 @@ unsigned char simpliciti_listen_to(void)
 	RF1ARXFIFO = 0x0000;
 	RF1ATXFIFO = 0x0000;
 
-#ifdef energy
-   // wait some seconds for the bike to get enough energy
-   Timer0_A4_Delay(1000);
-   Timer0_A4_Delay(1000);
-   Timer0_A4_Delay(1000);
-   Timer0_A4_Delay(1000);
-   Timer0_A4_Delay(1000);
-#endif
-
   // Set flag	
   simpliciti_flag = SIMPLICITI_STATUS_LINKING;
 
@@ -345,34 +336,25 @@ void listen()
 		// Put radio back to sleep  		
   		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
 	 
+}
+
+void bike_get_data()
+{
+
         SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_AWAKE, 0);	
         SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
        
-       Timer0_A4_Delay(1000);
-       Timer0_A4_Delay(1000);
-       Timer0_A4_Delay(1000);
-  
-   while (1)
-   {
-    //	if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_SEND_DATA)) 
-    //{
-	// Get radio ready. Radio wakes up in IDLE state.
-      simpliciti_data[0] = WATCH_CMD_GET_DATA;
+    simpliciti_data[0] = WATCH_CMD_GET_DATA;
       SMPL_Send(sLinkID3, simpliciti_data,BIKE_DATA_LENGTH);
       NWK_DELAY(50);
-    // Service watchdog
-	  WDTCTL = WDTPW + WDTIS__512K + WDTSSEL__ACLK + WDTCNTCL;
-	  // Break when flag bit SIMPLICITI_TRIGGER_STOP is set
-      if (getFlag(simpliciti_flag, SIMPLICITI_TRIGGER_STOP))
-      {
-      	 sInit_done = 0;
-	     break;
-	  }
-    }
-  
-  sInit_done = 0;  
-  SMPL_Unlink(sLinkID3);
+
+            SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXIDLE, 0);
+		// Put radio back to sleep  		
+  		SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SLEEP, 0);
+	
 }
+
+
 
 /* handle received messages */
 static uint8_t Listen_Callback(linkID_t port)

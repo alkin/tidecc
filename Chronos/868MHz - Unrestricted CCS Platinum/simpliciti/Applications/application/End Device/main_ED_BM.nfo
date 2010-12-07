@@ -12,16 +12,22 @@ static unsigned char Listen_Callback() is called from 0 sites in this file.
 	simpliciti_watch_decode_bike_callback() (1 times)
 	SMPL_Receive() (1 times)
 
-extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 85 units)
+extern void bike_get_data() is called from 0 sites in this file.
+    It appears to be inlineable (size = 28 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
-	SMPL_Unlink() (1 times)
-	Timer0_A4_Delay() (3 times)
-	MRFI_DelayMs() (2 times)
-	SMPL_Send() (2 times)
+	MRFI_DelayMs() (1 times)
+	SMPL_Send() (1 times)
+	SMPL_Ioctl() (4 times)
+
+extern void listen() is called from 0 sites in this file.
+    It appears to be inlineable (size = 43 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	MRFI_DelayMs() (1 times)
+	SMPL_Send() (1 times)
 	simpliciti_watch_get_data_callback() (1 times)
-	SMPL_Ioctl() (6 times)
+	SMPL_Ioctl() (4 times)
 
 extern void reset_simpliciti() is called from 0 sites in this file.
     It appears to be inlineable (size = 4 units)
@@ -79,6 +85,7 @@ extern void simpliciti_main_tx_only() is called from 0 sites in this file.
 
 These functions may be recursive:
 	Listen_Callback()
+	bike_get_data()
 	listen()
 	simpliciti_link()
 	simpliciti_listen_to()
@@ -90,19 +97,19 @@ Function show() will be specialized on these parameters:
 
 These external functions are called but not defined here:
 	simpliciti_get_ed_data_callback()
+	Timer0_A4_Delay()
 	SMPL_SendOpt()
 	simpliciti_sync_decode_ap_cmd_callback()
 	simpliciti_sync_get_data_callback()
+	SMPL_Unlink()
 	SMPL_LinkListen()
 	BSP_InitBoard()
 	SMPL_Init()
 	SMPL_Link()
-	SMPL_Ioctl()
 	simpliciti_watch_get_data_callback()
+	SMPL_Ioctl()
 	SMPL_Send()
 	MRFI_DelayMs()
-	Timer0_A4_Delay()
-	SMPL_Unlink()
 	SMPL_Receive()
 	simpliciti_watch_decode_bike_callback()
 
@@ -153,7 +160,15 @@ extern void reset_simpliciti() is called from 0 sites in this file.
 ==============================================================================
 
 extern void listen() is called from 0 sites in this file.
-    It appears to be inlineable (size = 85 units)
+    It appears to be inlineable (size = 43 units)
+    It has 3 non-trivial scope blocks nested 3 deep.
+    It calls these functions:
+	<NONE>
+
+==============================================================================
+
+extern void bike_get_data() is called from 0 sites in this file.
+    It appears to be inlineable (size = 28 units)
     It has 3 non-trivial scope blocks nested 3 deep.
     It calls these functions:
 	<NONE>
